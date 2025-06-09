@@ -1,0 +1,30 @@
+import Account from "@/components/ui/account";
+import Banking from "@/components/ui/banking";
+import Details from "@/components/ui/details";
+import Faq from "@/components/ui/faq";
+import Hero from "@/components/ui/hero";
+import Partners from "@/components/ui/partners";
+import Planning from "@/components/ui/planning";
+import Solution from "@/components/ui/solution";
+import Testimonials from "@/components/ui/testimonials";
+import Image from "next/image";
+
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col">
+      <Hero />
+      <Partners />
+      <Details />
+      <Account />
+      <div className="bg-gray-100 pt-[300px] pb-10 md:pt-[250px] md:pb-20 lg:pt-[200px]">
+        <Banking />
+      </div>
+      <Planning />
+      <div className="mt-[95rem] sm:mt-[60rem] md:mt-[70rem] lg:mt-[55rem]">
+        <Solution />
+      </div>
+      <Testimonials />
+      <Faq />
+    </main>
+  );
+}

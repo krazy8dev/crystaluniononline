@@ -1,0 +1,50 @@
+/* Custom styles for the partners slider */
+.partners-slider .slick-track {
+  display: flex;
+  align-items: center;
+}
+
+.partners-slider .slick-slide {
+  transition: all 0.3s ease;
+}
+
+.partners-slider .slick-slide:hover {
+  transform: scale(1.05);
+}
+
+/* Custom arrow styles */
+.partners-slider .slick-prev,
+.partners-slider .slick-next {
+  width: 40px;
+  height: 40px;
+  z-index: 1;
+}
+
+.partners-slider .slick-prev {
+  left: -50px;
+}
+
+.partners-slider .slick-next {
+  right: -50px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .partners-slider .slick-prev {
+    left: -30px;
+  }
+
+  .partners-slider .slick-next {
+    right: -30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .partners-slider .slick-prev {
+    left: -20px;
+  }
+
+  .partners-slider .slick-next {
+    right: -20px;
+  }
+}
