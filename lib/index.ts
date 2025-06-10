@@ -33,6 +33,9 @@ import house from "@/app/assets/icons/house.png";
 import education from "@/app/assets/icons/education.png";
 import businessloan from "@/app/assets/icons/business.png";
 import person from "@/app/assets/images/guy.png";
+import register from "@/app/assets/images/register.jpg";
+import login from "@/app/assets/images/login.jpg";
+import loginImage from "@/app/assets/images/bglogin.jpg";
 
 export const icons = {
   amex,
@@ -47,6 +50,9 @@ export const icons = {
   education,
   businessloan,
   person,
+  register,
+  login,
+  loginImage,
 };
 
 export const cards = [
