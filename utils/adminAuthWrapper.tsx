@@ -1,29 +1,80 @@
-// 'use client'
+"use client";
 
+import useAuthStore from "@/store/authstore";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { config } from "@/config";
 
-// import useAuthStore from "@/store/authstore";
-// import { useRouter } from "next/navigation";
-// import { useEffect } from "react";
+interface AdminAuthWrapperProps {
+  children: React.ReactNode;
+}
 
+export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
+  const { token, isInitialized, setInitialized, checkAdminAccess } =
+    useAuthStore();
+  const router = useRouter();
+  const pathname = usePathname();
 
-// interface AdminAuthWrapperProps{
-//     children: React.ReactNode
-// }
-// const AdminAuthWrapper = ({ children }: AdminAuthWrapperProps) => {
-//     const { user, isLoading } = useAuthStore();
-//     const router = useRouter();
-  
-//     useEffect(() => {
-//       if (!isLoading && (!user || !user.isAdmin)) {
-//         router.push('/admin/login');
-//       }
-//     }, [user, isLoading]);
-  
-//     if (isLoading) {
-//       return <LoadingSpinner />;
-//     }
-  
-//     // Only render children if user is admin
-//     return user?.isAdmin ? children : null;
-//   };
-  
+  // Initialize from cookies on first load
+  useEffect(() => {
+    const initializeAuth = () => {
+      const token = Cookies.get(config.auth.cookie.token.name);
+
+      // If we have a token in cookies, set it in the store
+      if (token) {
+        useAuthStore.setState({ token });
+      }
+
+      // Mark as initialized
+      setInitialized(true);
+    };
+
+    if (!isInitialized) {
+      initializeAuth();
+    }
+  }, [isInitialized, setInitialized]);
+
+  // Handle authentication and admin access redirects
+  useEffect(() => {
+    // Skip auth check for login page
+    if (pathname === "/admin/login") {
+      return;
+    }
+
+    if (isInitialized) {
+      if (!token) {
+        console.log("Not authenticated, redirecting to admin login");
+        router.replace("/admin/login");
+        return;
+      }
+
+      // If user is not admin, redirect to user dashboard
+      if (!checkAdminAccess()) {
+        console.log("Non-admin user detected, redirecting to user dashboard");
+        router.replace("/dashboard/account-summary");
+        return;
+      }
+    }
+  }, [isInitialized, token, router, checkAdminAccess, pathname]);
+
+  // Show loading state while initializing
+  if (!isInitialized) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+          <div className="text-gray-700">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // For login page, render without auth check
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
+  // For all other admin routes, only render if user is admin
+  return token && checkAdminAccess() ? <>{children}</> : null;
+}

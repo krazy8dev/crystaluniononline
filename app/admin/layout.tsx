@@ -1,15 +1,16 @@
-import React from 'react'
+"use client";
 
-interface AdminLayoutProps{
-    children: React.ReactNode
-}
+import AdminAuthWrapper from "@/utils/adminAuthWrapper";
 
-const AdminLayout = ({children}: AdminLayoutProps) => {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      {children}
-    </div>
-  )
+    <AdminAuthWrapper>
+      {/* Add your admin layout components here (navbar, sidebar, etc.) */}
+      <div className="min-h-screen bg-gray-100">{children}</div>
+    </AdminAuthWrapper>
+  );
 }
-
-export default AdminLayout

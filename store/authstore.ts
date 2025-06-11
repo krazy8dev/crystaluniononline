@@ -1,3 +1,5 @@
+"use client";
+
 import { create, StateCreator } from "zustand";
 import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
 import Cookies from "js-cookie";
@@ -30,7 +32,7 @@ interface AuthState {
   expireAt: number | null;
   user: User | null;
   isInitialized: boolean;
-  // isEmailVerified: boolean;
+  isAdmin: boolean;
   pageLoad: boolean;
 
   setPageLoad: (pageLoad: boolean) => void;
@@ -38,11 +40,11 @@ interface AuthState {
   setToken: (token: string | null) => void;
 
   register: (data: RegisterRequest) => Promise<void>;
-  // verifyEmail: (data: VerifyEmailRequest) => Promise<void>;
-  login: (data: LoginRequest) => Promise<void>;
+  login: (data: LoginRequest, isAdminRoute?: boolean) => Promise<void>;
   forgotPassword: (data: ForgotPasswordRequest) => Promise<void>;
   resetPassword: (data: ResetPasswordRequest) => Promise<void>;
   logout: (router?: NextRouter) => void;
+  checkAdminAccess: () => boolean;
 }
 
 type AuthPersistState = {
@@ -50,7 +52,7 @@ type AuthPersistState = {
   expireAt: number | null;
   user: User | null;
   isInitialized: boolean;
-  // isEmailVerified: boolean;
+  isAdmin: boolean;
 };
 
 type AuthStorePersist = (
@@ -66,7 +68,7 @@ const useAuthStore = create<AuthState>()(
       user: null,
       pageLoad: false,
       isInitialized: false,
-      // isEmailVerified: false,
+      isAdmin: false,
 
       setPageLoad: (pageLoad: boolean) => set({ pageLoad }),
       setInitialized: (initialized: boolean) =>
@@ -94,7 +96,7 @@ const useAuthStore = create<AuthState>()(
           if (response.status === 201) {
             set({
               user: response.data.user,
-              // isEmailVerified: false,
+              isAdmin: response.data.user.role === "admin",
             });
           }
         } catch (error: any) {
@@ -107,26 +109,10 @@ const useAuthStore = create<AuthState>()(
         }
       },
 
-      // verifyEmail: async (data: VerifyEmailRequest) => {
-      //   try {
-      //     const response = await axiosInstance.post(
-      //       config.api.endpoints.auth.verifyEmail,
-      //       data,
-      //     );
-      //     if (response.status === 200) {
-      //       set({ isEmailVerified: true });
-      //     }
-      //   } catch (error: any) {
-      //     if (error.response?.status === 400) {
-      //       throw new Error(error.response.data.message || "Invalid OTP");
-      //     }
-      //     throw error;
-      //   }
-      // },
-
-      login: async (data: LoginRequest) => {
+      login: async (data: LoginRequest, isAdminRoute = false) => {
         try {
           console.log("Making login request with data:", data);
+
           const response = await axiosInstance.post(
             config.api.endpoints.auth.login,
             data,
@@ -134,12 +120,23 @@ const useAuthStore = create<AuthState>()(
 
           console.log("Login response:", response.data);
 
-          if (response.status === 200) {
-            const { token, user } = response.data;
+          if (response.data.status === "success") {
+            const { token } = response.data;
+            const user = response.data.data.user;
             const decodedToken = decodeToken(token);
 
             if (!decodedToken) {
               throw new Error("Invalid token received");
+            }
+
+            // For admin route, verify the user has admin role
+            if (isAdminRoute && user.role !== "admin") {
+              throw new Error("Unauthorized: Admin access required");
+            }
+
+            // For user route, verify user is not trying to access with admin credentials
+            if (!isAdminRoute && user.role === "admin") {
+              throw new Error("Please use admin login for admin accounts");
             }
 
             const expireAt =
@@ -157,8 +154,10 @@ const useAuthStore = create<AuthState>()(
               token,
               expireAt,
               user,
-              // isEmailVerified: user.isEmailVerified,
+              isAdmin: user.role === "admin",
             });
+          } else {
+            throw new Error(response.data.message || "Failed to login");
           }
         } catch (error: any) {
           console.error("Login error details:", {
@@ -168,12 +167,21 @@ const useAuthStore = create<AuthState>()(
           });
 
           if (error.response?.status === 401) {
-            throw new Error("Invalid credentials");
+            throw new Error(
+              isAdminRoute
+                ? "Invalid admin credentials"
+                : "Invalid credentials",
+            );
           } else if (error.response?.status === 500) {
             throw new Error("Server error. Please try again later.");
           }
           throw new Error(error.response?.data?.message || "Failed to login");
         }
+      },
+
+      checkAdminAccess: () => {
+        const state = get();
+        return state.isAdmin && state.user?.role === "admin";
       },
 
       forgotPassword: async (data: ForgotPasswordRequest) => {
@@ -223,11 +231,12 @@ const useAuthStore = create<AuthState>()(
           token: null,
           expireAt: null,
           user: null,
-          // isEmailVerified: false,
+          isAdmin: false,
         });
 
         if (router) {
-          router.push("/login");
+          const isAdminPath = router.pathname.startsWith("/admin");
+          router.push(isAdminPath ? "/admin/login" : "/login");
         }
       },
     }),
@@ -239,7 +248,7 @@ const useAuthStore = create<AuthState>()(
         expireAt: state.expireAt,
         user: state.user,
         isInitialized: state.isInitialized,
-        // isEmailVerified: state.isEmailVerified,
+        isAdmin: state.isAdmin,
       }),
     },
   ),

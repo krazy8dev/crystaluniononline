@@ -11,7 +11,8 @@ interface AuthWrapperProps {
 }
 
 export default function AuthWrapper({ children }: AuthWrapperProps) {
-  const { token, isInitialized, setInitialized } = useAuthStore();
+  const { token, isInitialized, setInitialized, checkAdminAccess } =
+    useAuthStore();
   const router = useRouter();
 
   // Initialize from cookies on first load
@@ -35,23 +36,34 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
   // Handle authentication redirects
   useEffect(() => {
-    if (isInitialized && !token) {
-      console.log("Not authenticated, redirecting to login");
-      router.replace("/login");
-      return;
+    if (isInitialized) {
+      if (!token) {
+        console.log("Not authenticated, redirecting to login");
+        router.replace("/login");
+        return;
+      }
+
+      // If user is admin, redirect to admin dashboard
+      if (checkAdminAccess()) {
+        console.log("Admin user detected, redirecting to admin dashboard");
+        router.replace("/admin/dashboard");
+        return;
+      }
     }
-  }, [isInitialized, token, router]);
+  }, [isInitialized, token, router, checkAdminAccess]);
 
   // Show loading state while initializing
   if (!isInitialized) {
     return (
-      <div>
-        {/* <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div> */}
-        <div className="ml-4 text-black">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+          <div className="text-gray-700">Loading...</div>
+        </div>
       </div>
     );
   }
 
-  // Only render children if we have a token
-  return token ? <>{children}</> : null;
+  // Only render children if we have a token and user is not an admin
+  return token && !checkAdminAccess() ? <>{children}</> : null;
 }
