@@ -35,7 +35,7 @@ const Login = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      emailOrAccountNumber: "",
+      email: "",
       password: "",
       securityPin: "",
     },
@@ -44,14 +44,14 @@ const Login = () => {
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
       setIsLoading(true);
-      console.log("Login request data:", {
-        emailOrAccountNumber: values.emailOrAccountNumber,
-        password: values.password,
-        securityPin: values.securityPin,
-      });
+      // console.log("Login request data:", {
+      //   email: values.email,
+      //   password: values.password,
+      //   securityPin: values.securityPin,
+      // });
       await login(values as LoginRequest);
       toast.success("Login successful!");
-      router.push("/dashboard");
+      router.replace("/dashboard/account-summary");
     } catch (error: any) {
       console.error("Login error:", error);
       toast.error(error.message || "Failed to login. Please try again.");
@@ -61,149 +61,154 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center p-4 mt-5">
+    <div className="mt-5 flex items-center justify-center p-4">
       <Container>
-      <div className="flex items-center justify-center gap-10">
-        {/* Left side - Form */}
-        <div className="flex lg:w-1/2 w-full flex-col">
-          <div className="mb-8">
-            <h3 className="mb-2 md:text-2xl text-xl font-bold text-[#0B4B3C]">
-              The Power of Financial Freedom
-            </h3>
-            <h1 className="mb-3 md:text-6xl text-3xl font-bold">Login into your account</h1>
-            <p className="text-gray-600">
-              Your security is our top priority. You'll need this to log into
-              your Heritage Trust account
-            </p>
+        <div className="flex items-center justify-center gap-10">
+          {/* Left side - Form */}
+          <div className="flex w-full flex-col lg:w-1/2">
+            <div className="mb-8">
+              <h3 className="mb-2 text-xl font-bold text-[#0B4B3C] md:text-2xl">
+                The Power of Financial Freedom
+              </h3>
+              <h1 className="mb-3 text-3xl font-bold md:text-6xl">
+                Login into your account
+              </h1>
+              <p className="text-gray-600">
+                Your security is our top priority. You'll need this to log into
+                your Heritage Trust account
+              </p>
+            </div>
+
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your email address"
+                          className="h-12 bg-white text-base"
+                          {...field}
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Password
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter Your Password"
+                            className="h-12 bg-white pr-10 text-base"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            disabled={isLoading}
+                          >
+                            {showPassword ? (
+                              <EyeOffIcon className="h-5 w-5" />
+                            ) : (
+                              <EyeIcon className="h-5 w-5" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="securityPin"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        Security Pin
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showSecurityPin ? "text" : "password"}
+                            placeholder="Enter Your Security Pin"
+                            className="h-12 bg-white pr-10 text-base"
+                            maxLength={4}
+                            {...field}
+                            disabled={isLoading}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSecurityPin(!showSecurityPin)}
+                            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                            disabled={isLoading}
+                          >
+                            {showSecurityPin ? (
+                              <EyeOffIcon className="h-5 w-5" />
+                            ) : (
+                              <EyeIcon className="h-5 w-5" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex items-center justify-between">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+
+                <div>
+                  <Button
+                    type="submit"
+                    className="h-12 rounded-full bg-blue-600 px-20 text-base font-medium text-white hover:bg-blue-700"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Logging in..." : "Login"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </div>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="emailOrAccountNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Email or Account Number
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your email or account number"
-                        className="h-12 text-base bg-white"
-                        {...field}
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter Your Password"
-                          className="h-12 pr-10 text-base bg-white"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                          disabled={isLoading}
-                        >
-                          {showPassword ? (
-                            <EyeOffIcon className="h-5 w-5" />
-                          ) : (
-                            <EyeIcon className="h-5 w-5" />
-                          )}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="securityPin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Security Pin
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showSecurityPin ? "text" : "password"}
-                          placeholder="Enter Your Security Pin"
-                          className="h-12 pr-10 text-base bg-white"
-                          maxLength={4}
-                          {...field}
-                          disabled={isLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowSecurityPin(!showSecurityPin)}
-                          className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                          disabled={isLoading}
-                        >
-                          {showSecurityPin ? (
-                            <EyeOffIcon className="h-5 w-5" />
-                          ) : (
-                            <EyeIcon className="h-5 w-5" />
-                          )}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex items-center justify-between">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-
-            <div>
-            <Button
-                type="submit"
-                className="h-12 px-20 rounded-full bg-blue-600 text-base font-medium text-white hover:bg-blue-700"
-                disabled={isLoading}
-              >
-                {isLoading ? "Logging in..." : "Login"}
-              </Button>
-            </div>
-            </form>
-          </Form>
+          {/* Right side - Image */}
+          <div className="hidden w-full max-w-[480px] lg:block">
+            <Image
+              src={icons.login}
+              alt="Banking illustration"
+              className="h-full w-full rounded-lg object-contain"
+            />
+          </div>
         </div>
-
-        {/* Right side - Image */}
-        <div className="hidden w-full max-w-[480px] lg:block">
-          <Image
-            src={icons.login}
-            alt="Banking illustration"
-            className="h-full w-full rounded-lg object-contain"
-          />
-        </div>
-      </div>
       </Container>
     </div>
   );

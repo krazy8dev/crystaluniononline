@@ -55,7 +55,7 @@ const Register = () => {
       };
       await register(registerData);
       toast.success("Registration successful");
-      router.push("/login");
+      router.replace("/login");
     } catch (error: any) {
       toast.error(error.message || "Failed to register. Please try again.");
     } finally {
@@ -225,7 +225,7 @@ const Register = () => {
               <div className="text-sm text-gray-600">
                 By clicking submit, you agree to{" "}
                 <Link href="/terms" className="text-blue-600 hover:underline">
-                  platinumholdingplc.com Terms of Use
+                  heritagetrustbank.com Terms of Use
                 </Link>
               </div>
 
