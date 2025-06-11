@@ -1,19 +1,20 @@
 "use client";
 
 import useAuthStore from "@/store/authstore";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { config } from "@/config";
 
-interface AuthWrapperProps {
+interface AdminAuthWrapperProps {
   children: React.ReactNode;
 }
 
-export default function AuthWrapper({ children }: AuthWrapperProps) {
+export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
   const { token, isInitialized, setInitialized, checkAdminAccess } =
     useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Initialize from cookies on first load
   useEffect(() => {
@@ -34,23 +35,28 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     }
   }, [isInitialized, setInitialized]);
 
-  // Handle authentication redirects
+  // Handle authentication and admin access redirects
   useEffect(() => {
+    // Skip auth check for login page
+    if (pathname === "/admin/login") {
+      return;
+    }
+
     if (isInitialized) {
       if (!token) {
-        console.log("Not authenticated, redirecting to login");
-        router.replace("/login");
+        console.log("Not authenticated, redirecting to admin login");
+        router.replace("/admin/login");
         return;
       }
 
-      // If user is admin, redirect to admin dashboard
-      if (checkAdminAccess()) {
-        console.log("Admin user detected, redirecting to admin dashboard");
-        router.replace("/admin/dashboard");
+      // If user is not admin, redirect to user dashboard
+      if (!checkAdminAccess()) {
+        console.log("Non-admin user detected, redirecting to user dashboard");
+        router.replace("/dashboard/account-summary");
         return;
       }
     }
-  }, [isInitialized, token, router, checkAdminAccess]);
+  }, [isInitialized, token, router, checkAdminAccess, pathname]);
 
   // Show loading state while initializing
   if (!isInitialized) {
@@ -64,6 +70,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     );
   }
 
-  // Only render children if we have a token and user is not an admin
-  return token && !checkAdminAccess() ? <>{children}</> : null;
+  // For login page, render without auth check
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
+  // For all other admin routes, only render if user is admin
+  return token && checkAdminAccess() ? <>{children}</> : null;
 }
