@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import heroImage from "@/app/assets/images/banker.jpg";
 import Link from "next/link";

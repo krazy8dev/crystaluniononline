@@ -18,9 +18,9 @@ const Details = () => {
                 Real time notifications
               </h1>
               <p className="text-base font-medium md:text-lg">
-                Your customer stay informed in real time with everything that's
+                Your customer stay informed in real time with everything that&apos;s
                 happening on his account: payments, transfer, advice. Get
-                visibility on your customers' flows to anticipate their needs.
+                visibility on your customers&apos; flows to anticipate their needs.
               </p>
 
               <div>

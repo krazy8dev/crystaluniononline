@@ -1,7 +1,7 @@
 "use client";
 
 import useAuthStore from "@/store/authstore";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { config } from "@/config";
@@ -14,6 +14,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   const { token, isInitialized, setInitialized, checkAdminAccess } =
     useAuthStore();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Initialize from cookies on first load
   useEffect(() => {
@@ -37,10 +38,29 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   // Handle authentication redirects
   useEffect(() => {
     if (isInitialized) {
-      if (!token) {
-        console.log("Not authenticated, redirecting to login");
-        router.replace("/login");
-        return;
+      const isAuthRoute = pathname === "/login" || pathname === "/register";
+
+      if (token) {
+        // If user is already logged in and tries to access login/register
+        if (isAuthRoute) {
+          if (checkAdminAccess()) {
+            console.log("Admin user detected, redirecting to admin dashboard");
+            router.replace("/admin/dashboard");
+          } else {
+            console.log(
+              "Authenticated user detected, redirecting to dashboard",
+            );
+            router.replace("/dashboard/account-summary");
+          }
+          return;
+        }
+      } else {
+        // If user is not logged in and tries to access protected routes
+        if (!isAuthRoute) {
+          console.log("Not authenticated, redirecting to login");
+          router.replace("/login");
+          return;
+        }
       }
 
       // If user is admin, redirect to admin dashboard
@@ -50,7 +70,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         return;
       }
     }
-  }, [isInitialized, token, router, checkAdminAccess]);
+  }, [isInitialized, token, router, checkAdminAccess, pathname]);
 
   // Show loading state while initializing
   if (!isInitialized) {
@@ -64,6 +84,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     );
   }
 
-  // Only render children if we have a token and user is not an admin
+  // For login/register pages, only render if not authenticated
+  if (pathname === "/login" || pathname === "/register") {
+    return !token ? <>{children}</> : null;
+  }
+
+  // For other pages, only render if authenticated and not admin
   return token && !checkAdminAccess() ? <>{children}</> : null;
 }

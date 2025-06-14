@@ -1,4 +1,3 @@
-import AuthWrapper from "@/utils/authWrapper";
 import React from "react";
 
 const page = () => {

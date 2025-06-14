@@ -2,7 +2,7 @@
 
 import { icons } from "@/lib";
 import useUserStore from "@/store/userStore";
-import React, { useEffect } from "react";
+import React from "react";
 import {  ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 

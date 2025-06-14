@@ -16,7 +16,7 @@ const NavbarAuth = () => {
           <div className="md:flex hidden items-center gap-4 text-sm font-medium">
             <div>
               {pathname === "/login" ? (
-                <h1>Don't have an account?</h1>
+                <h1>Don&apos;t have an account?</h1>
               ) : (
                 <h1>Already have an account?</h1>
               )}

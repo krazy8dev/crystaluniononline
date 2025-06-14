@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { icons } from "@/lib";
-import Link from "next/link";
 
 const Banking = () => {
   return (

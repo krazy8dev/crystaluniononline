@@ -7,7 +7,6 @@ import Partners from "@/components/ui/partners";
 import Planning from "@/components/ui/planning";
 import Solution from "@/components/ui/solution";
 import Testimonials from "@/components/ui/testimonials";
-import Image from "next/image";
 
 export default function Home() {
   return (

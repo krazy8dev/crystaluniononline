@@ -52,9 +52,9 @@ const Login = () => {
       await login(values as LoginRequest);
       toast.success("Login successful!");
       router.replace("/dashboard/account-summary");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Login error:", error);
-      toast.error(error.message || "Failed to login. Please try again.");
+      toast.error("Failed to login. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +74,7 @@ const Login = () => {
                 Login into your account
               </h1>
               <p className="text-gray-600">
-                Your security is our top priority. You'll need this to log into
+                Your security is our top priority. You&apos;ll need this to log into
                 your Heritage Trust account
               </p>
             </div>

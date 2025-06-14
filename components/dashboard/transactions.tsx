@@ -7,7 +7,7 @@ import useUserStore from "@/store/userStore";
 import { History } from "lucide-react";
 
 const Transactions = () => {
-  const { profile, isLoading, error, fetchProfile } = useUserStore();
+  const { profile, isLoading, fetchProfile } = useUserStore();
 
   useEffect(() => {
     fetchProfile();

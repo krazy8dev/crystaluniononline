@@ -56,8 +56,8 @@ const Register = () => {
       await register(registerData);
       toast.success("Registration successful");
       router.replace("/login");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to register. Please try again.");
+    } catch {
+      toast.error( "Failed to register. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +72,7 @@ const Register = () => {
             <h3 className="mb-2 md:text-2xl text-xl font-bold text-[#0B4B3C]">
               The Power of Financial Freedom
             </h3>
-            <h1 className="mb-3 md:text-6xl text-3xl font-bold">Let's Get Started!</h1>
+            <h1 className="mb-3 md:text-6xl text-3xl font-bold">Let&apos;s Get Started!</h1>
             <p className="text-gray-600">
               Please Enter your Email Address to Start your Online Application
             </p>
