@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
 
 const OtherTransfer = () => {
-  const { profile, isLoading, error, fetchProfile } = useUserStore();
+  const { profile, isLoading, fetchProfile } = useUserStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",

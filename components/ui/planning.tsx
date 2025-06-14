@@ -45,12 +45,12 @@ const Planning = () => {
           <div className="w-full space-y-6 text-center md:space-y-8 lg:w-1/2 lg:text-left">
             <h1 className="text-lg font-bold md:text-xl">Financial Planning</h1>
             <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-              Let's plan your finances the <br className="hidden lg:block" />{" "}
+              Let&apos;s plan your finances the <br className="hidden lg:block" />{" "}
               right way.
             </h2>
             <p className="text-sm font-medium md:text-base">
-              Lending that doesn't weigh you down. We know how hard is it to
-              start something <br className="hidden lg:block" /> new, that's why
+              Lending that doesn&apos;t weigh you down. We know how hard is it to
+              start something <br className="hidden lg:block" /> new, that&apos;s why
               we have the perfect plan for you.
             </p>
             <Link

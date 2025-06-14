@@ -37,8 +37,8 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
 
   // Handle authentication and admin access redirects
   useEffect(() => {
-    // Skip auth check for login page
-    if (pathname === "/admin/login") {
+    // Skip auth check for login page if not authenticated
+    if (pathname === "/admin/login" && !token) {
       return;
     }
 
@@ -46,6 +46,20 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
       if (!token) {
         console.log("Not authenticated, redirecting to admin login");
         router.replace("/admin/login");
+        return;
+      }
+
+      // If already authenticated and trying to access login page
+      if (pathname === "/admin/login") {
+        if (checkAdminAccess()) {
+          console.log(
+            "Admin already logged in, redirecting to admin dashboard",
+          );
+          router.replace("/admin/dashboard");
+        } else {
+          console.log("Non-admin user detected, redirecting to user dashboard");
+          router.replace("/dashboard/account-summary");
+        }
         return;
       }
 
@@ -70,9 +84,9 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
     );
   }
 
-  // For login page, render without auth check
+  // For login page, only render if not authenticated
   if (pathname === "/admin/login") {
-    return <>{children}</>;
+    return !token ? <>{children}</> : null;
   }
 
   // For all other admin routes, only render if user is admin

@@ -10,7 +10,7 @@ import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { testimonials } from "@/lib";
 
 const Testimonials = () => {
-  const NextArrow = (props: any) => {
+  const NextArrow = (props: { onClick: () => void }) => {
     const { onClick } = props;
     return (
       <button
@@ -23,7 +23,7 @@ const Testimonials = () => {
     );
   };
 
-  const PrevArrow = (props: any) => {
+  const PrevArrow = (props: { onClick: () => void }) => {
     const { onClick } = props;
     return (
       <button
@@ -45,8 +45,8 @@ const Testimonials = () => {
     autoplay: true,
     autoplaySpeed: 5000,
     arrows: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow onClick={() => {}} />,
+    prevArrow: <PrevArrow onClick={() => {}} />,
     customPaging: () => (
       <div className="mx-1 h-2 w-2 rounded-full bg-gray-300 transition-colors duration-200 hover:bg-blue-500"></div>
     ),
@@ -60,7 +60,7 @@ const Testimonials = () => {
             Testimonials
           </h1>
           <h2 className="text-center text-2xl font-bold text-black md:text-5xl">
-            Don't take our word for <br /> it, take theirs
+            Don&apos;t take our word for <br /> it, take theirs
           </h2>
           <p className="font-lg font-medium">
             Take a look at our past success stories. Our goal is to help you

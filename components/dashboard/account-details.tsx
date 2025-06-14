@@ -7,7 +7,7 @@ import useUserStore from "@/store/userStore";
 import { Mail, Phone, Wallet, PenSquare } from "lucide-react";
 
 const AccountDetails = () => {
-  const { profile, isLoading, error, fetchProfile } = useUserStore();
+  const { profile, isLoading, fetchProfile } = useUserStore();
 
   useEffect(() => {
     fetchProfile();
@@ -71,7 +71,10 @@ const AccountDetails = () => {
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Wallet className="h-4 w-4" />
-                <span>Overdraft limit: <span className="font-medium text-red-500">$300,000</span></span>
+                <span>
+                  Overdraft limit:{" "}
+                  <span className="font-medium text-red-500">$300,000</span>
+                </span>
               </div>
             </div>
 

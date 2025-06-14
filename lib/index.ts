@@ -47,6 +47,7 @@ import {
   Building2,
   Globe2,
   BanknoteIcon,
+  LucideIcon,
   
 } from "lucide-react";
 
@@ -183,13 +184,13 @@ export const faqData = [
 ];
 
 export interface SidebarLink {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   href: string;
   subLinks?: {
     label: string;
     href: string;
-    icon: any;
+    icon: LucideIcon;
   }[];
 }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import Container from "../../shared/container";
 import Logo from "../../shared/logo";
-import Link from "next/link";
 import UserMenu from "./user-menu";
 import UserButton from "./user-button";
 
