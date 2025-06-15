@@ -38,7 +38,6 @@ import login from "@/app/assets/images/login.jpg";
 import loginImage from "@/app/assets/images/bglogin.jpg";
 import ebanking from "@/app/assets/images/e-banking.jpg";
 
-
 import {
   CreditCard,
   LayoutDashboard,
@@ -48,7 +47,9 @@ import {
   Globe2,
   BanknoteIcon,
   LucideIcon,
-  
+  Users,
+  FileText,
+  List,
 } from "lucide-react";
 
 export const icons = {
@@ -199,7 +200,7 @@ export const sidebarLinks: SidebarLink[] = [
     icon: LayoutDashboard,
     label: "My Account",
     href: "/dashboard",
-    subLinks:[
+    subLinks: [
       {
         icon: CreditCard,
         label: "Account Summary",
@@ -214,10 +215,10 @@ export const sidebarLinks: SidebarLink[] = [
         icon: BanknoteIcon,
         label: "Transactions",
         href: "/dashboard/transactions",
-      }
-    ]
+      },
+    ],
   },
- 
+
   {
     icon: SendHorizontal,
     label: "Transfer",
@@ -239,15 +240,15 @@ export const sidebarLinks: SidebarLink[] = [
         icon: Globe2,
       },
       //   {
-    //     label: "Loans",
-    //     href: "/dashboard/loans",
-    //     icon: Wallet,
-    //   },
-    //   {
-    //     label: "Deposits",
-    //     href: "/dashboard/deposits",
-    //     icon: BanknoteIcon,
-    //   },
+      //     label: "Loans",
+      //     href: "/dashboard/loans",
+      //     icon: Wallet,
+      //   },
+      //   {
+      //     label: "Deposits",
+      //     href: "/dashboard/deposits",
+      //     icon: BanknoteIcon,
+      //   },
     ],
   },
 ];
@@ -273,5 +274,28 @@ export const dashboardLinks = [
         href: "/dashboard/deposits",
       },
     ],
+  },
+];
+
+export const adminLinks: SidebarLink[] = [
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    href: "/admin/dashboard-admin",
+  },
+  {
+    icon: Users,
+    label: "Users",
+    href: "/admin/dashboard-admin/users",
+  },
+  {
+    icon: FileText,
+    label: "Create Transactions",
+    href: "/admin/dashboard-admin/create-transactions",
+  },
+  {
+    icon: List,
+    label: "Transactions List",
+    href: "/admin/dashboard-admin/transactions-list",
   },
 ];

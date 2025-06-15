@@ -40,7 +40,7 @@ const AdminLoginPage = () => {
       // After successful login, verify admin access
       if (checkAdminAccess()) {
         toast.success("Welcome back, Admin!");
-        router.push("/admin/dashboard");
+        router.push("/admin/dashboard-admin");
       } else {
         toast.error("Unauthorized: Admin access required");
         router.push("/login");
