@@ -9,70 +9,22 @@ import useAuthStore from "@/store/authstore";
 import { useRouter } from "next/navigation";
 import {
   LogOut,
-  ChevronDown,
-  ChevronRight,
   Menu,
   PanelLeftClose,
   PanelLeft,
 } from "lucide-react";
-import { sidebarLinks, type SidebarLink } from "@/lib";
+import { adminLinks } from "@/lib";
 
 const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
-  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     router.push("/");
-  };
-
-  const toggleSubmenu = (label: string) => {
-    if (isCollapsed) {
-      setIsCollapsed(false);
-      setExpandedMenu(label);
-      return;
-    }
-    setExpandedMenu(expandedMenu === label ? null : label);
-  };
-
-  const renderSubLinks = (link: SidebarLink) => {
-    if (!link.subLinks?.length) return null;
-
-    return (
-      <div className={cn("mt-1 space-y-1", isCollapsed ? "px-2" : "ml-4")}>
-        {link.subLinks.map((subLink) => {
-          const SubIcon = subLink.icon;
-          const isSubActive = pathname === subLink.href;
-
-          return (
-            <Link
-              key={subLink.href}
-              href={subLink.href}
-              className={cn(
-                "flex items-center rounded-lg py-2 text-sm font-medium transition-colors",
-                isCollapsed ? "justify-center px-2" : "space-x-3 px-4",
-                isSubActive
-                  ? "bg-blue-50 text-blue-800"
-                  : "text-gray-700 hover:bg-gray-100",
-              )}
-              title={isCollapsed ? subLink.label : undefined}
-            >
-              <SubIcon
-                className={cn(
-                  "flex-shrink-0",
-                  isCollapsed ? "h-5 w-5" : "h-4 w-4",
-                )}
-              />
-              {!isCollapsed && <span>{subLink.label}</span>}
-            </Link>
-          );
-        })}
-      </div>
-    );
   };
 
   const sidebarContent = (
@@ -101,24 +53,17 @@ const Sidebar = () => {
 
       {/* Navigation Links */}
       <nav className="flex-1 space-y-1 p-4">
-        {sidebarLinks.map((link) => {
+        {adminLinks.map((link) => {
           const Icon = link.icon;
-          const isActive =
-            pathname === link.href || pathname.startsWith(link.href + "/");
-          const hasSubLinks = Boolean(link.subLinks?.length);
-          const isExpanded = expandedMenu === link.label;
+          const isActive = pathname === link.href;
 
           return (
             <div key={link.href}>
               <button
-                onClick={() =>
-                  hasSubLinks
-                    ? toggleSubmenu(link.label)
-                    : router.push(link.href)
-                }
+                onClick={() => router.push(link.href)}
                 className={cn(
                   "flex w-full items-center rounded-lg py-2 text-sm font-medium transition-colors",
-                  isCollapsed ? "justify-center px-2" : "justify-between px-4",
+                  isCollapsed ? "justify-center px-2" : "px-4",
                   isActive
                     ? "bg-blue-50 text-blue-800"
                     : "text-gray-700 hover:bg-gray-100",
@@ -134,19 +79,7 @@ const Sidebar = () => {
                   <Icon className="h-5 w-5" />
                   {!isCollapsed && <span>{link.label}</span>}
                 </div>
-                {hasSubLinks &&
-                  !isCollapsed &&
-                  (isExpanded ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4" />
-                  ))}
               </button>
-
-              {/* Submenu */}
-              {hasSubLinks &&
-                (isExpanded || isCollapsed) &&
-                renderSubLinks(link)}
             </div>
           );
         })}
@@ -182,7 +115,7 @@ const Sidebar = () => {
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="bg-opacity-50 fixed inset-0 z-40 bg-black/10 lg:hidden"
+          className="bg-opacity-10 fixed inset-0 z-40 bg-black/10 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

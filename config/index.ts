@@ -11,6 +11,13 @@ export const config = {
         forgotPassword: "/auth/forgot-password",
         resetPassword: "/auth/reset-password",
       },
+      admin: {
+        users: "/admin/users",
+        getUserById: (id: string) => `/admin/users/${id}`,
+        updateUser: (id: string) => `/admin/users/${id}`,
+        deleteUser: (id: string) => `/admin/users/${id}`,
+        topUpUser: (id: string) => `/admin/users/${id}/top-up`,
+      },
     },
   },
   auth: {
