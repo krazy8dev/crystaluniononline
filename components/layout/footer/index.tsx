@@ -8,7 +8,7 @@ import {
   Twitter,
   Linkedin,
   Instagram,
-  MessageCircle,
+  // MessageCircle,
 } from "lucide-react";
 
 const Footer = () => {
