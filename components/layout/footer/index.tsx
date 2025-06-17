@@ -15,10 +15,10 @@ const Footer = () => {
   return (
     <footer className="relative bg-white py-20">
       {/* Chat Button */}
-      <button className="fixed right-8 bottom-8 flex items-center space-x-2 rounded-full bg-blue-600 px-6 py-3 text-white shadow-lg transition-colors hover:bg-blue-700">
+      {/* <button className="fixed right-8 bottom-8 flex items-center space-x-2 rounded-full bg-blue-600 px-6 py-3 text-white shadow-lg transition-colors hover:bg-blue-700">
         <span>Chat</span>
         <MessageCircle className="h-5 w-5" />
-      </button>
+      </button> */}
 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
