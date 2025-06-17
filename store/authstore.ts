@@ -2,11 +2,11 @@
 
 import { config } from "@/config";
 import {
-    ForgotPasswordRequest,
-    LoginRequest,
-    RegisterRequest,
-    ResetPasswordRequest,
-    User,
+  ForgotPasswordRequest,
+  LoginRequest,
+  RegisterRequest,
+  ResetPasswordRequest,
+  User,
 } from "@/types/auth";
 import { axiosInstance } from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
@@ -91,11 +91,15 @@ const useAuthStore = create<AuthState>()(
             config.api.endpoints.auth.register,
             data,
           );
-          if (response.status === 201) {
+
+          if (response.data.status === "success") {
+            // Only set user data if registration was successful
             set({
-              user: response.data.user,
-              isAdmin: response.data.user.role === "admin",
+              user: response.data.data.user,
+              isAdmin: response.data.data.user?.role === "admin",
             });
+          } else {
+            throw new Error(response.data.message || "Registration failed");
           }
         } catch (error: any) {
           if (error.response?.status === 400) {
@@ -112,7 +116,9 @@ const useAuthStore = create<AuthState>()(
           console.log("Making login request with data:", data);
 
           const response = await axiosInstance.post(
-            isAdminRoute ? "/auth/admin/login" : config.api.endpoints.auth.login,
+            isAdminRoute
+              ? "/auth/admin/login"
+              : config.api.endpoints.auth.login,
             data,
           );
 
