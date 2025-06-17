@@ -1,13 +1,11 @@
 "use client";
 
+import useAdminStore from "@/store/adminStore";
+import { Pencil, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { config } from "@/config";
-import { axiosInstance } from "@/utils/axiosInstance";
-import { Pencil, Trash2, Search } from "lucide-react";
 
 interface User {
-  id: string;
   fullName: string;
   email: string;
   accountNumber: string;
@@ -15,61 +13,53 @@ interface User {
   role: string;
 }
 
+interface UserState {
+  topUpAmount: string;
+  isToppingUp: boolean;
+  isUpdating: boolean;
+}
+
 const UsersPage = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { users, loading, error, fetchUsers, updateUser, deleteUser, topUpUserBalance } = useAdminStore();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [topUpAmount, setTopUpAmount] = useState("");
-
-  // Fetch all users
-  const fetchUsers = async () => {
-    try {
-      const response = await axiosInstance.get(
-        config.api.endpoints.admin.users,
-      );
-      // Ensure we're setting an array
-      setUsers(Array.isArray(response.data) ? response.data : []);
-    } catch (error) {
-      toast.error("Failed to load users");
-      console.error("Error fetching users:", error);
-      setUsers([]); // Set empty array on error
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [userStates, setUserStates] = useState<Record<string, UserState>>({});
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
-  // Get user by ID
-//   const fetchUserById = async (id: string) => {
-//     try {
-//       const response = await axiosInstance.get(
-//         config.api.endpoints.admin.getUserById(id),
-//       );
-//       setSelectedUser(response.data);
-//     } catch (error) {
-//       toast.error("Failed to fetch user details");
-//       console.error("Error fetching user:", error);
-//     }
-//   };
+  // Initialize user states when users are loaded
+  useEffect(() => {
+    const newUserStates: Record<string, UserState> = {};
+    users.forEach(user => {
+      newUserStates[user.accountNumber] = {
+        topUpAmount: "",
+        isToppingUp: false,
+        isUpdating: false
+      };
+    });
+    setUserStates(newUserStates);
+  }, [users]);
 
   // Update user
   const handleUpdateUser = async (id: string, data: Partial<User>) => {
     try {
-      await axiosInstance.patch(
-        config.api.endpoints.admin.updateUser(id),
-        data,
-      );
+      setUserStates(prev => ({
+        ...prev,
+        [id]: { ...prev[id], isUpdating: true }
+      }));
+      await updateUser(id, data);
       toast.success("User updated successfully");
-      fetchUsers(); // Refresh the list
       setIsEditing(false);
-    } catch (error) {
-      toast.error("Failed to update user");
-      console.error("Error updating user:", error);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update user");
+    } finally {
+      setUserStates(prev => ({
+        ...prev,
+        [id]: { ...prev[id], isUpdating: false }
+      }));
     }
   };
 
@@ -78,28 +68,41 @@ const UsersPage = () => {
     if (!confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axiosInstance.delete(config.api.endpoints.admin.deleteUser(id));
+      await deleteUser(id);
       toast.success("User deleted successfully");
-      fetchUsers(); // Refresh the list
-    } catch (error) {
-      toast.error("Failed to delete user");
-      console.error("Error deleting user:", error);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to delete user");
     }
   };
 
   // Top up user balance
   const handleTopUp = async (id: string, amount: number) => {
     try {
-      await axiosInstance.post(config.api.endpoints.admin.topUpUser(id), {
-        amount,
-      });
+      setUserStates(prev => ({
+        ...prev,
+        [id]: { ...prev[id], isToppingUp: true }
+      }));
+      await topUpUserBalance(id, amount);
       toast.success("Balance topped up successfully");
-      fetchUsers(); // Refresh the list
-      setTopUpAmount("");
-    } catch (error) {
-      toast.error("Failed to top up balance");
-      console.error("Error topping up balance:", error);
+      setUserStates(prev => ({
+        ...prev,
+        [id]: { ...prev[id], topUpAmount: "", isToppingUp: false }
+      }));
+    } catch (error: any) {
+      toast.error(error.message || "Failed to top up balance");
+      setUserStates(prev => ({
+        ...prev,
+        [id]: { ...prev[id], isToppingUp: false }
+      }));
     }
+  };
+
+  // Update top up amount for a specific user
+  const handleTopUpAmountChange = (id: string, amount: string) => {
+    setUserStates(prev => ({
+      ...prev,
+      [id]: { ...prev[id], topUpAmount: amount }
+    }));
   };
 
   // Filter users based on search query
@@ -110,10 +113,18 @@ const UsersPage = () => {
       user.accountNumber?.includes(searchQuery),
   );
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-full items-center justify-center text-red-500">
+        Error: {error}
       </div>
     );
   }
@@ -162,7 +173,7 @@ const UsersPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {isLoading ? (
+              {loading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center">
                     <div className="flex justify-center">
@@ -186,7 +197,7 @@ const UsersPage = () => {
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.accountNumber} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {user.fullName}
@@ -207,11 +218,10 @@ const UsersPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex rounded-full px-2 text-xs leading-5 font-semibold ${
-                          user.role === "admin"
+                        className={`inline-flex rounded-full px-2 text-xs leading-5 font-semibold ${user.role === "admin"
                             ? "bg-purple-100 text-purple-800"
                             : "bg-green-100 text-green-800"
-                        }`}
+                          }`}
                       >
                         {user.role || "user"}
                       </span>
@@ -223,12 +233,17 @@ const UsersPage = () => {
                             setSelectedUser(user);
                             setIsEditing(true);
                           }}
-                          className="text-blue-600 hover:text-blue-900"
+                          disabled={userStates[user.accountNumber]?.isUpdating}
+                          className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
                         >
-                          <Pencil className="h-4 w-4" />
+                          {userStates[user.accountNumber]?.isUpdating ? (
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
+                          ) : (
+                            <Pencil className="h-4 w-4" />
+                          )}
                         </button>
                         <button
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteUser(user.accountNumber)}
                           className="text-red-600 hover:text-red-900"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -237,19 +252,25 @@ const UsersPage = () => {
                           <input
                             type="number"
                             placeholder="Amount"
-                            value={topUpAmount}
-                            onChange={(e) => setTopUpAmount(e.target.value)}
+                            value={userStates[user.accountNumber]?.topUpAmount || ""}
+                            onChange={(e) => handleTopUpAmountChange(user.accountNumber, e.target.value)}
                             className="w-24 rounded-lg border border-gray-300 px-2 py-1 text-sm"
                           />
                           <button
                             onClick={() => {
-                              if (topUpAmount) {
-                                handleTopUp(user.id, parseFloat(topUpAmount));
+                              const amount = userStates[user.accountNumber]?.topUpAmount;
+                              if (amount) {
+                                handleTopUp(user.accountNumber, parseFloat(amount));
                               }
                             }}
-                            className="ml-2 rounded bg-green-500 px-2 py-1 text-xs text-white hover:bg-green-600"
+                            disabled={userStates[user.accountNumber]?.isToppingUp}
+                            className="ml-2 rounded bg-green-500 px-2 py-1 text-xs text-white hover:bg-green-600 disabled:opacity-50"
                           >
-                            Top Up
+                            {userStates[user.accountNumber]?.isToppingUp ? (
+                              <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                            ) : (
+                              "Top Up"
+                            )}
                           </button>
                         </div>
                       </div>
@@ -264,14 +285,14 @@ const UsersPage = () => {
 
       {/* Edit User Modal */}
       {isEditing && selectedUser && (
-        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-md rounded-lg bg-white p-6">
             <h2 className="mb-4 text-xl font-bold">Edit User</h2>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
-                handleUpdateUser(selectedUser.id, {
+                handleUpdateUser(selectedUser.accountNumber, {
                   fullName: formData.get("fullName") as string,
                   role: formData.get("role") as string,
                 });
@@ -312,9 +333,17 @@ const UsersPage = () => {
                 </button>
                 <button
                   type="submit"
-                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                  disabled={userStates[selectedUser.accountNumber]?.isUpdating}
+                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                 >
-                  Save Changes
+                  {userStates[selectedUser.accountNumber]?.isUpdating ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                      <span>Saving...</span>
+                    </div>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </button>
               </div>
             </form>

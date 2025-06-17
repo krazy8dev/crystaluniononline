@@ -2,12 +2,27 @@
 
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { getInitials } from "@/lib/utils";
+import useAdminStore from "@/store/adminStore";
 import useUserStore from "@/store/userStore";
-import { ArrowDown, ArrowUp, Ban, Download, File, Hourglass, UsersRound } from "lucide-react";
-import React from "react";
+import { ArrowDown, ArrowUp, Ban, Download, File, Hourglass } from "lucide-react";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   const { profile } = useUserStore();
+  const { dashboardStats, loading, error, fetchDashboardStats } = useAdminStore();
+
+  useEffect(() => {
+    fetchDashboardStats();
+  }, [fetchDashboardStats]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -22,34 +37,20 @@ const Dashboard = () => {
 
       <div className="mt-10 grid grid-cols-3 gap-4">
         <div className="rounded-lg border bg-white px-4 py-6 shadow-md">
-          <h1>Balance</h1>
-          <p className="text-2xl font-bold">{profile?.balance || 0}</p>
+          <h1>Total Users</h1>
+          <p className="text-2xl font-bold">{dashboardStats?.users.total || 0}</p>
           <span className="flex items-center gap-2 text-sm text-green-600">
             <ArrowUp className="h-4 w-4 text-green-600" />
-            3.48%
-            <span className="text-gray-500">Since last month</span>
+            {dashboardStats?.users.topUsers.length || 0} Top Users
           </span>
         </div>
         <div className="flex w-full items-center justify-between rounded-lg border bg-white p-4 shadow-md">
           <div>
-            <h1>Users</h1>
-            <p className="text-2xl font-bold">{profile?.balance || 0}</p>
-            <span className="flex items-center gap-2 text-sm text-green-600">
-              <ArrowUp className="h-4 w-4 text-green-600" />
-              20.4%
-              <span className="text-gray-500">Since last month</span>
-            </span>
-          </div>
-          <UsersRound className="h-10 w-10 text-cyan-600" />
-        </div>
-        <div className="flex w-full items-center justify-between rounded-lg border bg-white p-4 shadow-md">
-          <div>
             <h1>Total Transactions</h1>
-            <p className="text-2xl font-bold">{profile?.balance || 39}</p>
+            <p className="text-2xl font-bold">{dashboardStats?.transactions.total || 0}</p>
             <span className="flex items-center gap-2 text-sm text-green-600">
               <ArrowUp className="h-4 w-4 text-green-600" />
-              10.4%
-              <span className="text-gray-500">Since last years</span>
+              Total Amount: ${dashboardStats?.transactions.totalAmount || 0}
             </span>
           </div>
           <File className="h-10 w-10 text-green-600" />
@@ -57,11 +58,11 @@ const Dashboard = () => {
         <div className="flex w-full items-center justify-between rounded-lg border bg-white p-4 shadow-md">
           <div>
             <h1>Completed Transactions</h1>
-            <p className="text-2xl font-bold">{profile?.balance || 12}</p>
-            <span className="flex items-center gap-2 text-sm text-red-600">
-              <ArrowDown className="h-4 w-4 text-red-600" />
-              12%
-              <span className="text-gray-500">Since last years</span>
+            <p className="text-2xl font-bold">{dashboardStats?.transactions.byStatus.completed || 0}</p>
+            <span className="flex items-center gap-2 text-sm text-green-600">
+              <ArrowUp className="h-4 w-4 text-green-600" />
+              {((dashboardStats?.transactions.byStatus.completed || 0) / (dashboardStats?.transactions.total || 1) * 100).toFixed(1)}%
+              <span className="text-gray-500">Completion Rate</span>
             </span>
           </div>
           <Download className="h-10 w-10 text-yellow-500" />
@@ -69,26 +70,37 @@ const Dashboard = () => {
         <div className="flex w-full items-center justify-between rounded-lg border bg-white p-4 shadow-md">
           <div>
             <h1>Pending Transactions</h1>
-            <p className="text-2xl font-bold">{profile?.balance || 39}</p>
-            <span className="flex items-center gap-2 text-sm text-green-600">
-              <ArrowUp className="h-4 w-4 text-green-600" />
-              1.10%
-              <span className="text-gray-500">Since last month</span>
+            <p className="text-2xl font-bold">{dashboardStats?.transactions.byStatus.pending || 0}</p>
+            <span className="flex items-center gap-2 text-sm text-yellow-600">
+              <Hourglass className="h-4 w-4 text-yellow-600" />
+              {((dashboardStats?.transactions.byStatus.pending || 0) / (dashboardStats?.transactions.total || 1) * 100).toFixed(1)}%
+              <span className="text-gray-500">Pending Rate</span>
             </span>
           </div>
-          <Hourglass  className="h-10 w-10 text-yellow-500" />
+          <Hourglass className="h-10 w-10 text-yellow-500" />
         </div>
         <div className="flex w-full items-center justify-between rounded-lg border bg-white p-4 shadow-md">
           <div>
-            <h1>STATUS</h1>
-            <p className="text-2xl font-bold">active</p>
-            <span className="flex items-center gap-2 text-sm text-green-600">
-              <ArrowUp className="h-4 w-4 text-green-600" />
-              10.4%
-              <span className="text-gray-500">Since last years</span>
+            <h1>Failed Transactions</h1>
+            <p className="text-2xl font-bold">{dashboardStats?.transactions.byStatus.failed || 0}</p>
+            <span className="flex items-center gap-2 text-sm text-red-600">
+              <ArrowDown className="h-4 w-4 text-red-600" />
+              {((dashboardStats?.transactions.byStatus.failed || 0) / (dashboardStats?.transactions.total || 1) * 100).toFixed(1)}%
+              <span className="text-gray-500">Failure Rate</span>
             </span>
           </div>
-          <Ban  className="h-10 w-10 text-green-600 font-bold" />
+          <Ban className="h-10 w-10 text-red-600" />
+        </div>
+        <div className="flex w-full items-center justify-between rounded-lg border bg-white p-4 shadow-md">
+          <div>
+            <h1>Recent Transactions</h1>
+            <p className="text-2xl font-bold">{dashboardStats?.transactions.recent.length || 0}</p>
+            <span className="flex items-center gap-2 text-sm text-blue-600">
+              <File className="h-4 w-4 text-blue-600" />
+              Latest Activity
+            </span>
+          </div>
+          <File className="h-10 w-10 text-blue-600" />
         </div>
       </div>
     </div>

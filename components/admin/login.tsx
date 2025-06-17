@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { toast } from "sonner";
 import useAuthStore from "@/store/authstore";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const AdminLoginPage = () => {
   const router = useRouter();
@@ -32,7 +32,6 @@ const AdminLoginPage = () => {
         {
           email: formData.email,
           password: formData.password,
-          securityPin: "1111", // Add a dummy pin for type safety
         },
         true,
       );
@@ -46,7 +45,7 @@ const AdminLoginPage = () => {
         router.push("/login");
       }
     } catch {
-      toast.error( "Failed to login");
+      toast.error("Failed to login");
     } finally {
       setIsLoading(false);
     }

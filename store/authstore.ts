@@ -1,20 +1,18 @@
 "use client";
 
-import { create, StateCreator } from "zustand";
-import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
-import { NextRouter } from "next/router";
-import { axiosInstance } from "@/utils/axiosInstance";
 import { config } from "@/config";
 import {
-  ForgotPasswordRequest,
-  LoginRequest,
-  RegisterRequest,
-  ResetPasswordRequest,
-  User,
-  // VerifyEmailRequest,
+    ForgotPasswordRequest,
+    LoginRequest,
+    RegisterRequest,
+    ResetPasswordRequest,
+    User,
 } from "@/types/auth";
+import { axiosInstance } from "@/utils/axiosInstance";
+import Cookies from "js-cookie";
+import { NextRouter } from "next/router";
+import { create, StateCreator } from "zustand";
+import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 
 const decodeToken = (token: string) => {
   try {
@@ -114,7 +112,7 @@ const useAuthStore = create<AuthState>()(
           console.log("Making login request with data:", data);
 
           const response = await axiosInstance.post(
-            config.api.endpoints.auth.login,
+            isAdminRoute ? "/auth/admin/login" : config.api.endpoints.auth.login,
             data,
           );
 
