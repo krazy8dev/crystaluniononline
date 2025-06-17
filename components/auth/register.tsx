@@ -59,10 +59,10 @@ const Register = () => {
         "Registration successful! Please check your email for verification.",
       );
       router.replace("/login");
-    } catch (error: any) {
+    } catch  {
       const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
+        // error.response?.data?.message ||
+        // error.message ||
         "Failed to register. Please try again.";
       toast.error(errorMessage);
 
