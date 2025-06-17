@@ -53,26 +53,40 @@ const Register = () => {
         password: values.password,
         confirmPassword: values.confirmPassword,
       };
+
       await register(registerData);
-      toast.success("Registration successful");
+      toast.success(
+        "Registration successful! Please check your email for verification.",
+      );
       router.replace("/login");
-    } catch {
-      toast.error( "Failed to register. Please try again.");
+    } catch  {
+      const errorMessage =
+        // error.response?.data?.message ||
+        // error.message ||
+        "Failed to register. Please try again.";
+      toast.error(errorMessage);
+
+      // If email already exists, clear the email field
+      if (errorMessage.toLowerCase().includes("email already exists")) {
+        form.setValue("email", "");
+      }
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="flex items-center justify-center p-4 mt-5">
+    <div className="mt-5 flex items-center justify-center p-4">
       <div className="flex w-full flex-col items-center justify-center gap-8 lg:flex-row lg:gap-16">
         {/* Left side - Form */}
-        <div className="flex lg:w-1/2 w-full flex-col">
+        <div className="flex w-full flex-col lg:w-1/2">
           <div className="mb-8">
-            <h3 className="mb-2 md:text-2xl text-xl font-bold text-[#0B4B3C]">
+            <h3 className="mb-2 text-xl font-bold text-[#0B4B3C] md:text-2xl">
               The Power of Financial Freedom
             </h3>
-            <h1 className="mb-3 md:text-6xl text-3xl font-bold">Let&apos;s Get Started!</h1>
+            <h1 className="mb-3 text-3xl font-bold md:text-6xl">
+              Let&apos;s Get Started!
+            </h1>
             <p className="text-gray-600">
               Please Enter your Email Address to Start your Online Application
             </p>
@@ -91,7 +105,7 @@ const Register = () => {
                     <FormControl>
                       <Input
                         placeholder="Fullname"
-                        className="h-12 text-base bg-white"
+                        className="h-12 bg-white text-base"
                         {...field}
                         disabled={isLoading}
                       />
@@ -113,7 +127,7 @@ const Register = () => {
                       <Input
                         type="email"
                         placeholder="Email"
-                        className="h-12 text-base bg-white"
+                        className="h-12 bg-white text-base"
                         {...field}
                         disabled={isLoading}
                       />
@@ -135,7 +149,7 @@ const Register = () => {
                       <Input
                         type="password"
                         placeholder="Support pin"
-                        className="h-12 text-base bg-white"
+                        className="h-12 bg-white text-base"
                         {...field}
                         disabled={isLoading}
                         maxLength={4}
@@ -160,7 +174,7 @@ const Register = () => {
                           <Input
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter Your Password"
-                            className="h-12 pr-10 text-base bg-white"
+                            className="h-12 bg-white pr-10 text-base"
                             {...field}
                             disabled={isLoading}
                           />
@@ -178,6 +192,10 @@ const Register = () => {
                           </button>
                         </div>
                       </FormControl>
+                      <p className="mt-1 text-xs text-gray-500">
+                        Password must be at least 8 characters and contain
+                        uppercase, lowercase, number, and special character
+                      </p>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -196,7 +214,7 @@ const Register = () => {
                           <Input
                             type={showConfirmPassword ? "text" : "password"}
                             placeholder="Confirm Password"
-                            className="h-12 pr-10 text-base bg-white"
+                            className="h-12 bg-white pr-10 text-base"
                             {...field}
                             disabled={isLoading}
                           />
@@ -229,15 +247,15 @@ const Register = () => {
                 </Link>
               </div>
 
-             <div>
-             <Button
-                type="submit"
-                className="h-12 px-20 rounded-full bg-blue-600 text-base font-medium text-white hover:bg-blue-700"
-                disabled={isLoading}
-              >
-                {isLoading ? "Registering..." : "Submit Now"}
-              </Button>
-             </div>
+              <div>
+                <Button
+                  type="submit"
+                  className="h-12 rounded-full bg-blue-600 px-20 text-base font-medium text-white hover:bg-blue-700"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Registering..." : "Submit Now"}
+                </Button>
+              </div>
             </form>
           </Form>
         </div>
