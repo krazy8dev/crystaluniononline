@@ -28,7 +28,7 @@ const TransactionsList = () => {
         try {
             await updateTransactionStatus(transactionId, newStatus);
             toast.success("Transaction status updated successfully");
-        } catch (error) {
+        } catch {
             toast.error("Failed to update transaction status");
         }
     };

@@ -2,6 +2,7 @@
 
 import useAdminStore from "@/store/adminStore";
 import { Pencil, Search, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -11,6 +12,7 @@ interface User {
   accountNumber: string;
   balance: number;
   role: string;
+  _id: string;
 }
 
 interface UserState {
@@ -25,7 +27,7 @@ const UsersPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userStates, setUserStates] = useState<Record<string, UserState>>({});
-
+  const router = useRouter();
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
@@ -53,8 +55,8 @@ const UsersPage = () => {
       await updateUser(id, data);
       toast.success("User updated successfully");
       setIsEditing(false);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update user");
+    } catch  {
+      toast.error("Failed to update user");
     } finally {
       setUserStates(prev => ({
         ...prev,
@@ -70,8 +72,8 @@ const UsersPage = () => {
     try {
       await deleteUser(id);
       toast.success("User deleted successfully");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to delete user");
+    } catch  {
+      toast.error( "Failed to delete user");
     }
   };
 
@@ -88,8 +90,8 @@ const UsersPage = () => {
         ...prev,
         [id]: { ...prev[id], topUpAmount: "", isToppingUp: false }
       }));
-    } catch (error: any) {
-      toast.error(error.message || "Failed to top up balance");
+    } catch {
+      toast.error("Failed to top up balance");
       setUserStates(prev => ({
         ...prev,
         [id]: { ...prev[id], isToppingUp: false }
@@ -230,7 +232,7 @@ const UsersPage = () => {
                       <div className="flex items-center space-x-3">
                         <button
                           onClick={() => {
-                            setSelectedUser(user);
+                            setSelectedUser({...user, _id: user.accountNumber});
                             setIsEditing(true);
                           }}
                           disabled={userStates[user.accountNumber]?.isUpdating}
@@ -239,7 +241,8 @@ const UsersPage = () => {
                           {userStates[user.accountNumber]?.isUpdating ? (
                             <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
                           ) : (
-                            <Pencil className="h-4 w-4" />
+                            <Pencil className="h-4 w-4" 
+                            onClick={() => router.push(`/admin/dashboard-admin/users/${user.accountNumber}`)}/>
                           )}
                         </button>
                         <button
