@@ -33,7 +33,7 @@ const Sidebar = () => {
       <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
         {!isCollapsed && (
           <Link
-            href="/dashboard/account-summary"
+            href="/admin/dashboard-admin"
             className="text-xl font-bold text-blue-800"
           >
             Heritage Trust Bank

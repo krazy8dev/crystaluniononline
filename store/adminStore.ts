@@ -60,6 +60,7 @@ interface User {
   accountNumber: string;
   balance: number;
   role: string;
+  securityPin: string;
 }
 
 interface Transaction {
@@ -90,7 +91,9 @@ interface AdminState {
 
   // Actions
   fetchDashboardStats: () => Promise<void>;
-  fetchTransactionStats: (period: 'daily' | 'weekly' | 'monthly' | 'yearly') => Promise<void>;
+  fetchTransactionStats: (
+    period: "daily" | "weekly" | "monthly" | "yearly",
+  ) => Promise<void>;
   fetchUsers: () => Promise<void>;
   fetchUserById: (id: string) => Promise<void>;
   updateUser: (id: string, data: Partial<User>) => Promise<void>;
@@ -122,10 +125,16 @@ const useAdminStore = create<AdminState>()(
       fetchDashboardStats: async () => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(config.api.endpoints.admin.dashboard);
+          const response = await axiosInstance.get(
+            config.api.endpoints.admin.dashboard,
+          );
           set({ dashboardStats: response.data.data.stats });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch dashboard stats' });
+          set({
+            error:
+              error.response?.data?.message ||
+              "Failed to fetch dashboard stats",
+          });
         } finally {
           set({ loading: false });
         }
@@ -134,10 +143,16 @@ const useAdminStore = create<AdminState>()(
       fetchTransactionStats: async (period) => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(`${config.api.endpoints.admin.transactions.stats}?period=${period}`);
+          const response = await axiosInstance.get(
+            `${config.api.endpoints.admin.transactions.stats}?period=${period}`,
+          );
           set({ transactionStats: response.data.data });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch transaction stats' });
+          set({
+            error:
+              error.response?.data?.message ||
+              "Failed to fetch transaction stats",
+          });
         } finally {
           set({ loading: false });
         }
@@ -146,10 +161,14 @@ const useAdminStore = create<AdminState>()(
       fetchUsers: async () => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(config.api.endpoints.admin.users);
+          const response = await axiosInstance.get(
+            config.api.endpoints.admin.users,
+          );
           set({ users: response.data.data.users });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch users' });
+          set({
+            error: error.response?.data?.message || "Failed to fetch users",
+          });
         } finally {
           set({ loading: false });
         }
@@ -158,10 +177,14 @@ const useAdminStore = create<AdminState>()(
       fetchUserById: async (id) => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(config.api.endpoints.admin.getUserById(id));
+          const response = await axiosInstance.get(
+            config.api.endpoints.admin.getUserById(id),
+          );
           set({ selectedUser: response.data.data.user });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch user' });
+          set({
+            error: error.response?.data?.message || "Failed to fetch user",
+          });
         } finally {
           set({ loading: false });
         }
@@ -170,16 +193,21 @@ const useAdminStore = create<AdminState>()(
       updateUser: async (id, data) => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.patch(config.api.endpoints.admin.updateUser(id), data);
+          const response = await axiosInstance.patch(
+            config.api.endpoints.admin.updateUser(id),
+            data,
+          );
           set({ selectedUser: response.data.data.user });
           // Update user in the users list if it exists
           const users = get().users;
-          const updatedUsers = users.map(user => 
-            user.accountNumber === id ? response.data.data.user : user
+          const updatedUsers = users.map((user) =>
+            user.accountNumber === id ? response.data.data.user : user,
           );
           set({ users: updatedUsers });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to update user' });
+          set({
+            error: error.response?.data?.message || "Failed to update user",
+          });
         } finally {
           set({ loading: false });
         }
@@ -191,10 +219,14 @@ const useAdminStore = create<AdminState>()(
           await axiosInstance.delete(config.api.endpoints.admin.deleteUser(id));
           // Remove user from the users list
           const users = get().users;
-          const updatedUsers = users.filter(user => user.accountNumber !== id);
+          const updatedUsers = users.filter(
+            (user) => user.accountNumber !== id,
+          );
           set({ users: updatedUsers });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to delete user' });
+          set({
+            error: error.response?.data?.message || "Failed to delete user",
+          });
         } finally {
           set({ loading: false });
         }
@@ -203,16 +235,21 @@ const useAdminStore = create<AdminState>()(
       topUpUserBalance: async (id, amount) => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.post(config.api.endpoints.admin.topUpUser(id), { amount });
+          const response = await axiosInstance.post(
+            config.api.endpoints.admin.topUpUser(id),
+            { amount },
+          );
           set({ selectedUser: response.data.data.user });
           // Update user in the users list if it exists
           const users = get().users;
-          const updatedUsers = users.map(user => 
-            user.accountNumber === id ? response.data.data.user : user
+          const updatedUsers = users.map((user) =>
+            user.accountNumber === id ? response.data.data.user : user,
           );
           set({ users: updatedUsers });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to top up balance' });
+          set({
+            error: error.response?.data?.message || "Failed to top up balance",
+          });
         } finally {
           set({ loading: false });
         }
@@ -221,10 +258,16 @@ const useAdminStore = create<AdminState>()(
       fetchPendingTransactions: async () => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(config.api.endpoints.admin.transactions.pending);
+          const response = await axiosInstance.get(
+            config.api.endpoints.admin.transactions.pending,
+          );
           set({ pendingTransactions: response.data.data.transactions });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch pending transactions' });
+          set({
+            error:
+              error.response?.data?.message ||
+              "Failed to fetch pending transactions",
+          });
         } finally {
           set({ loading: false });
         }
@@ -233,10 +276,15 @@ const useAdminStore = create<AdminState>()(
       fetchTransactionById: async (id) => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(config.api.endpoints.admin.transactions.getById(id));
+          const response = await axiosInstance.get(
+            config.api.endpoints.admin.transactions.getById(id),
+          );
           set({ selectedTransaction: response.data.data.transaction });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch transaction' });
+          set({
+            error:
+              error.response?.data?.message || "Failed to fetch transaction",
+          });
         } finally {
           set({ loading: false });
         }
@@ -245,16 +293,25 @@ const useAdminStore = create<AdminState>()(
       updateTransactionStatus: async (id, status) => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.patch(config.api.endpoints.admin.transactions.updateStatus(id), { status });
+          const response = await axiosInstance.patch(
+            config.api.endpoints.admin.transactions.updateStatus(id),
+            { status },
+          );
           set({ selectedTransaction: response.data.data.transaction });
           // Update transaction in the pending transactions list if it exists
           const pendingTransactions = get().pendingTransactions;
-          const updatedTransactions = pendingTransactions.map(transaction => 
-            transaction._id === id ? response.data.data.transaction : transaction
+          const updatedTransactions = pendingTransactions.map((transaction) =>
+            transaction._id === id
+              ? response.data.data.transaction
+              : transaction,
           );
           set({ pendingTransactions: updatedTransactions });
         } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to update transaction status' });
+          set({
+            error:
+              error.response?.data?.message ||
+              "Failed to update transaction status",
+          });
         } finally {
           set({ loading: false });
         }
@@ -265,8 +322,8 @@ const useAdminStore = create<AdminState>()(
     {
       name: "admin-storage",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
-export default useAdminStore; 
+export default useAdminStore;

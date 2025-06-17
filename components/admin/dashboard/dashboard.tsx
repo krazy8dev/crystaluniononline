@@ -4,7 +4,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import { getInitials } from "@/lib/utils";
 import useAdminStore from "@/store/adminStore";
 import useUserStore from "@/store/userStore";
-import { ArrowDown, ArrowUp, Ban, Download, File, Hourglass } from "lucide-react";
+import { ArrowDown, ArrowUp, Ban, Download, File, Hourglass, Loader } from "lucide-react";
 import { useEffect } from "react";
 
 const Dashboard = () => {
@@ -16,7 +16,7 @@ const Dashboard = () => {
   }, [fetchDashboardStats]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center h-screen"><Loader className="animate-spin" /></div>;
   }
 
   if (error) {
@@ -35,7 +35,7 @@ const Dashboard = () => {
 
       <h1 className="text-2xl font-bold">Dashboard</h1>
 
-      <div className="mt-10 grid grid-cols-3 gap-4">
+      <div className="mt-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="rounded-lg border bg-white px-4 py-6 shadow-md">
           <h1>Total Users</h1>
           <p className="text-2xl font-bold">{dashboardStats?.users.total || 0}</p>
