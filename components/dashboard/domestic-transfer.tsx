@@ -7,6 +7,7 @@ import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
+import { toast } from "sonner";
 
 const DomesticTransfer = () => {
   const router = useRouter();
@@ -41,9 +42,10 @@ const DomesticTransfer = () => {
       });
       // Redirect to success page or show success message
       router.push("/dashboard/transactions");
-    } catch (error) {
+    } catch {
       // Error is handled by the store
-      console.error("Transfer failed:", error);
+      // console.error("Transfer failed:", error);
+      toast.error("Transfer failed, Please try again");
     }
   };
 

@@ -56,7 +56,7 @@ const Register = () => {
 
       await register(registerData);
       toast.success(
-        "Registration successful! Please check your email for verification.",
+        "Registration successful!",
       );
       router.replace("/login");
     } catch  {
