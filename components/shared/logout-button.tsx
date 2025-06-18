@@ -34,7 +34,7 @@ export default function LogoutButton({
     try {
       logout();
       toast.success("Logged out successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout");
     }
   };

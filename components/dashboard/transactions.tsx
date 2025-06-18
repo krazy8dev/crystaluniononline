@@ -48,9 +48,9 @@ const Transactions = () => {
       setSelectedId(id);
       await getTransactionById(id);
       setIsDetailsOpen(true);
-    } catch (error: any) {
+    } catch {
       console.error("Failed to fetch transaction details:", error);
-      toast.error(error.message || "Failed to fetch transaction details");
+      toast.error( "Failed to fetch transaction details");
     }
   };
 

@@ -1,9 +1,8 @@
 "use client";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
-import { getInitials } from "@/lib/utils";
 import useAdminStore from "@/store/adminStore";
-import useUserStore from "@/store/userStore";
+// import useUserStore from "@/store/userStore";
 import { ArrowLeft, Eye, Pencil, Search, Trash2 } from "lucide-react";
 // import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,7 +31,7 @@ const UsersPage = () => {
   const [isViewing, setIsViewing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userStates, setUserStates] = useState<Record<string, UserState>>({});
-  const { profile } = useUserStore();
+  // const { profile } = useUserStore();
   // const router = useRouter();
   useEffect(() => {
     fetchUsers();
