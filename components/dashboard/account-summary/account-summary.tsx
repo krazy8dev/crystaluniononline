@@ -15,8 +15,10 @@ import {
 import { toast } from "sonner";
 import Ebanking from "./e-banking";
 import Personal from "./personal";
+import { useRouter } from "next/navigation";
 
 const AccountSummary = () => {
+  const router = useRouter();
   const { profile, isLoading, error, fetchProfile } = useUserStore();
   const [timeLeft, setTimeLeft] = useState("00:00:00");
 
@@ -73,7 +75,9 @@ const AccountSummary = () => {
     <div className="p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
+        onClick={() => router.push("/dashboard/account-details")}
+        >
           {initials}
         </div>
       </div>

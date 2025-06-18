@@ -100,54 +100,66 @@ const useTransactionStore = create<TransactionState>((set) => ({
   sameBankTransfer: async (data) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await axiosInstance.post("/transactions/transfer/same-bank", {
-        type: "SAME_BANK",
-        ...data,
-      });
+      const response = await axiosInstance.post(
+        "/transactions/transfer/same-bank",
+        {
+          type: "SAME_BANK",
+          ...data,
+        },
+      );
       set({ isLoading: false });
       return response.data;
     } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Transfer failed";
       set({
-        error: error.response?.data?.message || "Transfer failed",
+        error: errorMessage,
         isLoading: false,
       });
-      throw error;
+      throw new Error(errorMessage);
     }
   },
 
   otherBankTransfer: async (data) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await axiosInstance.post("/transactions/transfer/other-bank", {
-        type: "OTHER_BANK",
-        ...data,
-      });
+      const response = await axiosInstance.post(
+        "/transactions/transfer/other-bank",
+        {
+          type: "OTHER_BANK",
+          ...data,
+        },
+      );
       set({ isLoading: false });
       return response.data;
     } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Transfer failed";
       set({
-        error: error.response?.data?.message || "Transfer failed",
+        error: errorMessage,
         isLoading: false,
       });
-      throw error;
+      throw new Error(errorMessage);
     }
   },
 
   internationalTransfer: async (data) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await axiosInstance.post("/transactions/transfer/international", {
-        type: "INTERNATIONAL",
-        ...data,
-      });
+      const response = await axiosInstance.post(
+        "/transactions/transfer/international",
+        {
+          type: "INTERNATIONAL",
+          ...data,
+        },
+      );
       set({ isLoading: false });
       return response.data;
     } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Transfer failed";
       set({
-        error: error.response?.data?.message || "Transfer failed",
+        error: errorMessage,
         isLoading: false,
       });
-      throw error;
+      throw new Error(errorMessage);
     }
   },
 
@@ -157,10 +169,13 @@ const useTransactionStore = create<TransactionState>((set) => ({
       const response = await axiosInstance.get("/transactions");
       set({ transactions: response.data.data.transactions, isLoading: false });
     } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch transactions";
       set({
-        error: error.response?.data?.message || "Failed to fetch transactions",
+        error: errorMessage,
         isLoading: false,
       });
+      throw new Error(errorMessage);
     }
   },
 
@@ -168,16 +183,22 @@ const useTransactionStore = create<TransactionState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const response = await axiosInstance.get(`/transactions/${id}`);
-      set({ selectedTransaction: response.data.data.transaction, isLoading: false });
-    } catch (error: any) {
       set({
-        error: error.response?.data?.message || "Failed to fetch transaction",
+        selectedTransaction: response.data.data.transaction,
         isLoading: false,
       });
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch transaction";
+      set({
+        error: errorMessage,
+        isLoading: false,
+      });
+      throw new Error(errorMessage);
     }
   },
 
   clearError: () => set({ error: null }),
 }));
 
-export default useTransactionStore; 
+export default useTransactionStore;

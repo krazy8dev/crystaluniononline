@@ -5,10 +5,11 @@ import React, { useEffect } from "react";
 import { getInitials } from "@/lib/utils";
 import useUserStore from "@/store/userStore";
 import { Mail, Phone, Wallet, PenSquare } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const AccountDetails = () => {
   const { profile, isLoading, fetchProfile } = useUserStore();
-
+  const router = useRouter();
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
@@ -30,7 +31,9 @@ const AccountDetails = () => {
     <div className="p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
+        onClick={() => router.push("/dashboard/account-details")}
+        >
           {initials}
         </div>
       </div>
