@@ -55,7 +55,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
           console.log(
             "Admin already logged in, redirecting to admin dashboard",
           );
-          router.replace("/admin/dashboard");
+          router.replace("/admin/dashboard-admin");
         } else {
           console.log("Non-admin user detected, redirecting to user dashboard");
           router.replace("/dashboard/account-summary");
@@ -63,11 +63,13 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
         return;
       }
 
-      // If user is not admin, redirect to user dashboard
-      if (!checkAdminAccess()) {
-        console.log("Non-admin user detected, redirecting to user dashboard");
-        router.replace("/dashboard/account-summary");
-        return;
+      // For admin routes, check if user is admin
+      if (pathname.startsWith("/admin/") && pathname !== "/admin/login") {
+        if (!checkAdminAccess()) {
+          console.log("Non-admin user detected, redirecting to user dashboard");
+          router.replace("/dashboard/account-summary");
+          return;
+        }
       }
     }
   }, [isInitialized, token, router, checkAdminAccess, pathname]);
@@ -89,6 +91,6 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
     return !token ? <>{children}</> : null;
   }
 
-  // For all other admin routes, only render if user is admin
+  // For admin routes, only render if user is admin
   return token && checkAdminAccess() ? <>{children}</> : null;
 }

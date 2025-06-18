@@ -39,38 +39,25 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   useEffect(() => {
     if (isInitialized) {
       const isAuthRoute = pathname === "/login" || pathname === "/register";
+      const isHomeRoute = pathname === "/";
 
       if (token) {
         // If user is already logged in and tries to access login/register
         if (isAuthRoute) {
-          if (checkAdminAccess()) {
-            console.log("Admin user detected, redirecting to admin dashboard");
-            router.replace("/admin/dashboard");
-          } else {
-            console.log(
-              "Authenticated user detected, redirecting to dashboard",
-            );
-            router.replace("/dashboard/account-summary");
-          }
+          console.log("Authenticated user detected, redirecting to dashboard");
+          router.replace("/dashboard/account-summary");
           return;
         }
       } else {
         // If user is not logged in and tries to access protected routes
-        if (!isAuthRoute) {
+        if (!isAuthRoute && !isHomeRoute) {
           console.log("Not authenticated, redirecting to login");
           router.replace("/login");
           return;
         }
       }
-
-      // If user is admin, redirect to admin dashboard
-      if (checkAdminAccess()) {
-        console.log("Admin user detected, redirecting to admin dashboard");
-        router.replace("/admin/dashboard");
-        return;
-      }
     }
-  }, [isInitialized, token, router, checkAdminAccess, pathname]);
+  }, [isInitialized, token, router, pathname]);
 
   // Show loading state while initializing
   if (!isInitialized) {
@@ -89,6 +76,6 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     return !token ? <>{children}</> : null;
   }
 
-  // For other pages, only render if authenticated and not admin
-  return token && !checkAdminAccess() ? <>{children}</> : null;
+  // For other pages, render if authenticated (both admin and user can access user routes)
+  return token ? <>{children}</> : null;
 }

@@ -22,21 +22,36 @@ import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Transactions = () => {
   const { profile } = useUserStore();
-  const { getAllTransactions, getTransactionById, transactions, selectedTransaction, isLoading, error } = useTransactionStore();
+  const {
+    getAllTransactions,
+    getTransactionById,
+    transactions,
+    selectedTransaction,
+    isLoading,
+    error,
+  } = useTransactionStore();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [, setSelectedId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     getAllTransactions();
   }, [getAllTransactions]);
 
   const handleViewDetails = async (id: string) => {
-    setSelectedId(id);
-    await getTransactionById(id);
-    setIsDetailsOpen(true);
+    try {
+      setSelectedId(id);
+      await getTransactionById(id);
+      setIsDetailsOpen(true);
+    } catch {
+      console.error("Failed to fetch transaction details:", error);
+      toast.error( "Failed to fetch transaction details");
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -99,14 +114,17 @@ const Transactions = () => {
     <div className="min-h-screen p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
+        <div
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+          onClick={() => router.push("/dashboard/account-details")}
+        >
           {initials}
         </div>
       </div>
       <hr className="my-4" />
 
-      <div className="md:max-w-7xl w-full">
-        <div className="flex items-center justify-between mb-6">
+      <div className="w-full md:max-w-7xl">
+        <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-semibold text-gray-900">
             Transaction History
           </h1>
@@ -140,7 +158,10 @@ const Transactions = () => {
             <TableBody>
               {transactions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                  <TableCell
+                    colSpan={7}
+                    className="py-8 text-center text-gray-500"
+                  >
                     No transactions found
                   </TableCell>
                 </TableRow>
@@ -150,9 +171,15 @@ const Transactions = () => {
                     <TableCell>{formatDate(transaction.createdAt)}</TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-medium">{getTransactionType(transaction.type)}</div>
+                        <div className="font-medium">
+                          {getTransactionType(transaction.type)}
+                        </div>
                         {transaction.typeDescription && (
-                          <Badge className={getTypeColor(transaction.typeDescription)}>
+                          <Badge
+                            className={getTypeColor(
+                              transaction.typeDescription,
+                            )}
+                          >
                             {transaction.typeDescription}
                           </Badge>
                         )}
@@ -166,14 +193,22 @@ const Transactions = () => {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell className="font-mono text-sm">{transaction.reference}</TableCell>
-                    <TableCell className={transaction.balance < 0 ? "text-red-600" : "text-green-600"}>
+                    <TableCell className="font-mono text-sm">
+                      {transaction.reference}
+                    </TableCell>
+                    <TableCell
+                      className={
+                        transaction.balance < 0
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }
+                    >
                       {formatAmount(transaction.balance)}
                     </TableCell>
                     <TableCell className="text-right">
                       <button
                         onClick={() => handleViewDetails(transaction._id)}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        className="text-sm font-medium text-blue-600 hover:text-blue-800"
                       >
                         View Details
                       </button>
@@ -194,36 +229,56 @@ const Transactions = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Transaction ID</p>
-                    <p className="mt-1 font-mono text-sm">{selectedTransaction._id}</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      Transaction ID
+                    </p>
+                    <p className="mt-1 font-mono text-sm">
+                      {selectedTransaction._id}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Reference</p>
-                    <p className="mt-1 font-mono text-sm">{selectedTransaction.reference}</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      Reference
+                    </p>
+                    <p className="mt-1 font-mono text-sm">
+                      {selectedTransaction.reference}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Date</p>
-                    <p className="mt-1">{formatDate(selectedTransaction.createdAt)}</p>
+                    <p className="mt-1">
+                      {formatDate(selectedTransaction.createdAt)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Type</p>
-                    <p className="mt-1">{getTransactionType(selectedTransaction.type)}</p>
+                    <p className="mt-1">
+                      {getTransactionType(selectedTransaction.type)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Amount</p>
-                    <p className="mt-1">{formatAmount(selectedTransaction.amount)}</p>
+                    <p className="mt-1">
+                      {formatAmount(selectedTransaction.amount)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Status</p>
                     <div className="mt-1">
-                      <Badge className={getStatusColor(selectedTransaction.status)}>
+                      <Badge
+                        className={getStatusColor(selectedTransaction.status)}
+                      >
                         {selectedTransaction.status}
                       </Badge>
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Balance After</p>
-                    <p className={`mt-1 ${selectedTransaction.balance < 0 ? "text-red-600" : "text-green-600"}`}>
+                    <p className="text-sm font-medium text-gray-500">
+                      Balance After
+                    </p>
+                    <p
+                      className={`mt-1 ${selectedTransaction.balance < 0 ? "text-red-600" : "text-green-600"}`}
+                    >
                       {formatAmount(selectedTransaction.balance)}
                     </p>
                   </div>
@@ -234,83 +289,133 @@ const Transactions = () => {
                 </div>
 
                 <div className="border-t pt-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Sender Details</h4>
+                  <h4 className="mb-2 font-medium text-gray-900">
+                    Sender Details
+                  </h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm font-medium text-gray-500">Name</p>
-                      <p className="mt-1">{selectedTransaction.sender.fullName}</p>
+                      <p className="mt-1">
+                        {selectedTransaction.sender.fullName}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-500">Email</p>
                       <p className="mt-1">{selectedTransaction.sender.email}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Account Number</p>
-                      <p className="mt-1 font-mono">{selectedTransaction.sender.accountNumber}</p>
+                      <p className="text-sm font-medium text-gray-500">
+                        Account Number
+                      </p>
+                      <p className="mt-1 font-mono">
+                        {selectedTransaction.sender.accountNumber}
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 {selectedTransaction.recipient && (
                   <div className="border-t pt-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Recipient Details</h4>
+                    <h4 className="mb-2 font-medium text-gray-900">
+                      Recipient Details
+                    </h4>
                     <div className="grid grid-cols-2 gap-4">
                       {selectedTransaction.recipient.firstName && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">First Name</p>
-                          <p className="mt-1">{selectedTransaction.recipient.firstName}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            First Name
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.firstName}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.lastName && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">Last Name</p>
-                          <p className="mt-1">{selectedTransaction.recipient.lastName}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            Last Name
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.lastName}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.email && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">Email</p>
-                          <p className="mt-1">{selectedTransaction.recipient.email}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            Email
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.email}
+                          </p>
                         </div>
                       )}
                       <div>
-                        <p className="text-sm font-medium text-gray-500">Account Number</p>
-                        <p className="mt-1 font-mono">{selectedTransaction.recipient.accountNumber}</p>
+                        <p className="text-sm font-medium text-gray-500">
+                          Account Number
+                        </p>
+                        <p className="mt-1 font-mono">
+                          {selectedTransaction.recipient.accountNumber}
+                        </p>
                       </div>
                       {selectedTransaction.recipient.bankName && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">Bank Name</p>
-                          <p className="mt-1">{selectedTransaction.recipient.bankName}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            Bank Name
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.bankName}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.bankRouteNumber && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">Bank Route Number</p>
-                          <p className="mt-1">{selectedTransaction.recipient.bankRouteNumber}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            Bank Route Number
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.bankRouteNumber}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.city && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">City</p>
-                          <p className="mt-1">{selectedTransaction.recipient.city}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            City
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.city}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.country && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">Country</p>
-                          <p className="mt-1">{selectedTransaction.recipient.country}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            Country
+                          </p>
+                          <p className="mt-1">
+                            {selectedTransaction.recipient.country}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.swiftBic && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">SWIFT/BIC</p>
-                          <p className="mt-1 font-mono">{selectedTransaction.recipient.swiftBic}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            SWIFT/BIC
+                          </p>
+                          <p className="mt-1 font-mono">
+                            {selectedTransaction.recipient.swiftBic}
+                          </p>
                         </div>
                       )}
                       {selectedTransaction.recipient.iban && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">IBAN</p>
-                          <p className="mt-1 font-mono">{selectedTransaction.recipient.iban}</p>
+                          <p className="text-sm font-medium text-gray-500">
+                            IBAN
+                          </p>
+                          <p className="mt-1 font-mono">
+                            {selectedTransaction.recipient.iban}
+                          </p>
                         </div>
                       )}
                     </div>

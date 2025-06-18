@@ -21,22 +21,33 @@ const Breadcrumb = () => {
     };
   });
 
+  // Check if we're in admin or user dashboard areas
+  const isInDashboard =
+    pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
+
   return (
     <nav className="container mx-auto py-4">
       <ol className="flex items-center space-x-2 text-sm">
-        <li>
-          <Link
-            href="/"
-            className="flex items-center text-gray-600 transition-colors hover:text-blue-800"
-          >
-            Home
-          </Link>
-        </li>
+        {!isInDashboard && (
+          <li>
+            <Link
+              href="/"
+              className="flex items-center text-gray-600 transition-colors hover:text-blue-800"
+            >
+              Home
+            </Link>
+          </li>
+        )}
         {breadcrumbItems.map((item, index) => (
           <li key={item.href} className="flex items-center space-x-2">
-            <ChevronRight className="h-4 w-4 text-gray-400" />
+            {(!isInDashboard || index > 0) && (
+              <ChevronRight className="h-4 w-4 text-gray-400" />
+            )}
             {index === breadcrumbItems.length - 1 ? (
               <span className="font-medium text-blue-800">{item.label}</span>
+            ) : isInDashboard && index === 0 ? (
+              // First item in dashboard is not clickable
+              <span className="text-gray-600">{item.label}</span>
             ) : (
               <Link
                 href={item.href}

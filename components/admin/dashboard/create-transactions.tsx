@@ -619,7 +619,8 @@ const CreateTransactions = () => {
     <div className="p-6">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+        >
           {getInitials(profile?.fullName ?? "")}
         </div>
       </div>

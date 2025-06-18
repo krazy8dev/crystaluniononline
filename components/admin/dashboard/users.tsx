@@ -1,6 +1,8 @@
 "use client";
 
+import Breadcrumb from "@/components/ui/breadcrumb";
 import useAdminStore from "@/store/adminStore";
+// import useUserStore from "@/store/userStore";
 import { ArrowLeft, Eye, Pencil, Search, Trash2 } from "lucide-react";
 // import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -29,6 +31,7 @@ const UsersPage = () => {
   const [isViewing, setIsViewing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userStates, setUserStates] = useState<Record<string, UserState>>({});
+  // const { profile } = useUserStore();
   // const router = useRouter();
   useEffect(() => {
     fetchUsers();
@@ -135,7 +138,17 @@ const UsersPage = () => {
 
   return (
     <div className="space-y-6">
+       <div className="flex items-center justify-between">
+        <Breadcrumb />
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+        >
+          {/* {getInitials(profile?.fullName ?? "")} */}
+        </div>
+      </div>
+      <hr className="my-4" />
       <div className="flex items-center justify-between">
+        
+
         <h1 className="text-2xl font-bold text-gray-900">Users Management</h1>
         <div className="flex items-center space-x-4">
           <div className="relative">
