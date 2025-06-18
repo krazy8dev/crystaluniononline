@@ -1,7 +1,7 @@
 "use client";
 
 import useAdminStore from "@/store/adminStore";
-import { Pencil, Search, Trash2 } from "lucide-react";
+import { ArrowLeft, Eye, Pencil, Search, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ interface User {
   accountNumber: string;
   balance: number;
   role: string;
+  securityPin: string;
   _id: string;
 }
 
@@ -25,6 +26,7 @@ const UsersPage = () => {
   const { users, loading, error, fetchUsers, updateUser, deleteUser, topUpUserBalance } = useAdminStore();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userStates, setUserStates] = useState<Record<string, UserState>>({});
   const router = useRouter();
@@ -55,7 +57,7 @@ const UsersPage = () => {
       await updateUser(id, data);
       toast.success("User updated successfully");
       setIsEditing(false);
-    } catch  {
+    } catch {
       toast.error("Failed to update user");
     } finally {
       setUserStates(prev => ({
@@ -72,8 +74,8 @@ const UsersPage = () => {
     try {
       await deleteUser(id);
       toast.success("User deleted successfully");
-    } catch  {
-      toast.error( "Failed to delete user");
+    } catch {
+      toast.error("Failed to delete user");
     }
   };
 
@@ -164,6 +166,9 @@ const UsersPage = () => {
                   Account Number
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
+                  Security PIN
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                   Balance
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
@@ -177,7 +182,7 @@ const UsersPage = () => {
             <tbody className="divide-y divide-gray-200 bg-white">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={7} className="px-6 py-12 text-center">
                     <div className="flex justify-center">
                       <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
                     </div>
@@ -185,7 +190,7 @@ const UsersPage = () => {
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center">
+                  <td colSpan={7} className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center">
                       <div className="mb-4 text-4xl">👥</div>
                       <h3 className="text-lg font-medium text-gray-900">
@@ -214,6 +219,11 @@ const UsersPage = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500 font-mono">
+                        {user.securityPin}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">
                         ${user.balance?.toFixed(2) || "0.00"}
                       </div>
@@ -221,8 +231,8 @@ const UsersPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`inline-flex rounded-full px-2 text-xs leading-5 font-semibold ${user.role === "admin"
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-green-100 text-green-800"
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-green-100 text-green-800"
                           }`}
                       >
                         {user.role || "user"}
@@ -232,22 +242,33 @@ const UsersPage = () => {
                       <div className="flex items-center space-x-3">
                         <button
                           onClick={() => {
-                            setSelectedUser({...user, _id: user.accountNumber});
+                            setSelectedUser({ ...user, _id: user.accountNumber });
+                            setIsViewing(true);
+                          }}
+                          className="text-green-600 hover:text-green-900"
+                          title="View Details"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedUser({ ...user, _id: user.accountNumber });
                             setIsEditing(true);
                           }}
                           disabled={userStates[user.accountNumber]?.isUpdating}
                           className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
+                          title="Edit User"
                         >
                           {userStates[user.accountNumber]?.isUpdating ? (
                             <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
                           ) : (
-                            <Pencil className="h-4 w-4" 
-                            onClick={() => router.push(`/admin/dashboard-admin/users/${user.accountNumber}`)}/>
+                            <Pencil className="h-4 w-4" />
                           )}
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user.accountNumber)}
                           className="text-red-600 hover:text-red-900"
+                          title="Delete User"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -350,6 +371,88 @@ const UsersPage = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* User Details Modal */}
+      {isViewing && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-2xl rounded-lg bg-white p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">User Details</h2>
+              <button
+                onClick={() => setIsViewing(false)}
+                className="flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Users
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Full Name</p>
+                    <p className="mt-1 text-sm text-gray-900">{selectedUser.fullName}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Email</p>
+                    <p className="mt-1 text-sm text-gray-900">{selectedUser.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Account Number</p>
+                    <p className="mt-1 text-sm text-gray-900 font-mono">{selectedUser.accountNumber}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Security PIN</p>
+                    <p className="mt-1 text-sm text-gray-900 font-mono">{selectedUser.securityPin}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Current Balance</p>
+                    <p className={`mt-1 text-lg font-semibold ${selectedUser.balance < 0 ? "text-red-600" : "text-green-600"}`}>
+                      ${selectedUser.balance?.toFixed(2) || "0.00"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Role</p>
+                    <span
+                      className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold mt-1 ${selectedUser.role === "admin"
+                        ? "bg-purple-100 text-purple-800"
+                        : "bg-green-100 text-green-800"
+                        }`}
+                    >
+                      {selectedUser.role || "user"}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">User ID</p>
+                    <p className="mt-1 text-sm text-gray-900 font-mono">{selectedUser._id}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setIsViewing(false);
+                  setSelectedUser({ ...selectedUser, _id: selectedUser.accountNumber });
+                  setIsEditing(true);
+                }}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                Edit User
+              </button>
+            </div>
           </div>
         </div>
       )}

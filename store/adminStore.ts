@@ -66,15 +66,28 @@ interface User {
 interface Transaction {
   _id: string;
   type: string;
+  typeDescription?: string;
   amount: number;
+  purpose: string;
   status: string;
+  balance: number;
+  reference: string;
   sender: {
     fullName: string;
     email: string;
     accountNumber: string;
   };
   recipient?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
     accountNumber: string;
+    bankName?: string;
+    bankRouteNumber?: string;
+    city?: string;
+    country?: string;
+    swiftBic?: string;
+    iban?: string;
   };
   createdAt: string;
 }
@@ -239,13 +252,38 @@ const useAdminStore = create<AdminState>()(
             config.api.endpoints.admin.topUpUser(id),
             { amount },
           );
-          set({ selectedUser: response.data.data.user });
-          // Update user in the users list if it exists
+          
+          // Get the updated user data from response
+          const updatedUserData = response.data.data.user;
+          
+          // Update user in the users list if it exists, preserving existing data
           const users = get().users;
-          const updatedUsers = users.map((user) =>
-            user.accountNumber === id ? response.data.data.user : user,
-          );
+          const updatedUsers = users.map((user) => {
+            if (user.accountNumber === id) {
+              // Merge existing user data with updated data to preserve all fields
+              return {
+                ...user,
+                ...updatedUserData,
+                // Ensure securityPin is preserved if not in response
+                securityPin: updatedUserData.securityPin || user.securityPin,
+              };
+            }
+            return user;
+          });
+          
           set({ users: updatedUsers });
+          
+          // Update selectedUser if it's the same user
+          const currentSelectedUser = get().selectedUser;
+          if (currentSelectedUser && currentSelectedUser.accountNumber === id) {
+            set({ 
+              selectedUser: {
+                ...currentSelectedUser,
+                ...updatedUserData,
+                securityPin: updatedUserData.securityPin || currentSelectedUser.securityPin,
+              }
+            });
+          }
         } catch (error: any) {
           set({
             error: error.response?.data?.message || "Failed to top up balance",
@@ -259,14 +297,14 @@ const useAdminStore = create<AdminState>()(
         try {
           set({ loading: true, error: null });
           const response = await axiosInstance.get(
-            config.api.endpoints.admin.transactions.pending,
+            "/admin/transactions/all",
           );
           set({ pendingTransactions: response.data.data.transactions });
         } catch (error: any) {
           set({
             error:
               error.response?.data?.message ||
-              "Failed to fetch pending transactions",
+              "Failed to fetch transactions",
           });
         } finally {
           set({ loading: false });
