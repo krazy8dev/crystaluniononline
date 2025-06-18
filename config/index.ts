@@ -20,6 +20,7 @@ export const config = {
         topUpUser: (id: string) => `/admin/users/${id}/top-up`,
         transactions: {
           stats: "/admin/transactions/stats",
+          all:"/admin/transactions/all",
           pending: "/admin/transactions/pending",
           getById: (id: string) => `/admin/transactions/${id}`,
           updateStatus: (id: string) => `/admin/transactions/${id}/status`,

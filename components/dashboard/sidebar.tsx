@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { useState } from "react";
 
+import { sidebarLinks, type SidebarLink } from "@/lib";
 import useAuthStore from "@/store/authstore";
-import { useRouter } from "next/navigation";
 import {
-  LogOut,
   ChevronDown,
   ChevronRight,
+  LogOut,
   Menu,
-  PanelLeftClose,
   PanelLeft,
+  PanelLeftClose,
 } from "lucide-react";
-import { sidebarLinks, type SidebarLink } from "@/lib";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const pathname = usePathname();

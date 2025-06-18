@@ -3,11 +3,47 @@
 import { axiosInstance } from "@/utils/axiosInstance";
 import { create } from "zustand";
 
+interface TransactionRecipient {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  accountNumber: string;
+  bankName?: string;
+  bankRouteNumber?: string;
+  city?: string;
+  country?: string;
+  swiftBic?: string;
+  iban?: string;
+}
+
+interface TransactionSender {
+  _id: string;
+  fullName: string;
+  email: string;
+  accountNumber: string;
+}
+
+interface Transaction {
+  _id: string;
+  sender: TransactionSender;
+  recipient?: TransactionRecipient;
+  type: string;
+  typeDescription?: string;
+  amount: number;
+  purpose: string;
+  status: string;
+  balance: number;
+  createdAt: string;
+  updatedAt: string;
+  reference: string;
+  __v: number;
+}
+
 interface TransactionState {
   isLoading: boolean;
   error: string | null;
-  transactions: any[];
-  selectedTransaction: any | null;
+  transactions: Transaction[];
+  selectedTransaction: Transaction | null;
 
   // Same Bank Transfer
   sameBankTransfer: (data: {
@@ -46,8 +82,8 @@ interface TransactionState {
     securityPin: string;
   }) => Promise<void>;
 
-  // Get Transactions
-  getTransactions: () => Promise<void>;
+  // Get All Transactions
+  getAllTransactions: () => Promise<void>;
 
   // Get Transaction by ID
   getTransactionById: (id: string) => Promise<void>;
@@ -115,7 +151,7 @@ const useTransactionStore = create<TransactionState>((set) => ({
     }
   },
 
-  getTransactions: async () => {
+  getAllTransactions: async () => {
     try {
       set({ isLoading: true, error: null });
       const response = await axiosInstance.get("/transactions");
