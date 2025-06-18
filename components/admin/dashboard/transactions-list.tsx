@@ -29,8 +29,8 @@ const TransactionsList = () => {
 
   const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [allTransactions, setAllTransactions] = useState<any[]>([]);
+  const [,setSelectedId] = useState<string | null>(null);
+//   const [, setAllTransactions] = useState<any[]>([]);
 
   useEffect(() => {
     fetchPendingTransactions();

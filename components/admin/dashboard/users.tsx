@@ -2,7 +2,7 @@
 
 import useAdminStore from "@/store/adminStore";
 import { ArrowLeft, Eye, Pencil, Search, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -29,7 +29,7 @@ const UsersPage = () => {
   const [isViewing, setIsViewing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [userStates, setUserStates] = useState<Record<string, UserState>>({});
-  const router = useRouter();
+  // const router = useRouter();
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
