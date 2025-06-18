@@ -19,14 +19,14 @@ export default function RootLayout({
       <body>
         {children}
         <Toaster
-        // position="top-right"
-        // toastOptions={{
-        //   style: {
-        //     background: "white",
-        //     color: "black",
-        //   },
-        //   className: "text-sm font-medium",
-        // }}
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#0B4B3C",
+            color: "white",
+          },
+          className: "text-sm font-medium",
+        }}
         />
         <Script id="tawkto" strategy="afterInteractive">
           {`

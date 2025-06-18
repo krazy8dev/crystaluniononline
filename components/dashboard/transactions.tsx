@@ -27,7 +27,7 @@ const Transactions = () => {
   const { profile } = useUserStore();
   const { getAllTransactions, getTransactionById, transactions, selectedTransaction, isLoading, error } = useTransactionStore();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     getAllTransactions();
