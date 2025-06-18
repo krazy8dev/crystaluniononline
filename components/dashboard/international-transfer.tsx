@@ -1,12 +1,17 @@
 "use client";
 
 import { getInitials } from "@/lib/utils";
+import useTransactionStore from "@/store/transactionStore";
 import useUserStore from "@/store/userStore";
-import React, { useEffect, useState } from "react";
+import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
 
-const International = () => {
-  const { profile, isLoading, fetchProfile } = useUserStore();
+const InternationalTransfer = () => {
+  const router = useRouter();
+  const { profile } = useUserStore();
+  const { internationalTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -16,45 +21,39 @@ const International = () => {
     bankName: "",
     accountNumber: "",
     swiftBic: "",
-    ibanNumber: "",
+    iban: "",
     amount: "",
     purpose: "",
+    securityPin: "",
   });
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  const initials = getInitials(profile?.fullName ?? "");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log(formData);
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  if (isLoading) {
-    return (
-      <div className="p-4">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 rounded bg-gray-200" />
-          <div className="h-32 rounded bg-gray-200" />
-        </div>
-      </div>
-    );
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await internationalTransfer({
+        ...formData,
+        amount: parseFloat(formData.amount),
+      });
+      router.push("/dashboard/transactions");
+    } catch (error) {
+      console.error("Transfer failed:", error);
+    }
+  };
+
+  const initials = getInitials(profile?.fullName ?? "");
 
   return (
-    <div className="p-4">
+    <div className="min-h-screen p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
@@ -63,249 +62,269 @@ const International = () => {
       </div>
       <hr className="my-4" />
 
-      <div className="w-full md:max-w-5xl">
-        <h2 className="mb-6 text-2xl font-semibold">International transfer</h2>
+      <div className="md:max-w-5xl w-full">
+        <h1 className="text-2xl font-semibold text-gray-900">
+          International Transfer
+        </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Receivers Details Section */}
-          <div className="rounded-lg border p-6">
-            <h3 className="mb-4 text-lg font-semibold">Recievers Details</h3>
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  First Name*
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="First name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Last Name*
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Last Name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email*
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Email"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="city"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  City*
-                </label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="City"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="country"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Country*
-                </label>
-                <input
-                  type="text"
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Country"
-                  required
-                />
-              </div>
-            </div>
+        {error && (
+          <div className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <p>{error}</p>
           </div>
+        )}
 
-          {/* Receivers Bank Details Section */}
-          <div className="rounded-lg border p-6">
-            <h3 className="mb-4 text-lg font-semibold">
-              Recievers Bank Details
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="bankName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Bank Name*
-                </label>
-                <input
-                  type="text"
-                  id="bankName"
-                  name="bankName"
-                  value={formData.bankName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Bank Name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="accountNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Account Number*
-                </label>
-                <input
-                  type="text"
-                  id="accountNumber"
-                  name="accountNumber"
-                  value={formData.accountNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Account Number"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="swiftBic"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  SWift/BIC*
-                </label>
-                <input
-                  type="text"
-                  id="swiftBic"
-                  name="swiftBic"
-                  value={formData.swiftBic}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="SWift Code"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="ibanNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  IBAN Number*
-                </label>
-                <input
-                  type="text"
-                  id="ibanNumber"
-                  name="ibanNumber"
-                  value={formData.ibanNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  placeholder="IBAN Number"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Amount and Purpose Section */}
-          <div className="space-y-4">
-            <div>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
               <label
-                htmlFor="amount"
+                htmlFor="firstName"
                 className="block text-sm font-medium text-gray-700"
               >
-                Amount*
+                First Name<span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
-                id="amount"
-                name="amount"
-                value={formData.amount}
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                placeholder="Amount"
+                placeholder="First Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                 required
-                min="0"
-                step="0.01"
               />
             </div>
 
-            <div>
+            <div className="space-y-1">
               <label
-                htmlFor="purpose"
+                htmlFor="lastName"
                 className="block text-sm font-medium text-gray-700"
               >
-                Purpose*
+                Last Name<span className="text-red-500">*</span>
               </label>
-              <textarea
-                id="purpose"
-                name="purpose"
-                value={formData.purpose}
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                placeholder="Purpose"
+                placeholder="Last Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                 required
-                rows={3}
               />
             </div>
           </div>
 
-          <div className="text-sm text-red-500">
-            Warning: if you have insufficient funds in your account to cover the
-            transactions, your account is at risk of going into overdraft.
+          <div className="space-y-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email Address"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
           </div>
 
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium text-gray-700"
+              >
+                City<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="City"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Country<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                placeholder="Country"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="bankName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Bank Name<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="bankName"
+              name="bankName"
+              value={formData.bankName}
+              onChange={handleChange}
+              placeholder="Bank Name"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="accountNumber"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Account Number<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="accountNumber"
+              name="accountNumber"
+              value={formData.accountNumber}
+              onChange={handleChange}
+              placeholder="Account Number"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="swiftBic"
+                className="block text-sm font-medium text-gray-700"
+              >
+                SWIFT/BIC<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="swiftBic"
+                name="swiftBic"
+                value={formData.swiftBic}
+                onChange={handleChange}
+                placeholder="SWIFT/BIC Code"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="iban"
+                className="block text-sm font-medium text-gray-700"
+              >
+                IBAN<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="iban"
+                name="iban"
+                value={formData.iban}
+                onChange={handleChange}
+                placeholder="IBAN"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Amount<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              placeholder="Amount"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="purpose"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Purpose<span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="purpose"
+              name="purpose"
+              value={formData.purpose}
+              onChange={handleChange}
+              placeholder="Purpose"
+              rows={3}
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="securityPin"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Security PIN<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              id="securityPin"
+              name="securityPin"
+              value={formData.securityPin}
+              onChange={handleChange}
+              placeholder="Enter your security PIN"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+              maxLength={4}
+              minLength={4}
+            />
+          </div>
+
+          <div className="flex items-start gap-2 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+            <p>
+              Warning: if you have insufficient funds in your account to cover
+              the transactions, your account is at risk of going into overdraft.
+            </p>
+          </div>
+
+          <div className="flex justify-end">
             <button
               type="submit"
-              className="inline-flex justify-center rounded-md bg-blue-600 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              disabled={isLoading}
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
+              {isLoading ? "Processing..." : "Next"}
             </button>
           </div>
         </form>
@@ -324,4 +343,4 @@ const International = () => {
   );
 };
 
-export default International;
+export default InternationalTransfer;

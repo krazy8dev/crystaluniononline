@@ -1,18 +1,23 @@
 "use client";
 
+import { getInitials } from "@/lib/utils";
+import useTransactionStore from "@/store/transactionStore";
+import useUserStore from "@/store/userStore";
+import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
-import useUserStore from "@/store/userStore";
-import { getInitials } from "@/lib/utils";
-import { AlertCircle } from "lucide-react";
 
 const DomesticTransfer = () => {
+  const router = useRouter();
   const { profile } = useUserStore();
+  const { sameBankTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     accountNumber: "",
     beneficiary: "",
     amount: "",
     purpose: "",
+    securityPin: "",
   });
 
   const handleChange = (
@@ -25,10 +30,21 @@ const DomesticTransfer = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    // console.log(formData);
+    try {
+      await sameBankTransfer({
+        accountNumber: formData.accountNumber,
+        amount: parseFloat(formData.amount),
+        purpose: formData.purpose,
+        securityPin: formData.securityPin,
+      });
+      // Redirect to success page or show success message
+      router.push("/dashboard/transactions");
+    } catch (error) {
+      // Error is handled by the store
+      console.error("Transfer failed:", error);
+    }
   };
 
   const initials = getInitials(profile?.fullName ?? "");
@@ -47,6 +63,12 @@ const DomesticTransfer = () => {
         <h1 className="text-2xl font-semibold text-gray-900">
           Transfer to the same bank
         </h1>
+
+        {error && (
+          <div className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <p>{error}</p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-1">
@@ -124,6 +146,27 @@ const DomesticTransfer = () => {
             />
           </div>
 
+          <div className="space-y-1">
+            <label
+              htmlFor="securityPin"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Security PIN<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              id="securityPin"
+              name="securityPin"
+              value={formData.securityPin}
+              onChange={handleChange}
+              placeholder="Enter your security PIN"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+              maxLength={4}
+              minLength={4}
+            />
+          </div>
+
           <div className="flex items-start gap-2 rounded-lg bg-red-50 p-4 text-sm text-red-600">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <p>
@@ -135,9 +178,10 @@ const DomesticTransfer = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+              disabled={isLoading}
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
+              {isLoading ? "Processing..." : "Next"}
             </button>
           </div>
         </form>

@@ -1,57 +1,56 @@
 "use client";
 
 import { getInitials } from "@/lib/utils";
+import useTransactionStore from "@/store/transactionStore";
 import useUserStore from "@/store/userStore";
-import React, { useEffect, useState } from "react";
+import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
 
 const OtherTransfer = () => {
-  const { profile, isLoading, fetchProfile } = useUserStore();
+  const router = useRouter();
+  const { profile } = useUserStore();
+  const { otherBankTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     accountNumber: "",
     bankName: "",
-    routeNumber: "",
+    bankRouteNumber: "",
     amount: "",
     purpose: "",
+    securityPin: "",
   });
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  const initials = getInitials(profile?.fullName ?? "");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log(formData);
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  if (isLoading) {
-    return (
-      <div className="p-4">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 rounded bg-gray-200" />
-          <div className="h-32 rounded bg-gray-200" />
-        </div>
-      </div>
-    );
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await otherBankTransfer({
+        ...formData,
+        amount: parseFloat(formData.amount),
+      });
+      router.push("/dashboard/transactions");
+    } catch (error) {
+      console.error("Transfer failed:", error);
+    }
+  };
+
+  const initials = getInitials(profile?.fullName ?? "");
 
   return (
-    <div className="p-4">
+    <div className="min-h-screen p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
@@ -61,53 +60,63 @@ const OtherTransfer = () => {
       <hr className="my-4" />
 
       <div className="md:max-w-5xl w-full">
-        <h2 className="mb-6 text-2xl font-semibold">Transfer to other bank</h2>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Transfer to Other Bank
+        </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="firstName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Recipient First Name*
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-              placeholder="First name"
-              required
-            />
+        {error && (
+          <div className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <p>{error}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                First Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="First Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Last Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Last Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="lastName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Recipient Last Name*
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-              placeholder="Last Name"
-              required
-            />
-          </div>
-
-          <div>
+          <div className="space-y-1">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Recipient Email*
+              Email<span className="text-red-500">*</span>
             </label>
             <input
               type="email"
@@ -115,18 +124,18 @@ const OtherTransfer = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-              placeholder="Recipient Email"
+              placeholder="Email Address"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               required
             />
           </div>
 
-          <div>
+          <div className="space-y-1">
             <label
               htmlFor="accountNumber"
               className="block text-sm font-medium text-gray-700"
             >
-              Recipient Account Number*
+              Account Number<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -134,56 +143,58 @@ const OtherTransfer = () => {
               name="accountNumber"
               value={formData.accountNumber}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-              placeholder="Recipient Account Number"
+              placeholder="Account Number"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               required
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="bankName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Recipient Bank Name*
-            </label>
-            <input
-              type="text"
-              id="bankName"
-              name="bankName"
-              value={formData.bankName}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-              placeholder="Recipient Bank Name"
-              required
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="bankName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Bank Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="bankName"
+                name="bankName"
+                value={formData.bankName}
+                onChange={handleChange}
+                placeholder="Bank Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="bankRouteNumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Bank Route Number<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="bankRouteNumber"
+                name="bankRouteNumber"
+                value={formData.bankRouteNumber}
+                onChange={handleChange}
+                placeholder="Bank Route Number"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="routeNumber"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Recipient Bank Route Number*
-            </label>
-            <input
-              type="text"
-              id="routeNumber"
-              name="routeNumber"
-              value={formData.routeNumber}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-              placeholder="Bank Route Number"
-              required
-            />
-          </div>
-
-          <div>
+          <div className="space-y-1">
             <label
               htmlFor="amount"
               className="block text-sm font-medium text-gray-700"
             >
-              Amount*
+              Amount<span className="text-red-500">*</span>
             </label>
             <input
               type="number"
@@ -191,44 +202,67 @@ const OtherTransfer = () => {
               name="amount"
               value={formData.amount}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               placeholder="Amount"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               required
-              min="0"
-              step="0.01"
             />
           </div>
 
-          <div>
+          <div className="space-y-1">
             <label
               htmlFor="purpose"
               className="block text-sm font-medium text-gray-700"
             >
-              Purpose*
+              Purpose<span className="text-red-500">*</span>
             </label>
             <textarea
               id="purpose"
               name="purpose"
               value={formData.purpose}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               placeholder="Purpose"
-              required
               rows={3}
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
             />
           </div>
 
-          <div className="mt-4 text-sm text-red-500">
-            Warning: if you have insufficient funds in your account to cover the
-            transactions, your account is at risk of going into overdraft.
+          <div className="space-y-1">
+            <label
+              htmlFor="securityPin"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Security PIN<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              id="securityPin"
+              name="securityPin"
+              value={formData.securityPin}
+              onChange={handleChange}
+              placeholder="Enter your security PIN"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+              maxLength={4}
+              minLength={4}
+            />
           </div>
 
-          <div className="mt-6">
+          <div className="flex items-start gap-2 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+            <p>
+              Warning: if you have insufficient funds in your account to cover
+              the transactions, your account is at risk of going into overdraft.
+            </p>
+          </div>
+
+          <div className="flex justify-end">
             <button
               type="submit"
-              className="inline-flex justify-center rounded-md bg-blue-600 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              disabled={isLoading}
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
+              {isLoading ? "Processing..." : "Next"}
             </button>
           </div>
         </form>
