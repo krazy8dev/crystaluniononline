@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 
 const Banking = () => {
   return (
-    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24">
+    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24 overflow-hidden">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Content */}
