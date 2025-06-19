@@ -1,5 +1,5 @@
-import About from '@/components/ui/about'
 import Breadcrumb from '@/components/ui/breadcrumb'
+import Contact from '@/components/ui/contact'
 import React from 'react'
 
 const page = () => {
@@ -8,7 +8,7 @@ const page = () => {
       <div className="pt-40 pb-10">
         <Breadcrumb />
       </div>
-      <About />
+      <Contact />
     </div>
   )
 }

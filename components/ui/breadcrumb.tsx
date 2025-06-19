@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Home } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Breadcrumb = () => {
   const pathname = usePathname();
@@ -26,40 +27,64 @@ const Breadcrumb = () => {
     pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
 
   return (
-    <nav className="container mx-auto py-4">
-      <ol className="flex items-center space-x-2 text-sm">
+    <motion.nav
+      className="container mx-auto px-4 py-6"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <ol className="flex items-center space-x-2 rounded-lg border border-gray-100 bg-white px-4 py-3 text-sm shadow-sm">
         {!isInDashboard && (
-          <li>
+          <motion.li
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
             <Link
               href="/"
-              className="flex items-center text-gray-600 transition-colors hover:text-blue-800"
+              className="flex items-center text-gray-600 transition-all duration-200 hover:scale-105 hover:text-blue-600"
             >
+              <Home className="mr-1 h-4 w-4" />
               Home
             </Link>
-          </li>
+          </motion.li>
         )}
         {breadcrumbItems.map((item, index) => (
-          <li key={item.href} className="flex items-center space-x-2">
+          <motion.li
+            key={item.href}
+            className="flex items-center space-x-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
+          >
             {(!isInDashboard || index > 0) && (
-              <ChevronRight className="h-4 w-4 text-gray-400" />
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}
+              >
+                <ChevronRight className="h-4 w-4 text-gray-400" />
+              </motion.div>
             )}
             {index === breadcrumbItems.length - 1 ? (
-              <span className="font-medium text-blue-800">{item.label}</span>
+              <span className="rounded-md bg-blue-50 px-2 py-1 font-semibold text-blue-600">
+                {item.label}
+              </span>
             ) : isInDashboard && index === 0 ? (
               // First item in dashboard is not clickable
-              <span className="text-gray-600">{item.label}</span>
+              <span className="font-medium text-gray-600">{item.label}</span>
             ) : (
               <Link
                 href={item.href}
-                className="text-gray-600 transition-colors hover:text-blue-800"
+                className="rounded-md px-2 py-1 text-gray-600 transition-all duration-200 hover:bg-gray-50 hover:text-blue-600"
               >
                 {item.label}
               </Link>
             )}
-          </li>
+          </motion.li>
         ))}
       </ol>
-    </nav>
+    </motion.nav>
   );
 };
 

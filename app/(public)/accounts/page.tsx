@@ -1,4 +1,4 @@
-import About from '@/components/ui/about'
+import Accounts from '@/components/ui/accounts'
 import Breadcrumb from '@/components/ui/breadcrumb'
 import React from 'react'
 
@@ -8,7 +8,7 @@ const page = () => {
       <div className="pt-40 pb-10">
         <Breadcrumb />
       </div>
-      <About />
+      <Accounts />
     </div>
   )
 }

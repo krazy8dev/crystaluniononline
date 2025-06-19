@@ -91,11 +91,11 @@ const Ebanking = () => {
               </div>
             </div>
 
-            <div className="flex-1">
-              <div className="rounded-lg bg-gray-50 p-4">
+            <div className="">
+              <div className="rounded-lg bg-gray-50 p-4 flex flex-col gap-2">
                 <h2 className="font-medium text-gray-900">Quick Actions</h2>
-                <div className="mt-4 space-y-2">
-                  <Link href='/dashboard/domestic-transfer' className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                <div className="flex flex-col gap-2">
+                  <Link href='/dashboard/domestic-transfer' className="w-full rounded-lg bg-blue-600 px-4 py-2 px-5 text-sm font-medium text-white hover:bg-blue-700">
                     Transfer Money
                   </Link>
                   <button className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
