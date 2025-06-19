@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Breadcrumb from "../../ui/breadcrumb";
 import useUserStore from "@/store/userStore";
 import { getInitials } from "@/lib/utils";
@@ -20,24 +20,24 @@ import { useRouter } from "next/navigation";
 const AccountSummary = () => {
   const router = useRouter();
   const { profile, isLoading, error, fetchProfile } = useUserStore();
-  const [timeLeft, setTimeLeft] = useState("00:00:00");
+  // const [timeLeft, setTimeLeft] = useState("00:00:00");
 
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
 
   // Timer effect
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      const seconds = now.getSeconds().toString().padStart(2, "0");
-      const hours = now.getHours().toString().padStart(2, "0");
-      setTimeLeft(`${hours}:${minutes}:${seconds}`);
-    }, 1000);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     const now = new Date();
+  //     const minutes = now.getMinutes().toString().padStart(2, "0");
+  //     const seconds = now.getSeconds().toString().padStart(2, "0");
+  //     const hours = now.getHours().toString().padStart(2, "0");
+  //     setTimeLeft(`${hours}:${minutes}:${seconds}`);
+  //   // }, 1000);
 
-    return () => clearInterval(timer);
-  }, []);
+  //   // return () => clearInterval(timer);
+  // }, []);
 
   if (isLoading) {
     return (
@@ -75,8 +75,9 @@ const AccountSummary = () => {
     <div className="p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
-        onClick={() => router.push("/dashboard/account-details")}
+        <div
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+          onClick={() => router.push("/dashboard/account-details")}
         >
           {initials}
         </div>
@@ -102,7 +103,7 @@ const AccountSummary = () => {
               <div className="flex items-start justify-between">
                 <CreditCard className="h-8 w-8 text-blue-600" />
                 <span className="flex items-center rounded-full bg-blue-600 px-4 py-1 text-sm text-white">
-                  {timeLeft} <ChevronDown className="ml-1 h-4 w-4" />
+                  {/* {timeLeft} <ChevronDown className="ml-1 h-4 w-4" /> */}
                 </span>
               </div>
 
@@ -154,9 +155,7 @@ const AccountSummary = () => {
               <div className="mt-12">
                 <div className="flex items-baseline">
                   <span className="text-2xl text-gray-700"></span>
-                  <span className="text-4xl font-semibold text-gray-900">
-                    0
-                  </span>
+                  <span className="text-4xl font-semibold text-black">0</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="mt-1 text-xl font-extrabold text-white">

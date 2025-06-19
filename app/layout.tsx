@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import "./globals.css";
 import Script from "next/script";
+import { AnimationProvider } from "@/components/providers/animation-provider";
 
 export const metadata: Metadata = {
   title: "Heritage Trust Bank",
@@ -17,19 +18,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            style: {
-              background: "#0B4B3C",
-              color: "white",
-            },
-            className: "text-sm font-medium",
-          }}
-        />
-        <Script id="tawkto" strategy="afterInteractive">
-          {`
+        <AnimationProvider>
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                background: "#0B4B3C",
+                color: "white",
+              },
+              className: "text-sm font-medium",
+            }}
+          />
+          <Script id="tawkto" strategy="afterInteractive">
+            {`
             // Check if ad blocker is active
             function isAdBlockerActive() {
               return new Promise((resolve) => {
@@ -67,7 +69,8 @@ export default function RootLayout({
               }
             });
           `}
-        </Script>
+          </Script>
+        </AnimationProvider>
       </body>
     </html>
   );

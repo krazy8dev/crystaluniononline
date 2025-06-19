@@ -15,13 +15,11 @@ export default function Home() {
       <Partners />
       <Details />
       <Account />
-      <div className="bg-gray-100 pt-[300px] pb-10 md:pt-[250px] md:pb-20 lg:pt-[200px]">
         <Banking />
-      </div>
       <Planning />
-      <div className="mt-[95rem] sm:mt-[60rem] md:mt-[70rem] lg:mt-[55rem]">
+      {/* <div className="mt-[95rem] sm:mt-[60rem] md:mt-[70rem] lg:mt-[55rem]"> */}
         <Solution />
-      </div>
+      {/* </div> */}
       <Testimonials />
       <Faq />
     </main>

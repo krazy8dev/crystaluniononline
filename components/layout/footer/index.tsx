@@ -1,109 +1,110 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+// import { motion } from "framer-motion";
 import {
   Facebook,
   Twitter,
   Linkedin,
   Instagram,
-  // MessageCircle,
+  Mail,
+  Phone,
+  MapPin,
 } from "lucide-react";
+import Logo from "../../ui/logo";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-white py-20">
-      {/* Chat Button */}
-      {/* <button className="fixed right-8 bottom-8 flex items-center space-x-2 rounded-full bg-blue-600 px-6 py-3 text-white shadow-lg transition-colors hover:bg-blue-700">
-        <span>Chat</span>
-        <MessageCircle className="h-5 w-5" />
-      </button> */}
-
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <footer className="border-t border-gray-200 bg-white">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {/* Bank Info Section */}
-          <div className="space-y-6">
-            <div className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="Heritage Trust Bank"
-                width={200}
-                height={60}
-                className="h-auto w-auto"
-              />
-            </div>
-            <p className="max-w-md text-gray-600">
-              A modern, technology-first bank built for you and your growing
-              business.
+          <div className="space-y-4">
+            <Logo width={180} height={50} />
+            <p className="text-sm leading-relaxed text-gray-600">
+              A legacy of trust, innovation, and excellence spanning over 150
+              years in the UAE&apos;s financial landscape.
             </p>
             <div className="flex space-x-4">
               <Link
                 href="#"
-                className="text-gray-600 transition-colors hover:text-blue-800"
+                className="text-gray-400 transition-colors hover:text-blue-600"
               >
                 <Facebook className="h-5 w-5" />
               </Link>
               <Link
                 href="#"
-                className="text-gray-600 transition-colors hover:text-blue-800"
+                className="text-gray-400 transition-colors hover:text-blue-600"
               >
                 <Twitter className="h-5 w-5" />
               </Link>
               <Link
                 href="#"
-                className="text-gray-600 transition-colors hover:text-blue-800"
+                className="text-gray-400 transition-colors hover:text-blue-600"
               >
                 <Linkedin className="h-5 w-5" />
               </Link>
               <Link
                 href="#"
-                className="text-gray-600 transition-colors hover:text-blue-800"
+                className="text-gray-400 transition-colors hover:text-blue-600"
               >
                 <Instagram className="h-5 w-5" />
               </Link>
             </div>
           </div>
 
-          {/* Company Section */}
+          {/* Quick Links */}
           <div>
-            <h3 className="mb-6 text-xl font-bold">Company</h3>
-            <ul className="space-y-4">
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
               <li>
                 <Link
                   href="/about"
-                  className="text-gray-600 transition-colors hover:text-blue-800"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   About Us
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/awards"
-                  className="text-gray-600 transition-colors hover:text-blue-800"
+                  href="/accounts"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
-                  Awards
+                  Accounts
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/loans"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                >
+                  Loans & Credit
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/investments"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                >
+                  Investment Services
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Support Section */}
+          {/* Support */}
           <div>
-            <h3 className="mb-6 text-xl font-bold">Support</h3>
-            <ul className="space-y-4">
-              <li>
-                <Link
-                  href="mailto:support@heritagetrust.com"
-                  className="text-gray-600 transition-colors hover:text-blue-800"
-                >
-                  support@heritagetrust.com
-                </Link>
-              </li>
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+              Support
+            </h3>
+            <ul className="space-y-3">
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-600 transition-colors hover:text-blue-800"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   Contact Us
                 </Link>
@@ -111,33 +112,72 @@ const Footer = () => {
               <li>
                 <Link
                   href="/faq"
-                  className="text-gray-600 transition-colors hover:text-blue-800"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   FAQ
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/help"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                >
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+              Contact
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <Phone className="h-4 w-4 text-blue-600" />
+                <span className="text-sm text-gray-600">+971 4 123 4567</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="h-4 w-4 text-blue-600" />
+                <span className="text-sm text-gray-600">
+                  info@heritagetrustbank.ae
+                </span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <MapPin className="h-4 w-4 text-blue-600" />
+                <span className="text-sm text-gray-600">Dubai, UAE</span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-16 border-t border-gray-200 pt-8">
+        <div className="mt-8 border-t border-gray-200 pt-8">
           <div className="flex flex-col items-center justify-between md:flex-row">
-            <p className="text-sm text-gray-600">
-              Copyright © 2008 Heritage Trust Bank
+            <p className="mb-4 text-sm text-gray-500 md:mb-0">
+              © 2024 Heritage Trust Bank. All rights reserved.
             </p>
-            <div className="mt-4 flex space-x-6 md:mt-0">
-              <Link
-                href="/privacy"
-                className="text-sm text-gray-600 transition-colors hover:text-blue-800"
-              >
-                Privacy
-              </Link>
+            <div className="flex space-x-6">
               <Link
                 href="/terms"
-                className="text-sm text-gray-600 transition-colors hover:text-blue-800"
+                className="text-sm text-gray-500 transition-colors hover:text-blue-600"
               >
-                Terms & Condition
+                Terms & Conditions
+              </Link>
+              <Link
+                href="/security"
+                className="text-sm text-gray-500 transition-colors hover:text-blue-600"
+              >
+                Security
               </Link>
             </div>
           </div>
