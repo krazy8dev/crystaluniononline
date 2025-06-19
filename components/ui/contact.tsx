@@ -70,7 +70,7 @@ const Contact = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
               >
-                We're here to help. Reach out to us for any questions about our
+                We&apos;re here to help. Reach out to us for any questions about our
                 services.
               </motion.p>
             </motion.div>
@@ -267,7 +267,7 @@ const Contact = () => {
                     Contact Information
                   </h3>
                   <p className="mb-8 text-lg leading-relaxed text-gray-600">
-                    We're here to help you with all your banking needs. Reach
+                    We&apos;re here to help you with all your banking needs. Reach
                     out to us through any of the channels below.
                   </p>
                 </div>

@@ -50,7 +50,7 @@ const About = () => {
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
               >
                 A legacy of trust, innovation, and excellence spanning over 150
-                years in the UAE's financial landscape.
+                years in the UAE&apos;s financial landscape.
               </motion.p>
             </motion.div>
           </div>
@@ -270,7 +270,7 @@ const About = () => {
                 Today, Heritage Trust Bank is a wholly owned subsidiary of the
                 Heritage Trust Group. Our growing range of bank accounts and
                 structured solutions is designed to be consistent with the needs
-                of clients' cash portfolios.
+                of clients&apos; cash portfolios.
               </motion.p>
               <motion.div
                 className="mt-8 grid gap-6 md:grid-cols-2"

@@ -114,7 +114,7 @@ const Partners = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            We partner with the world's leading payment providers to ensure
+            We partner with the world&apos;s leading payment providers to ensure
             secure, fast, and reliable transactions for our customers.
           </motion.p>
         </motion.div>

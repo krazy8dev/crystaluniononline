@@ -5,10 +5,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
-  User,
+  
   LogOut,
   LayoutDashboard,
-  Settings,
+
 } from "lucide-react";
 import useAuthStore from "@/store/authstore";
 import { useRouter } from "next/navigation";

@@ -87,7 +87,7 @@ const Testimonials = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Discover how we've helped thousands of clients achieve their
+            Discover how we&apos;ve helped thousands of clients achieve their
             financial goals with personalized banking solutions.
           </motion.p>
         </motion.div>
@@ -152,7 +152,7 @@ const Testimonials = () => {
                           </div>
                           <div className="flex-1">
                             <blockquote className="text-lg leading-relaxed font-medium text-gray-900 md:text-xl">
-                              "{testimonial.quote}"
+                              &quot;{testimonial.quote}&quot;
                             </blockquote>
                             <p className="mt-4 text-gray-600">
                               {testimonial.description}

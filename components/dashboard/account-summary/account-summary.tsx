@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Breadcrumb from "../../ui/breadcrumb";
 import useUserStore from "@/store/userStore";
 import { getInitials } from "@/lib/utils";

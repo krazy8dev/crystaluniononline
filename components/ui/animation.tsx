@@ -124,7 +124,7 @@ export const AnimatedDiv: React.FC<AnimatedDivProps> = ({
         animate: {
           ...variants.animate,
           transition: {
-            ...(variants.animate as any)?.transition,
+            ...(variants.animate as { transition?: object })?.transition,
             duration,
             delay,
           },
@@ -135,7 +135,7 @@ export const AnimatedDiv: React.FC<AnimatedDivProps> = ({
         animate: {
           ...variants.animate,
           transition: {
-            ...(variants.animate as any)?.transition,
+            ...(variants.animate as { transition?: object })?.transition,
             delay,
           },
         },

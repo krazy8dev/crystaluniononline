@@ -7,22 +7,13 @@ import {
   Menu,
   X,
   Home,
-  User,
   CreditCard,
   Building2,
-  PiggyBank,
-  Shield,
-  HelpCircle,
   Phone,
   Mail,
-  MapPin,
-  Clock,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
+
 } from "lucide-react";
-import Logo from "../../ui/logo";
+// import Logo from "../../ui/logo";
 
 const Mobile = () => {
   const [isOpen, setIsOpen] = useState(false);

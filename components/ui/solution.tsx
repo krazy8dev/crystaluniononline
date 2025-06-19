@@ -102,7 +102,7 @@ const Solution = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 1 }}
             >
-              Get in touch with our expert advisors, and we'll help you create
+              Get in touch with our expert advisors, and we&apos;ll help you create
               the perfect financial solution tailored to your business or
               personal needs. Our team is here to guide you every step of the
               way.

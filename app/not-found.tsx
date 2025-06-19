@@ -13,10 +13,10 @@ import {
   Star,
   Heart,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const NotFound = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const floatingElements = [
     { icon: Star, delay: 0, x: 20, y: -30 },
     { icon: Heart, delay: 0.5, x: -40, y: 20 },
@@ -167,7 +167,7 @@ const NotFound = () => {
             </h2>
             <p className="mx-auto max-w-md text-lg text-gray-600 md:text-xl">
               Looks like this page has been transferred to a different account.
-              Don't worry, our secure banking services are still available to
+              Don&apos;t worry, our secure banking services are still available to
               help you navigate back to safety.
             </p>
           </motion.div>
