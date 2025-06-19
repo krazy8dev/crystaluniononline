@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 const Faq = () => {
   return (
     <motion.div
-      className="bg-gray-100 py-20"
+      className="bg-gray-100 py-20 overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}

@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 
 const Details = () => {
   return (
-    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24">
+    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24 overflow-hidden">
       <Container>
         <div className="space-y-24">
           {/* First Section - Smart Banking */}
