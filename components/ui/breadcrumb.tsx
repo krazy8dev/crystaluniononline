@@ -28,12 +28,12 @@ const Breadcrumb = () => {
 
   return (
     <motion.nav
-      className="container mx-auto px-4 py-6"
+      className="container mx-auto px-2 py-4 sm:px-4 sm:py-6"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <ol className="flex items-center space-x-2 rounded-lg border border-gray-100 bg-white px-4 py-3 text-sm shadow-sm">
+      <ol className="scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent flex max-w-full items-center space-x-2 overflow-x-auto rounded-lg border border-gray-100 bg-white px-2 py-2 text-xs shadow-sm sm:px-4 sm:py-3 sm:text-sm">
         {!isInDashboard && (
           <motion.li
             initial={{ opacity: 0, x: -20 }}

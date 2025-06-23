@@ -50,7 +50,7 @@ const Transactions = () => {
       setIsDetailsOpen(true);
     } catch {
       console.error("Failed to fetch transaction details:", error);
-      toast.error( "Failed to fetch transaction details");
+      toast.error("Failed to fetch transaction details");
     }
   };
 
@@ -111,7 +111,7 @@ const Transactions = () => {
   const initials = getInitials(profile?.fullName ?? "");
 
   return (
-    <div className="min-h-screen p-4">
+    <div className="h-full space-y-6">
       <div className="flex items-center justify-between">
         <Breadcrumb />
         <div
@@ -121,42 +121,54 @@ const Transactions = () => {
           {initials}
         </div>
       </div>
-      <hr className="my-4" />
 
-      <div className="w-full md:max-w-7xl">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Transaction History
-          </h1>
-          {isLoading && (
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Loading transactions...</span>
-            </div>
-          )}
-        </div>
-
-        {error && (
-          <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-600">
-            <p>{error}</p>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Transaction History
+        </h1>
+        {isLoading && (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>Loading transactions...</span>
           </div>
         )}
+      </div>
 
-        <div className="rounded-lg border">
+      {error && (
+        <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">
+          <p>{error}</p>
+        </div>
+      )}
+
+      <div className="overflow-hidden rounded-lg border bg-white shadow">
+        <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Reference</TableHead>
-                <TableHead>Balance</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="whitespace-nowrap">Date</TableHead>
+                <TableHead className="whitespace-nowrap">Type</TableHead>
+                <TableHead className="whitespace-nowrap">Amount</TableHead>
+                <TableHead className="whitespace-nowrap">Status</TableHead>
+                <TableHead className="whitespace-nowrap">Reference</TableHead>
+                <TableHead className="whitespace-nowrap">Balance</TableHead>
+                <TableHead className="text-right whitespace-nowrap">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.length === 0 ? (
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="py-12 text-center">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+                      <span className="text-gray-500">
+                        Loading transactions...
+                      </span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : transactions.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={7}
@@ -168,10 +180,12 @@ const Transactions = () => {
               ) : (
                 transactions.map((transaction) => (
                   <TableRow key={transaction._id}>
-                    <TableCell>{formatDate(transaction.createdAt)}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      {formatDate(transaction.createdAt)}
+                    </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-medium">
+                        <div className="font-medium whitespace-nowrap">
                           {getTransactionType(transaction.type)}
                         </div>
                         {transaction.typeDescription && (
@@ -185,27 +199,27 @@ const Transactions = () => {
                         )}
                       </div>
                     </TableCell>
-                    <TableCell>{formatAmount(transaction.amount)}</TableCell>
-                    <TableCell>
-                      <div className="mt-1">
-                        <Badge className={getStatusColor(transaction.status)}>
-                          {transaction.status}
-                        </Badge>
-                      </div>
+                    <TableCell className="whitespace-nowrap">
+                      {formatAmount(transaction.amount)}
                     </TableCell>
-                    <TableCell className="font-mono text-sm">
+                    <TableCell>
+                      <Badge className={getStatusColor(transaction.status)}>
+                        {transaction.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="font-mono text-sm whitespace-nowrap">
                       {transaction.reference}
                     </TableCell>
                     <TableCell
-                      className={
+                      className={`whitespace-nowrap ${
                         transaction.balance < 0
                           ? "text-red-600"
                           : "text-green-600"
-                      }
+                      }`}
                     >
                       {formatAmount(transaction.balance)}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right whitespace-nowrap">
                       <button
                         onClick={() => handleViewDetails(transaction._id)}
                         className="text-sm font-medium text-blue-600 hover:text-blue-800"
@@ -219,222 +233,222 @@ const Transactions = () => {
             </TableBody>
           </Table>
         </div>
+      </div>
 
-        <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-          <DialogContent className="sm:max-w-[700px]">
-            <DialogHeader>
-              <DialogTitle>Transaction Details</DialogTitle>
-            </DialogHeader>
-            {selectedTransaction && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Transaction ID
-                    </p>
-                    <p className="mt-1 font-mono text-sm">
-                      {selectedTransaction._id}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Reference
-                    </p>
-                    <p className="mt-1 font-mono text-sm">
-                      {selectedTransaction.reference}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Date</p>
-                    <p className="mt-1">
-                      {formatDate(selectedTransaction.createdAt)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Type</p>
-                    <p className="mt-1">
-                      {getTransactionType(selectedTransaction.type)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Amount</p>
-                    <p className="mt-1">
-                      {formatAmount(selectedTransaction.amount)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Status</p>
-                    <div className="mt-1">
-                      <Badge
-                        className={getStatusColor(selectedTransaction.status)}
-                      >
-                        {selectedTransaction.status}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Balance After
-                    </p>
-                    <p
-                      className={`mt-1 ${selectedTransaction.balance < 0 ? "text-red-600" : "text-green-600"}`}
+      <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[700px]">
+          <DialogHeader>
+            <DialogTitle>Transaction Details</DialogTitle>
+          </DialogHeader>
+          {selectedTransaction && (
+            <div className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">
+                    Transaction ID
+                  </p>
+                  <p className="mt-1 font-mono text-sm break-all">
+                    {selectedTransaction._id}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Reference</p>
+                  <p className="mt-1 font-mono text-sm break-all">
+                    {selectedTransaction.reference}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Date</p>
+                  <p className="mt-1">
+                    {formatDate(selectedTransaction.createdAt)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Type</p>
+                  <p className="mt-1">
+                    {getTransactionType(selectedTransaction.type)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Amount</p>
+                  <p className="mt-1">
+                    {formatAmount(selectedTransaction.amount)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Status</p>
+                  <div className="mt-1">
+                    <Badge
+                      className={getStatusColor(selectedTransaction.status)}
                     >
-                      {formatAmount(selectedTransaction.balance)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Purpose</p>
-                    <p className="mt-1">{selectedTransaction.purpose}</p>
+                      {selectedTransaction.status}
+                    </Badge>
                   </div>
                 </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">
+                    Balance After
+                  </p>
+                  <p
+                    className={`mt-1 ${selectedTransaction.balance < 0 ? "text-red-600" : "text-green-600"}`}
+                  >
+                    {formatAmount(selectedTransaction.balance)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Purpose</p>
+                  <p className="mt-1">{selectedTransaction.purpose}</p>
+                </div>
+              </div>
 
+              <div className="border-t pt-4">
+                <h4 className="mb-4 font-medium text-gray-900">
+                  Sender Details
+                </h4>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Name</p>
+                    <p className="mt-1">
+                      {selectedTransaction.sender.fullName}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">Email</p>
+                    <p className="mt-1 break-all">
+                      {selectedTransaction.sender.email}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">
+                      Account Number
+                    </p>
+                    <p className="mt-1 font-mono">
+                      {selectedTransaction.sender.accountNumber}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {selectedTransaction.recipient && (
                 <div className="border-t pt-4">
-                  <h4 className="mb-2 font-medium text-gray-900">
-                    Sender Details
+                  <h4 className="mb-4 font-medium text-gray-900">
+                    Recipient Details
                   </h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-gray-500">Name</p>
-                      <p className="mt-1">
-                        {selectedTransaction.sender.fullName}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-500">Email</p>
-                      <p className="mt-1">{selectedTransaction.sender.email}</p>
-                    </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {selectedTransaction.recipient.firstName && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          First Name
+                        </p>
+                        <p className="mt-1">
+                          {selectedTransaction.recipient.firstName}
+                        </p>
+                      </div>
+                    )}
+                    {selectedTransaction.recipient.lastName && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Last Name
+                        </p>
+                        <p className="mt-1">
+                          {selectedTransaction.recipient.lastName}
+                        </p>
+                      </div>
+                    )}
+                    {selectedTransaction.recipient.email && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Email
+                        </p>
+                        <p className="mt-1 break-all">
+                          {selectedTransaction.recipient.email}
+                        </p>
+                      </div>
+                    )}
                     <div>
                       <p className="text-sm font-medium text-gray-500">
                         Account Number
                       </p>
                       <p className="mt-1 font-mono">
-                        {selectedTransaction.sender.accountNumber}
+                        {selectedTransaction.recipient.accountNumber}
                       </p>
                     </div>
-                  </div>
-                </div>
-
-                {selectedTransaction.recipient && (
-                  <div className="border-t pt-4">
-                    <h4 className="mb-2 font-medium text-gray-900">
-                      Recipient Details
-                    </h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      {selectedTransaction.recipient.firstName && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            First Name
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.firstName}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.lastName && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            Last Name
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.lastName}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.email && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            Email
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.email}
-                          </p>
-                        </div>
-                      )}
+                    {selectedTransaction.recipient.bankName && (
                       <div>
                         <p className="text-sm font-medium text-gray-500">
-                          Account Number
+                          Bank Name
                         </p>
-                        <p className="mt-1 font-mono">
-                          {selectedTransaction.recipient.accountNumber}
+                        <p className="mt-1">
+                          {selectedTransaction.recipient.bankName}
                         </p>
                       </div>
-                      {selectedTransaction.recipient.bankName && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            Bank Name
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.bankName}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.bankRouteNumber && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            Bank Route Number
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.bankRouteNumber}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.city && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            City
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.city}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.country && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            Country
-                          </p>
-                          <p className="mt-1">
-                            {selectedTransaction.recipient.country}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.swiftBic && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            SWIFT/BIC
-                          </p>
-                          <p className="mt-1 font-mono">
-                            {selectedTransaction.recipient.swiftBic}
-                          </p>
-                        </div>
-                      )}
-                      {selectedTransaction.recipient.iban && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-500">
-                            IBAN
-                          </p>
-                          <p className="mt-1 font-mono">
-                            {selectedTransaction.recipient.iban}
-                          </p>
-                        </div>
-                      )}
-                    </div>
+                    )}
+                    {selectedTransaction.recipient.bankRouteNumber && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Bank Route Number
+                        </p>
+                        <p className="mt-1">
+                          {selectedTransaction.recipient.bankRouteNumber}
+                        </p>
+                      </div>
+                    )}
+                    {selectedTransaction.recipient.city && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          City
+                        </p>
+                        <p className="mt-1">
+                          {selectedTransaction.recipient.city}
+                        </p>
+                      </div>
+                    )}
+                    {selectedTransaction.recipient.country && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Country
+                        </p>
+                        <p className="mt-1">
+                          {selectedTransaction.recipient.country}
+                        </p>
+                      </div>
+                    )}
+                    {selectedTransaction.recipient.swiftBic && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          SWIFT/BIC
+                        </p>
+                        <p className="mt-1 font-mono">
+                          {selectedTransaction.recipient.swiftBic}
+                        </p>
+                      </div>
+                    )}
+                    {selectedTransaction.recipient.iban && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          IBAN
+                        </p>
+                        <p className="mt-1 font-mono">
+                          {selectedTransaction.recipient.iban}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
-        <div className="mt-8 text-sm text-gray-600">
-          <p>
-            This site provides information about and access to services offered
-            by the Institution and all its respective affiliates or partners.
-          </p>
-          <p className="mt-2 text-xs text-gray-500">
-            ©2022 All rights reserved.
-          </p>
-        </div>
+      <div className="text-sm text-gray-600">
+        <p>
+          This site provides information about and access to services offered by
+          the Institution and all its respective affiliates or partners.
+        </p>
+        <p className="mt-2 text-xs text-gray-500">
+          ©2022 All rights reserved.
+        </p>
       </div>
     </div>
   );
