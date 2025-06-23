@@ -41,20 +41,22 @@ const AccountSummary = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4">
-        <Breadcrumb />
-        <div className="mt-4 flex items-center space-x-4">
+      <div className="h-full space-y-6">
+        <div className="flex items-center justify-between">
+          <Breadcrumb />
           <div className="h-12 w-12 animate-pulse rounded-full bg-gray-200" />
-          <div className="h-6 w-32 animate-pulse rounded bg-gray-200" />
         </div>
+        <div className="h-6 w-32 animate-pulse rounded bg-gray-200" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-4">
-        <Breadcrumb />
+      <div className="h-full space-y-6">
+        <div className="flex items-center justify-between">
+          <Breadcrumb />
+        </div>
         <div className="mt-4 text-red-600">Error: {error}</div>
       </div>
     );
@@ -62,8 +64,10 @@ const AccountSummary = () => {
 
   if (!profile) {
     return (
-      <div className="p-4">
-        <Breadcrumb />
+      <div className="h-full space-y-6">
+        <div className="flex items-center justify-between">
+          <Breadcrumb />
+        </div>
         <div className="mt-4">No profile data available</div>
       </div>
     );
@@ -72,7 +76,7 @@ const AccountSummary = () => {
   const initials = getInitials(profile.fullName);
 
   return (
-    <div className="p-4">
+    <div className="h-full space-y-6">
       <div className="flex items-center justify-between">
         <Breadcrumb />
         <div
@@ -82,9 +86,8 @@ const AccountSummary = () => {
           {initials}
         </div>
       </div>
-      <hr className="my-4" />
 
-      <div className="flex max-w-5xl items-center justify-between">
+      <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Accounts Summary</h1>
         <span
           className="flex cursor-pointer items-center gap-2 text-sm text-gray-500"
@@ -95,19 +98,13 @@ const AccountSummary = () => {
         </span>
       </div>
 
-      <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50/50 p-6">
-        <div className="flex flex-col gap-6 md:flex-row md:gap-10">
-          <div className="w-full transition-all duration-300 hover:scale-[1.02] md:w-[400px]">
-            <div className="relative bg-white p-6 shadow-lg">
-              {/* Top section with icon and timer */}
+      <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4 lg:p-6">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="transition-all duration-300 hover:scale-[1.02]">
+            <div className="relative h-full bg-white p-6 shadow-lg">
               <div className="flex items-start justify-between">
                 <CreditCard className="h-8 w-8 text-blue-600" />
-                <span className="flex items-center rounded-full bg-blue-600 px-4 py-1 text-sm text-white">
-                  {/* {timeLeft} <ChevronDown className="ml-1 h-4 w-4" /> */}
-                </span>
               </div>
-
-              {/* Balance section */}
               <div className="mt-12">
                 <div className="flex items-baseline">
                   <span className="text-2xl text-gray-700">$</span>
@@ -119,44 +116,18 @@ const AccountSummary = () => {
               </div>
             </div>
           </div>
-          <div className="w-full transition-all duration-300 hover:scale-[1.02] md:w-[400px]">
-            <div className="relative bg-white p-6 shadow-lg">
-              {/* Top section with icon and timer */}
-              <div className="flex items-start justify-between">
-                <User2 className="h-8 w-8 text-yellow-600" />
-                <span className="flex items-center rounded-full bg-blue-600 px-4 py-1 text-sm text-white">
-                  Premium <ChevronDown className="ml-1 h-4 w-4" />
-                </span>
-              </div>
 
-              {/* Balance section */}
-              <div className="mt-12">
-                <div className="flex items-baseline">
-                  <span className="text-2xl text-gray-700"></span>
-                  <span className="text-4xl font-semibold text-gray-900">
-                    0
-                  </span>
-                </div>
-                <p className="mt-1 text-base text-gray-500">Transactions</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full transition-all duration-300 hover:scale-[1.02] md:w-[400px]">
-            <div className="relative bg-black p-6 shadow-lg">
-              {/* Top section with icon and timer */}
+         
+
+          <div className="transition-all duration-300 hover:scale-[1.02]">
+            <div className="relative h-full bg-black p-6 shadow-lg">
               <div className="flex items-start justify-between">
                 <h1 className="text-2xl font-semibold text-white">HT Bank</h1>
                 <span className="flex items-center text-sm text-white">
                   <Ellipsis />
                 </span>
               </div>
-
-              {/* Balance section */}
               <div className="mt-12">
-                <div className="flex items-baseline">
-                  <span className="text-2xl text-gray-700"></span>
-                  <span className="text-4xl font-semibold text-black">0</span>
-                </div>
                 <div className="flex items-center justify-between">
                   <p className="mt-1 text-xl font-extrabold text-white">
                     {profile.accountNumber}
@@ -174,7 +145,26 @@ const AccountSummary = () => {
               </div>
             </div>
           </div>
+           <div className="transition-all duration-300 hover:scale-[1.02] sm:col-span-2 xl:col-span-1">
+            <div className="relative h-full bg-white p-6 shadow-lg">
+              <div className="flex items-start justify-between">
+                <User2 className="h-8 w-8 text-yellow-600" />
+                <span className="flex items-center rounded-full bg-blue-600 px-4 py-1 text-sm text-white">
+                  Premium <ChevronDown className="ml-1 h-4 w-4" />
+                </span>
+              </div>
+              <div className="mt-12">
+                <div className="flex items-baseline">
+                  <span className="text-4xl font-semibold text-gray-900">
+                    0
+                  </span>
+                </div>
+                <p className="mt-1 text-base text-gray-500">Transactions</p>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="mt-10 border-t border-gray-200 pt-6">
           <Ebanking />
         </div>

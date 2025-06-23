@@ -140,16 +140,13 @@ const UsersPage = () => {
     <div className="space-y-6">
        <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
-        >
-          {/* {getInitials(profile?.fullName ?? "")} */}
-        </div>
+       
       </div>
       <hr className="my-4" />
       <div className="flex items-center justify-between">
         
 
-        <h1 className="text-2xl font-bold text-gray-900">Users Management</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Users Management</h1>
         <div className="flex items-center space-x-4">
           <div className="relative">
             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -158,7 +155,7 @@ const UsersPage = () => {
               placeholder="Search users..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-lg border border-gray-300 py-2 pr-4 pl-10 focus:border-blue-500 focus:outline-none"
+              className="rounded-lg border border-gray-300 py-2 pr-4 pl-10 focus:border-blue-500 focus:outline-none text-xs md:text-base"
             />
           </div>
         </div>

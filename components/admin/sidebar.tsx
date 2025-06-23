@@ -4,15 +4,17 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 import useAuthStore from "@/store/authstore";
 import { useRouter } from "next/navigation";
-import {
-  LogOut,
-  Menu,
-  PanelLeftClose,
-  PanelLeft,
-} from "lucide-react";
+import { LogOut, Menu, PanelLeftClose, PanelLeft } from "lucide-react";
 import { adminLinks } from "@/lib";
 
 const Sidebar = () => {
@@ -21,10 +23,16 @@ const Sidebar = () => {
   const logout = useAuthStore((state) => state.logout);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const handleLogout = () => {
+    setShowLogoutConfirm(false);
     logout();
     router.push("/");
+  };
+
+  const initiateLogout = () => {
+    setShowLogoutConfirm(true);
   };
 
   const sidebarContent = (
@@ -88,7 +96,7 @@ const Sidebar = () => {
       {/* Logout Button */}
       <div className="border-t border-gray-200 p-4">
         <button
-          onClick={handleLogout}
+          onClick={initiateLogout}
           className={cn(
             "flex items-center rounded-lg py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50",
             isCollapsed ? "justify-center px-2" : "w-full space-x-3 px-4",
@@ -132,6 +140,31 @@ const Sidebar = () => {
       >
         {sidebarContent}
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Confirm Logout</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-gray-600">
+              Are you sure you want to logout?
+            </p>
+          </div>
+          <div className="flex justify-end space-x-4">
+            <Button
+              variant="outline"
+              onClick={() => setShowLogoutConfirm(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Content Margin */}
       <div className={cn("hidden lg:block", isCollapsed ? "w-20" : "w-64")} />

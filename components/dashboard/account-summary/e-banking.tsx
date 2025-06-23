@@ -3,7 +3,7 @@
 import { icons } from "@/lib";
 import useUserStore from "@/store/userStore";
 import React from "react";
-import {  ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 const Ebanking = () => {
@@ -14,8 +14,8 @@ const Ebanking = () => {
   //   }, [fetchProfile]);
 
   return (
-    <div className="mt-10 flex flex-col gap-10 md:flex-row md:gap-20">
-      <div className="w-full md:w-[450px]">
+    <div className="grid gap-6 lg:grid-cols-2">
+      <div className="w-full">
         <h1 className="mb-5 text-xl font-semibold">E-Banking</h1>
         <div className="relative bg-white shadow-lg">
           <div
@@ -47,7 +47,7 @@ const Ebanking = () => {
         </div>
       </div>
 
-      <div className="w-full md:w-[450px]">
+      <div className="w-full">
         <h1 className="mb-5 text-xl font-semibold">Received Funds</h1>
 
         <div className="relative overflow-hidden bg-white p-6 shadow-lg">
@@ -60,8 +60,8 @@ const Ebanking = () => {
             </span>
           </div>
 
-          <div className="mt-8 flex items-start gap-8">
-            <div className="flex-1 space-y-6 border-r border-gray-100 pr-8">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+            <div className="space-y-6">
               <div>
                 <h2 className="text-sm font-medium text-gray-500">
                   Last Transaction
@@ -91,17 +91,18 @@ const Ebanking = () => {
               </div>
             </div>
 
-            <div className="">
-              <div className="rounded-lg bg-gray-50 p-4 flex flex-col gap-2">
-                <h2 className="font-medium text-gray-900">Quick Actions</h2>
-                <div className="flex flex-col gap-2">
-                  <Link href='/dashboard/domestic-transfer' className="w-full rounded-lg bg-blue-600 px-4 py-2 px-5 text-sm font-medium text-white hover:bg-blue-700">
-                    Transfer Money
-                  </Link>
-                  <button className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-                    View Statement
-                  </button>
-                </div>
+            <div className="rounded-lg bg-gray-50 p-4">
+              <h2 className="font-medium text-gray-900">Quick Actions</h2>
+              <div className="mt-2 flex flex-col gap-2">
+                <Link
+                  href="/dashboard/domestic-transfer"
+                  className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                >
+                  Transfer Money
+                </Link>
+                <button className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                  View Statement
+                </button>
               </div>
             </div>
           </div>
