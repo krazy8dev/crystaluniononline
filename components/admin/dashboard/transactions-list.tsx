@@ -2,16 +2,20 @@
 
 import { Badge } from "@/components/ui/badge";
 import Breadcrumb from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { getInitials } from "@/lib/utils";
 import useAdminStore from "@/store/adminStore";
 import useUserStore from "@/store/userStore";
 import { format } from "date-fns";
+import { Calendar, Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,12 +29,17 @@ const TransactionsList = () => {
     fetchPendingTransactions,
     fetchTransactionById,
     updateTransactionStatus,
+    updateTransactionDate,
   } = useAdminStore();
 
   const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [,setSelectedId] = useState<string | null>(null);
-//   const [, setAllTransactions] = useState<any[]>([]);
+  const [isDateEditOpen, setIsDateEditOpen] = useState(false);
+  const [editingTransactionId, setEditingTransactionId] = useState<
+    string | null
+  >(null);
+  const [newDate, setNewDate] = useState<string>("");
+  const [, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPendingTransactions();
@@ -63,6 +72,33 @@ const TransactionsList = () => {
     } catch {
       toast.error("Failed to update transaction status");
     }
+  };
+
+  const handleDateUpdate = async () => {
+    if (!editingTransactionId || !newDate) {
+      toast.error("Please select a valid date");
+      return;
+    }
+
+    try {
+      await updateTransactionDate(editingTransactionId, newDate);
+      toast.success("Transaction date updated successfully");
+      setIsDateEditOpen(false);
+      setEditingTransactionId(null);
+      setNewDate("");
+      // Refresh the transactions list
+      await fetchPendingTransactions();
+    } catch {
+      toast.error("Failed to update transaction date");
+    }
+  };
+
+  const handleEditDate = (transactionId: string, currentDate: string) => {
+    setEditingTransactionId(transactionId);
+    // Format the current date for the datetime-local input
+    const formattedDate = new Date(currentDate).toISOString().slice(0, 16);
+    setNewDate(formattedDate);
+    setIsDateEditOpen(true);
   };
 
   const handleViewDetails = async (id: string) => {
@@ -214,7 +250,18 @@ const TransactionsList = () => {
               filteredTransactions.map((transaction) => (
                 <tr key={transaction._id}>
                   <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
-                    {formatDate(transaction.createdAt)}
+                    <div className="flex items-center space-x-2">
+                      <span>{formatDate(transaction.createdAt)}</span>
+                      <button
+                        onClick={() =>
+                          handleEditDate(transaction._id, transaction.createdAt)
+                        }
+                        className="text-blue-600 hover:text-blue-800"
+                        title="Edit date"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
                     <div className="space-y-1">
@@ -287,6 +334,44 @@ const TransactionsList = () => {
         </table>
       </div>
 
+      {/* Date Edit Dialog */}
+      <Dialog open={isDateEditOpen} onOpenChange={setIsDateEditOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Edit Transaction Date
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="newDate">New Date and Time</Label>
+              <Input
+                id="newDate"
+                type="datetime-local"
+                value={newDate}
+                onChange={(e) => setNewDate(e.target.value)}
+                className="mt-1"
+              />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsDateEditOpen(false);
+                  setEditingTransactionId(null);
+                  setNewDate("");
+                }}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleDateUpdate}>Update Date</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Transaction Details Dialog */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
         <DialogContent className="sm:max-w-[700px]">
           <DialogHeader>

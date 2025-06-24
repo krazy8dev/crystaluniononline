@@ -1,8 +1,7 @@
 export const config = {
   api: {
-    baseUrl:
-      // process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
-      "https://developersgridapi.onrender.com/api",
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+    // "https://developersgridapi.onrender.com/api",
     endpoints: {
       auth: {
         register: "/auth/register",
@@ -23,6 +22,7 @@ export const config = {
           pending: "/admin/transactions/pending",
           getById: (id: string) => `/admin/transactions/${id}`,
           updateStatus: (id: string) => `/admin/transactions/${id}/status`,
+          updateDate: (id: string) => `/admin/transactions/${id}/update-date`,
         },
       },
     },

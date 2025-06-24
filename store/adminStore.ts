@@ -14,6 +14,7 @@ interface DashboardStats {
       email: string;
       accountNumber: string;
       balance: number;
+      password?: string;
     }>;
   };
   transactions: {
@@ -55,6 +56,7 @@ interface TransactionStats {
 }
 
 interface User {
+  password: any;
   fullName: string;
   email: string;
   accountNumber: string;
@@ -115,6 +117,7 @@ interface AdminState {
   fetchPendingTransactions: () => Promise<void>;
   fetchTransactionById: (id: string) => Promise<void>;
   updateTransactionStatus: (id: string, status: string) => Promise<void>;
+  updateTransactionDate: (id: string, createdAt: string) => Promise<void>;
   clearError: () => void;
 }
 
@@ -252,10 +255,10 @@ const useAdminStore = create<AdminState>()(
             config.api.endpoints.admin.topUpUser(id),
             { amount },
           );
-          
+
           // Get the updated user data from response
           const updatedUserData = response.data.data.user;
-          
+
           // Update user in the users list if it exists, preserving existing data
           const users = get().users;
           const updatedUsers = users.map((user) => {
@@ -270,18 +273,20 @@ const useAdminStore = create<AdminState>()(
             }
             return user;
           });
-          
+
           set({ users: updatedUsers });
-          
+
           // Update selectedUser if it's the same user
           const currentSelectedUser = get().selectedUser;
           if (currentSelectedUser && currentSelectedUser.accountNumber === id) {
-            set({ 
+            set({
               selectedUser: {
                 ...currentSelectedUser,
                 ...updatedUserData,
-                securityPin: updatedUserData.securityPin || currentSelectedUser.securityPin,
-              }
+                securityPin:
+                  updatedUserData.securityPin ||
+                  currentSelectedUser.securityPin,
+              },
             });
           }
         } catch (error: any) {
@@ -296,15 +301,12 @@ const useAdminStore = create<AdminState>()(
       fetchPendingTransactions: async () => {
         try {
           set({ loading: true, error: null });
-          const response = await axiosInstance.get(
-            "/admin/transactions/all",
-          );
+          const response = await axiosInstance.get("/admin/transactions/all");
           set({ pendingTransactions: response.data.data.transactions });
         } catch (error: any) {
           set({
             error:
-              error.response?.data?.message ||
-              "Failed to fetch transactions",
+              error.response?.data?.message || "Failed to fetch transactions",
           });
         } finally {
           set({ loading: false });
@@ -355,6 +357,35 @@ const useAdminStore = create<AdminState>()(
         }
       },
 
+      updateTransactionDate: async (id, createdAt) => {
+        try {
+          set({ loading: true, error: null });
+          const isoDate = new Date(createdAt).toISOString();
+          const response = await axiosInstance.patch(
+            config.api.endpoints.admin.transactions.updateDate(id),
+            {
+              createdAt: isoDate,
+            },
+          );
+          set({ selectedTransaction: response.data.data.transaction });
+          // Update transaction in the pending transactions list if it exists
+          const pendingTransactions = get().pendingTransactions;
+          const updatedTransactions = pendingTransactions.map((transaction) =>
+            transaction._id === id
+              ? response.data.data.transaction
+              : transaction,
+          );
+          set({ pendingTransactions: updatedTransactions });
+        } catch (error: any) {
+          set({
+            error:
+              error.response?.data?.message ||
+              "Failed to update transaction date",
+          });
+        } finally {
+          set({ loading: false });
+        }
+      },
       clearError: () => set({ error: null }),
     }),
     {
