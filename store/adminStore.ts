@@ -6,6 +6,46 @@ import { create, StateCreator } from "zustand";
 import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 
 // Types
+export interface CreateTransferData {
+  type: "SAME_BANK" | "OTHER_BANK" | "INTERNATIONAL";
+  accountNumber: string; // Sender's account number
+  amount: number;
+  purpose: string;
+  status: string;
+  recipientAccountNumber: string;
+  // OTHER_BANK & INTERNATIONAL fields
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  bankName?: string;
+  // OTHER_BANK fields
+  bankRouteNumber?: string;
+  // INTERNATIONAL fields
+  city?: string;
+  country?: string;
+  swiftBic?: string;
+  iban?: string;
+}
+export interface CreateTransferData {
+  type: "SAME_BANK" | "OTHER_BANK" | "INTERNATIONAL";
+  accountNumber: string; // Sender's account number
+  amount: number;
+  purpose: string;
+  status: string;
+  recipientAccountNumber: string;
+  // OTHER_BANK & INTERNATIONAL fields
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  bankName?: string;
+  // OTHER_BANK fields
+  bankRouteNumber?: string;
+  // INTERNATIONAL fields
+  city?: string;
+  country?: string;
+  swiftBic?: string;
+  iban?: string;
+}
 interface DashboardStats {
   users: {
     total: number;
@@ -56,7 +96,7 @@ interface TransactionStats {
 }
 
 interface User {
-  password: any;
+  password: string;
   fullName: string;
   email: string;
   accountNumber: string;
@@ -118,6 +158,7 @@ interface AdminState {
   fetchTransactionById: (id: string) => Promise<void>;
   updateTransactionStatus: (id: string, status: string) => Promise<void>;
   updateTransactionDate: (id: string, createdAt: string) => Promise<void>;
+  createTransfer: (data: CreateTransferData) => Promise<boolean>;
   clearError: () => void;
 }
 
@@ -384,6 +425,23 @@ const useAdminStore = create<AdminState>()(
           });
         } finally {
           set({ loading: false });
+        }
+      },
+      createTransfer: async (data: CreateTransferData) => {
+        set({ loading: true, error: null });
+        try {
+          await axiosInstance.post(
+            config.api.endpoints.admin.createTransfer,
+            data,
+          );
+          set({ loading: false });
+          return true;
+        } catch (error: any) {
+          set({
+            error: error.response?.data?.message || "Failed to create transfer",
+            loading: false,
+          });
+          return false;
         }
       },
       clearError: () => set({ error: null }),
