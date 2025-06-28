@@ -18,6 +18,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/* Smartsupp Live Chat script */}
+        {/* <Script id="smartsupp-livechat" strategy="afterInteractive">
+          {`
+            var _smartsupp = _smartsupp || {};
+            _smartsupp.key = '14dd920f18a9907f8a5cbe3cd2590d57bebc2173';
+            window.smartsupp||(function(d) {
+              var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+              s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+              c.type='text/javascript';c.charset='utf-8';c.async=true;
+              c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+            })(document);
+          `}
+        </Script>
+        <noscript>
+          Powered by{" "}
+          <a href="https://www.smartsupp.com" target="_blank">
+            Smartsupp
+          </a>
+        </noscript> */}
         <AnimationProvider>
           {children}
           <Toaster

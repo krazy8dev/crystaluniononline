@@ -15,3 +15,17 @@ export async function getUserProfile(): Promise<User> {
     );
   }
 }
+
+export async function getUserByAccountNumber(accountNumber: string): Promise<User> {
+  try {
+    const response = await axiosInstance.get(`/user/lookup?accountNumber=${accountNumber}`);
+    return response.data.data.user;
+  } catch (error: any) {
+    if (error.response?.status === 401) {
+      throw new Error("Unauthorized. Please login again.");
+    }
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch user",
+    );
+  }
+}

@@ -5,13 +5,14 @@ import useTransactionStore from "@/store/transactionStore";
 import useUserStore from "@/store/userStore";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Breadcrumb from "../ui/breadcrumb";
 import { toast } from "sonner";
+import { debounce } from "lodash";
 
 const DomesticTransfer = () => {
   const router = useRouter();
-  const { profile } = useUserStore();
+  const { profile, getUserByAccountNumber } = useUserStore();
   const { sameBankTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     accountNumber: "",
@@ -21,6 +22,30 @@ const DomesticTransfer = () => {
     securityPin: "",
   });
 
+  const [isBeneficiaryLoading, setIsBeneficiaryLoading] = useState(false);
+
+  const debouncedGetBeneficiary = useCallback(
+    debounce(async (accountNumber: string) => {
+      if (accountNumber.length >= 10) {
+        setIsBeneficiaryLoading(true);
+        try {
+          const user = await getUserByAccountNumber(accountNumber);
+          if (user) {
+            setFormData((prev) => ({
+              ...prev,
+              beneficiary: user.fullName,
+            }));
+          }
+        } catch (error) {
+          // You might want to handle errors, e.g., show a toast notification
+        } finally {
+          setIsBeneficiaryLoading(false);
+        }
+      }
+    }, 500),
+    [getUserByAccountNumber],
+  );
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -29,6 +54,10 @@ const DomesticTransfer = () => {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "accountNumber") {
+      debouncedGetBeneficiary(value);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,15 +84,16 @@ const DomesticTransfer = () => {
     <div className="min-h-screen p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
-        onClick={() => router.push("/dashboard/account-details")}
+        <div
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+          onClick={() => router.push("/dashboard/account-details")}
         >
           {initials}
         </div>
       </div>
       <hr className="my-4" />
 
-      <div className="md:max-w-5xl w-full">
+      <div className="w-full md:max-w-5xl">
         <h1 className="text-2xl font-semibold text-gray-900">
           Transfer to the same bank
         </h1>
@@ -108,8 +138,12 @@ const DomesticTransfer = () => {
               value={formData.beneficiary}
               onChange={handleChange}
               placeholder="Beneficiary Name"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              readOnly
             />
+            {isBeneficiaryLoading && (
+              <p className="mt-1 text-sm text-gray-500">Checking account...</p>
+            )}
           </div>
 
           <div className="space-y-1">
@@ -183,7 +217,7 @@ const DomesticTransfer = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? "Processing..." : "Next"}
             </button>

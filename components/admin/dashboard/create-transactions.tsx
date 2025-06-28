@@ -31,10 +31,16 @@ const DomesticTransferForm = () => {
       [name]: value,
     }));
   };
-  const { } = useUserStore();
+  const {} = useUserStore();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Replace with actual submit logic
+    console.log("Domestic Transfer Submitted:", formData);
+  };
 
   return (
-    <div className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       {/* <div className="flex items-center justify-between">
         <Breadcrumb />
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
@@ -138,7 +144,13 @@ const DomesticTransferForm = () => {
           <option value="cancelled">Cancelled</option>
         </select>
       </div>
-    </div>
+      <button
+        type="submit"
+        className="w-full rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        Submit
+      </button>
+    </form>
   );
 };
 
@@ -170,8 +182,14 @@ const InternationalTransferForm = () => {
     }));
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Replace with actual submit logic
+    console.log("International Transfer Submitted:", formData);
+  };
+
   return (
-    <div className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <div className="rounded-lg border p-6">
         <h3 className="mb-4 text-lg font-semibold">Receiver&apos;s Details</h3>
         <div className="space-y-4">
@@ -404,7 +422,13 @@ const InternationalTransferForm = () => {
           </select>
         </div>
       </div>
-    </div>
+      <button
+        type="submit"
+        className="w-full rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        Submit
+      </button>
+    </form>
   );
 };
 
@@ -433,8 +457,14 @@ const LocalTransferForm = () => {
     }));
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Replace with actual submit logic
+    console.log("Local Transfer Submitted:", formData);
+  };
+
   return (
-    <div className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
         <label
           htmlFor="firstName"
@@ -601,13 +631,19 @@ const LocalTransferForm = () => {
           <option value="cancelled">Cancelled</option>
         </select>
       </div>
-    </div>
+      <button
+        type="submit"
+        className="w-full rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        Submit
+      </button>
+    </form>
   );
 };
 
 const CreateTransactions = () => {
   const [selected, setSelected] = useState("domestic");
-  const { profile} = useUserStore();
+  const { profile } = useUserStore();
 
   let FormComponent = null;
   if (selected === "domestic") FormComponent = <DomesticTransferForm />;
@@ -619,8 +655,7 @@ const CreateTransactions = () => {
     <div className="p-6">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
-        >
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
           {getInitials(profile?.fullName ?? "")}
         </div>
       </div>

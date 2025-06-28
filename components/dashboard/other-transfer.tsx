@@ -21,6 +21,7 @@ const OtherTransfer = () => {
     bankRouteNumber: "",
     amount: "",
     purpose: "",
+    beneficiary: "",
     securityPin: "",
   });
 
@@ -53,15 +54,16 @@ const OtherTransfer = () => {
     <div className="min-h-screen p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
-        onClick={() => router.push("/dashboard/account-details")}
+        <div
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+          onClick={() => router.push("/dashboard/account-details")}
         >
           {initials}
         </div>
       </div>
       <hr className="my-4" />
 
-      <div className="md:max-w-5xl w-full">
+      <div className="w-full md:max-w-5xl">
         <h1 className="text-2xl font-semibold text-gray-900">
           Transfer to Other Bank
         </h1>
@@ -73,7 +75,7 @@ const OtherTransfer = () => {
         )}
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-1">
               <label
                 htmlFor="firstName"
@@ -151,7 +153,7 @@ const OtherTransfer = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-1">
               <label
                 htmlFor="bankName"
@@ -231,6 +233,25 @@ const OtherTransfer = () => {
 
           <div className="space-y-1">
             <label
+              htmlFor="beneficiary"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Beneficiary<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="beneficiary"
+              name="beneficiary"
+              value={formData.beneficiary}
+              onChange={handleChange}
+              placeholder="Beneficiary"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
               htmlFor="securityPin"
               className="block text-sm font-medium text-gray-700"
             >
@@ -262,7 +283,7 @@ const OtherTransfer = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? "Processing..." : "Next"}
             </button>
