@@ -26,10 +26,10 @@ const useUserStore = create<UserState>((set) => ({
   profile: null,
   isLoading: false,
   error: null,
-  verifyAccount: async (accountNumber: string) => {
+    verifyAccount: async (accountNumber: string) => {
     try {
-            const response = await axiosInstance.post(
-        config.api.verifyAccount,
+      const response = await axiosInstance.post(
+        config.api.endpoints.user.verifyAccount,
         { accountNumber },
       );
       return response.data;
