@@ -40,7 +40,7 @@ const DomesticTransfer = () => {
         } else {
           setBeneficiaryName("");
         }
-      } catch (error) {
+      } catch  {
         setBeneficiaryName("");
         toast.error("Failed to verify account number.");
       }
@@ -61,7 +61,7 @@ const DomesticTransfer = () => {
               beneficiary: user.fullName,
             }));
           }
-        } catch (error) {
+        } catch {
           // You might want to handle errors, e.g., show a toast notification
         } finally {
           setIsBeneficiaryLoading(false);
