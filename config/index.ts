@@ -2,7 +2,7 @@ export const config = {
   api: {
     baseUrl:
       // process.env.NEXT_PUBLIC_API_URL ||
-      // "https://developersgridapi.onrender.com/api",
+      // "http://localhost:5000/api",
       "https://developersgridapi.onrender.com/api",
 
     endpoints: {
@@ -12,6 +12,9 @@ export const config = {
         verifyEmail: "/auth/verify-email",
         forgotPassword: "/auth/forgot-password",
         resetPassword: "/auth/reset-password",
+      },
+      user: {
+        verifyAccount: "user/verify-account",
       },
       admin: {
         dashboard: "/admin/dashboard",
