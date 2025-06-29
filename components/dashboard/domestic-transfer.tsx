@@ -1,15 +1,15 @@
 "use client";
 
+import { getUserByAccountNumber } from "@/api/api";
 import { getInitials } from "@/lib/utils";
 import useTransactionStore from "@/store/transactionStore";
 import useUserStore from "@/store/userStore";
+import { debounce } from "lodash";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
 import Breadcrumb from "../ui/breadcrumb";
-import { debounce } from "lodash";
-import { getUserByAccountNumber } from "@/api/api";
 
 const DomesticTransfer = () => {
   const router = useRouter();
@@ -25,7 +25,9 @@ const DomesticTransfer = () => {
   });
   const [beneficiaryName, setBeneficiaryName] = useState("");
 
-  const handleAccountNumberChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAccountNumberChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const { name, value } = e.target;
     // still call the original handleChange to update the form state
     handleChange(e);
@@ -40,7 +42,7 @@ const DomesticTransfer = () => {
         } else {
           setBeneficiaryName("");
         }
-      } catch  {
+      } catch {
         setBeneficiaryName("");
         toast.error("Failed to verify account number.");
       }
@@ -58,7 +60,7 @@ const DomesticTransfer = () => {
           if (user) {
             setFormData((prev) => ({
               ...prev,
-              beneficiary: user.fullName,
+              beneficiary: user.data.fullName,
             }));
           }
         } catch {
