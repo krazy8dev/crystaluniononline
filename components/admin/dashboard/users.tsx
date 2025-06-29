@@ -423,7 +423,7 @@ const UsersPage = () => {
 
       {/* User Details Modal */}
       {isViewing && selectedUser && (
-        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <div className="w-full max-w-2xl rounded-lg bg-white p-6">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-xl font-bold">User Details</h2>
@@ -506,6 +506,12 @@ const UsersPage = () => {
                     <p className="text-sm font-medium text-gray-500">User ID</p>
                     <p className="mt-1 font-mono text-sm text-gray-900">
                       {selectedUser._id}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">User Password</p>
+                    <p className="mt-1 font-mono text-sm text-gray-900">
+                      {selectedUser.password}
                     </p>
                   </div>
                 </div>

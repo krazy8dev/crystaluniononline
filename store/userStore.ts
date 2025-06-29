@@ -2,7 +2,7 @@
 
 import { axiosInstance } from "@/utils/axiosInstance";
 import { config } from "@/config";
-import { getUserProfile } from "@/api/api";
+import { getUserByAccountNumber, getUserProfile } from "@/api/api";
 import { User } from "@/types/user";
 import { create } from "zustand";
 
@@ -32,6 +32,7 @@ const useUserStore = create<UserState>((set) => ({
         config.api.endpoints.user.verifyAccount,
         { accountNumber },
       );
+      console.log(response);
       return response.data;
     } catch (error) {
       console.error("Error verifying account:", error);
@@ -49,6 +50,21 @@ const useUserStore = create<UserState>((set) => ({
         error: error.message || "Failed to fetch profile",
         isLoading: false,
       });
+    }
+  },
+  getUserByAccountNumber: async (accountNumber: string) => {
+    try {
+      set({ isLoading: true, error: null });
+      // Import getUserByAccountNumber from "@/api/api"
+      const user = await getUserByAccountNumber(accountNumber);
+      set({ isLoading: false });
+      return user;
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to fetch user",
+        isLoading: false,
+      });
+      return null;
     }
   },
 }));

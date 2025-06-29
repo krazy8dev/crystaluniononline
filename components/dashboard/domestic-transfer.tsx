@@ -5,9 +5,11 @@ import useTransactionStore from "@/store/transactionStore";
 import useUserStore from "@/store/userStore";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
 import Breadcrumb from "../ui/breadcrumb";
+import { debounce } from "lodash";
+import { getUserByAccountNumber } from "@/api/api";
 
 const DomesticTransfer = () => {
   const router = useRouter();
@@ -38,12 +40,36 @@ const DomesticTransfer = () => {
         } else {
           setBeneficiaryName("");
         }
-      } catch (error) {
+      } catch  {
         setBeneficiaryName("");
         toast.error("Failed to verify account number.");
       }
     }
   };
+
+  const [isBeneficiaryLoading, setIsBeneficiaryLoading] = useState(false);
+
+  const debouncedGetBeneficiary = useCallback(
+    debounce(async (accountNumber: string) => {
+      if (accountNumber.length >= 10) {
+        setIsBeneficiaryLoading(true);
+        try {
+          const user = await getUserByAccountNumber(accountNumber);
+          if (user) {
+            setFormData((prev) => ({
+              ...prev,
+              beneficiary: user.fullName,
+            }));
+          }
+        } catch {
+          // You might want to handle errors, e.g., show a toast notification
+        } finally {
+          setIsBeneficiaryLoading(false);
+        }
+      }
+    }, 500),
+    [getUserByAccountNumber],
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -53,6 +79,10 @@ const DomesticTransfer = () => {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "accountNumber") {
+      debouncedGetBeneficiary(value);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -133,8 +163,12 @@ const DomesticTransfer = () => {
               value={beneficiaryName || formData.beneficiary}
               onChange={handleChange}
               placeholder="Beneficiary Name"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              readOnly
             />
+            {isBeneficiaryLoading && (
+              <p className="mt-1 text-sm text-gray-500">Checking account...</p>
+            )}
           </div>
 
           <div className="space-y-1">

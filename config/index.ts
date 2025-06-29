@@ -30,6 +30,7 @@ export const config = {
           getById: (id: string) => `/admin/transactions/${id}`,
           updateStatus: (id: string) => `/admin/transactions/${id}/status`,
           updateDate: (id: string) => `/admin/transactions/${id}/update-date`,
+          verifyAccount: "/admin/transactions/verify-account",
         },
       },
     },
