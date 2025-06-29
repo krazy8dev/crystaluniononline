@@ -1,9 +1,14 @@
 "use client";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { getInitials } from "@/lib/utils";
+import useAdminStore, { type CreateTransferData } from "@/store/adminStore";
+import useAuthStore from "@/store/authstore";
 import useUserStore from "@/store/userStore";
-import React, { useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const transactionTypes = [
   { label: "Domestic Transfer", value: "domestic" },
@@ -11,14 +16,26 @@ const transactionTypes = [
   { label: "Local Transfer", value: "local" },
 ];
 
-const DomesticTransferForm = () => {
+const DomesticTransferForm = ({
+  onSubmit,
+  loading,
+  adminAccountNumber,
+}: {
+  onSubmit: (data: CreateTransferData) => void;
+  loading: boolean;
+  adminAccountNumber: string;
+}) => {
   const [formData, setFormData] = useState({
-    accountNumber: "",
-    beneficiary: "",
+    accountNumber: adminAccountNumber,
+    recipientAccountNumber: "",
     amount: "",
     purpose: "",
-    status: "pending",
+    status: "COMPLETED",
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, accountNumber: adminAccountNumber }));
+  }, [adminAccountNumber]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -31,30 +48,28 @@ const DomesticTransferForm = () => {
       [name]: value,
     }));
   };
-  const {} = useUserStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with actual submit logic
-    console.log("Domestic Transfer Submitted:", formData);
+    if (!formData.amount || Number.parseFloat(formData.amount) <= 0) {
+      toast.error("Please enter a valid amount.");
+      return;
+    }
+    onSubmit({
+      ...formData,
+      type: "SAME_BANK",
+      amount: Number.parseFloat(formData.amount),
+    });
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
-      {/* <div className="flex items-center justify-between">
-        <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800">
-          {getInitials(profile?.fullName ?? "")}
-        </div>
-      </div>
-      <hr className="my-4" /> */}
-
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-1">
         <label
           htmlFor="accountNumber"
           className="block text-sm font-medium text-gray-700"
         >
-          Receiver Account Number<span className="text-red-500">*</span>
+          Sender Account Number<span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -65,24 +80,26 @@ const DomesticTransferForm = () => {
           placeholder="Account Number"
           className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           required
+          readOnly
         />
       </div>
 
       <div className="space-y-1">
         <label
-          htmlFor="beneficiary"
+          htmlFor="recipientAccountNumber"
           className="block text-sm font-medium text-gray-700"
         >
-          Beneficiary
+          Receiver Account Number<span className="text-red-500">*</span>
         </label>
         <input
           type="text"
-          id="beneficiary"
-          name="beneficiary"
-          value={formData.beneficiary}
+          id="recipientAccountNumber"
+          name="recipientAccountNumber"
+          value={formData.recipientAccountNumber}
           onChange={handleChange}
-          placeholder="Beneficiary Name"
+          placeholder="Recipient Account Number"
           className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+          required
         />
       </div>
 
@@ -138,37 +155,48 @@ const DomesticTransferForm = () => {
           onChange={handleChange}
           className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
         >
-          <option value="pending">Pending</option>
-          <option value="completed">Completed</option>
-          <option value="failed">Failed</option>
-          <option value="cancelled">Cancelled</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="PENDING">Pending</option>
+          <option value="FAILED">Failed</option>
+          <option value="CANCELLED">Cancelled</option>
         </select>
       </div>
-      <button
-        type="submit"
-        className="w-full rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-      >
-        Submit
-      </button>
+
+      <Button type="submit" disabled={loading} className="w-full">
+        {loading ? "Submitting..." : "Submit Transfer"}
+      </Button>
     </form>
   );
 };
 
-const InternationalTransferForm = () => {
+const InternationalTransferForm = ({
+  onSubmit,
+  loading,
+  adminAccountNumber,
+}: {
+  onSubmit: (data: CreateTransferData) => void;
+  loading: boolean;
+  adminAccountNumber: string;
+}) => {
   const [formData, setFormData] = useState({
+    accountNumber: adminAccountNumber,
+    recipientAccountNumber: "",
     firstName: "",
     lastName: "",
     email: "",
     city: "",
     country: "",
     bankName: "",
-    accountNumber: "",
     swiftBic: "",
-    ibanNumber: "",
+    iban: "",
     amount: "",
     purpose: "",
-    status: "pending",
+    status: "COMPLETED",
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, accountNumber: adminAccountNumber }));
+  }, [adminAccountNumber]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -184,12 +212,41 @@ const InternationalTransferForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with actual submit logic
-    console.log("International Transfer Submitted:", formData);
+    if (!formData.amount || Number.parseFloat(formData.amount) <= 0) {
+      toast.error("Please enter a valid amount.");
+      return;
+    }
+    onSubmit({
+      ...formData,
+      type: "INTERNATIONAL",
+      amount: Number.parseFloat(formData.amount),
+    });
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="rounded-lg border p-6">
+        <h3 className="mb-4 text-lg font-semibold">Sender Details</h3>
+        <div>
+          <label
+            htmlFor="accountNumber"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Sender Account Number<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="accountNumber"
+            name="accountNumber"
+            value={formData.accountNumber}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            required
+            readOnly
+          />
+        </div>
+      </div>
+
       <div className="rounded-lg border p-6">
         <h3 className="mb-4 text-lg font-semibold">Receiver&apos;s Details</h3>
         <div className="space-y-4">
@@ -308,16 +365,16 @@ const InternationalTransferForm = () => {
 
           <div>
             <label
-              htmlFor="accountNumber"
+              htmlFor="recipientAccountNumber"
               className="block text-sm font-medium text-gray-700"
             >
               Account Number<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              id="accountNumber"
-              name="accountNumber"
-              value={formData.accountNumber}
+              id="recipientAccountNumber"
+              name="recipientAccountNumber"
+              value={formData.recipientAccountNumber}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               required
@@ -344,16 +401,16 @@ const InternationalTransferForm = () => {
 
           <div>
             <label
-              htmlFor="ibanNumber"
+              htmlFor="iban"
               className="block text-sm font-medium text-gray-700"
             >
               IBAN Number<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              id="ibanNumber"
-              name="ibanNumber"
-              value={formData.ibanNumber}
+              id="iban"
+              name="iban"
+              value={formData.iban}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               required
@@ -415,35 +472,46 @@ const InternationalTransferForm = () => {
             onChange={handleChange}
             className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           >
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-            <option value="failed">Failed</option>
-            <option value="cancelled">Cancelled</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="PENDING">Pending</option>
+            <option value="FAILED">Failed</option>
+            <option value="CANCELLED">Cancelled</option>
           </select>
         </div>
       </div>
-      <button
-        type="submit"
-        className="w-full rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-      >
-        Submit
-      </button>
+
+      <Button type="submit" disabled={loading} className="w-full">
+        {loading ? "Submitting..." : "Submit Transfer"}
+      </Button>
     </form>
   );
 };
 
-const LocalTransferForm = () => {
+const LocalTransferForm = ({
+  onSubmit,
+  loading,
+  adminAccountNumber,
+}: {
+  onSubmit: (data: CreateTransferData) => void;
+  loading: boolean;
+  adminAccountNumber: string;
+}) => {
   const [formData, setFormData] = useState({
+    accountNumber: adminAccountNumber,
+    recipientAccountNumber: "",
     firstName: "",
     lastName: "",
     email: "",
-    accountNumber: "",
     bankName: "",
-    routeNumber: "",
+    bankRouteNumber: "",
     amount: "",
     purpose: "",
-    status: "pending",
+    status: "COMPLETED",
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, accountNumber: adminAccountNumber }));
+  }, [adminAccountNumber]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -459,12 +527,38 @@ const LocalTransferForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with actual submit logic
-    console.log("Local Transfer Submitted:", formData);
+    if (!formData.amount || Number.parseFloat(formData.amount) <= 0) {
+      toast.error("Please enter a valid amount.");
+      return;
+    }
+    onSubmit({
+      ...formData,
+      type: "OTHER_BANK",
+      amount: Number.parseFloat(formData.amount),
+    });
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label
+          htmlFor="accountNumber"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Sender Account Number<span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="accountNumber"
+          name="accountNumber"
+          value={formData.accountNumber}
+          onChange={handleChange}
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+          required
+          readOnly
+        />
+      </div>
+
       <div>
         <label
           htmlFor="firstName"
@@ -521,16 +615,16 @@ const LocalTransferForm = () => {
 
       <div>
         <label
-          htmlFor="accountNumber"
+          htmlFor="recipientAccountNumber"
           className="block text-sm font-medium text-gray-700"
         >
           Recipient Account Number<span className="text-red-500">*</span>
         </label>
         <input
           type="text"
-          id="accountNumber"
-          name="accountNumber"
-          value={formData.accountNumber}
+          id="recipientAccountNumber"
+          name="recipientAccountNumber"
+          value={formData.recipientAccountNumber}
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           required
@@ -557,16 +651,16 @@ const LocalTransferForm = () => {
 
       <div>
         <label
-          htmlFor="routeNumber"
+          htmlFor="bankRouteNumber"
           className="block text-sm font-medium text-gray-700"
         >
           Recipient Bank Route Number<span className="text-red-500">*</span>
         </label>
         <input
           type="text"
-          id="routeNumber"
-          name="routeNumber"
-          value={formData.routeNumber}
+          id="bankRouteNumber"
+          name="bankRouteNumber"
+          value={formData.bankRouteNumber}
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           required
@@ -625,18 +719,16 @@ const LocalTransferForm = () => {
           onChange={handleChange}
           className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
         >
-          <option value="pending">Pending</option>
-          <option value="completed">Completed</option>
-          <option value="failed">Failed</option>
-          <option value="cancelled">Cancelled</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="PENDING">Pending</option>
+          <option value="FAILED">Failed</option>
+          <option value="CANCELLED">Cancelled</option>
         </select>
       </div>
-      <button
-        type="submit"
-        className="w-full rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-      >
-        Submit
-      </button>
+
+      <Button type="submit" disabled={loading} className="w-full">
+        {loading ? "Submitting..." : "Submit Transfer"}
+      </Button>
     </form>
   );
 };
@@ -644,12 +736,46 @@ const LocalTransferForm = () => {
 const CreateTransactions = () => {
   const [selected, setSelected] = useState("domestic");
   const { profile } = useUserStore();
+  const { createTransfer, loading, error } = useAdminStore();
+  const { user } = useAuthStore();
+
+  const adminAccountNumber = user?.accountNumber || "";
+
+  const handleSubmit = async (data: CreateTransferData) => {
+    const success = await createTransfer(data);
+    if (success) {
+      toast.success("Transfer created successfully!");
+      // Reset form by changing selected type and back (optional)
+    } else {
+      toast.error(error || "An unknown error occurred.");
+    }
+  };
 
   let FormComponent = null;
-  if (selected === "domestic") FormComponent = <DomesticTransferForm />;
+  if (selected === "domestic")
+    FormComponent = (
+      <DomesticTransferForm
+        onSubmit={handleSubmit}
+        loading={loading}
+        adminAccountNumber={adminAccountNumber}
+      />
+    );
   else if (selected === "international")
-    FormComponent = <InternationalTransferForm />;
-  else if (selected === "local") FormComponent = <LocalTransferForm />;
+    FormComponent = (
+      <InternationalTransferForm
+        onSubmit={handleSubmit}
+        loading={loading}
+        adminAccountNumber={adminAccountNumber}
+      />
+    );
+  else if (selected === "local")
+    FormComponent = (
+      <LocalTransferForm
+        onSubmit={handleSubmit}
+        loading={loading}
+        adminAccountNumber={adminAccountNumber}
+      />
+    );
 
   return (
     <div className="p-6">

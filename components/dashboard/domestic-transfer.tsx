@@ -5,15 +5,17 @@ import useTransactionStore from "@/store/transactionStore";
 import useUserStore from "@/store/userStore";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect, useCallback } from "react";
-import Breadcrumb from "../ui/breadcrumb";
+import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
+import Breadcrumb from "../ui/breadcrumb";
 import { debounce } from "lodash";
+import { getUserByAccountNumber } from "@/api/api";
 
 const DomesticTransfer = () => {
   const router = useRouter();
-  const { profile, getUserByAccountNumber } = useUserStore();
+  const { profile } = useUserStore();
   const { sameBankTransfer, isLoading, error } = useTransactionStore();
+  const { verifyAccount } = useUserStore();
   const [formData, setFormData] = useState({
     accountNumber: "",
     beneficiary: "",
@@ -21,6 +23,29 @@ const DomesticTransfer = () => {
     purpose: "",
     securityPin: "",
   });
+  const [beneficiaryName, setBeneficiaryName] = useState("");
+
+  const handleAccountNumberChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    // still call the original handleChange to update the form state
+    handleChange(e);
+
+    if (name === "accountNumber" && value.length === 10) {
+      try {
+        const data = await verifyAccount(value);
+        if (data.status === "success") {
+          setBeneficiaryName(data.data.fullName);
+          // also update the main form data
+          setFormData((prev) => ({ ...prev, beneficiary: data.data.fullName }));
+        } else {
+          setBeneficiaryName("");
+        }
+      } catch (error) {
+        setBeneficiaryName("");
+        toast.error("Failed to verify account number.");
+      }
+    }
+  };
 
   const [isBeneficiaryLoading, setIsBeneficiaryLoading] = useState(false);
 
@@ -117,7 +142,7 @@ const DomesticTransfer = () => {
               id="accountNumber"
               name="accountNumber"
               value={formData.accountNumber}
-              onChange={handleChange}
+              onChange={handleAccountNumberChange}
               placeholder="Account Number"
               className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               required
@@ -135,7 +160,7 @@ const DomesticTransfer = () => {
               type="text"
               id="beneficiary"
               name="beneficiary"
-              value={formData.beneficiary}
+              value={beneficiaryName || formData.beneficiary}
               onChange={handleChange}
               placeholder="Beneficiary Name"
               className="w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"

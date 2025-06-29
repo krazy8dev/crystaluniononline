@@ -1,8 +1,10 @@
 export const config = {
   api: {
     baseUrl:
-      process.env.NEXT_PUBLIC_API_URL ||
+      // process.env.NEXT_PUBLIC_API_URL ||
+      // "https://developersgridapi.onrender.com/api",
       "https://developersgridapi.onrender.com/api",
+
     endpoints: {
       auth: {
         register: "/auth/register",
@@ -18,12 +20,14 @@ export const config = {
         updateUser: (id: string) => `/admin/users/${id}`,
         deleteUser: (id: string) => `/admin/users/${id}`,
         topUpUser: (id: string) => `/admin/users/${id}/top-up`,
+        createTransfer: "/admin/transfer",
         transactions: {
           stats: "/admin/transactions/stats",
           pending: "/admin/transactions/pending",
           getById: (id: string) => `/admin/transactions/${id}`,
           updateStatus: (id: string) => `/admin/transactions/${id}/status`,
           updateDate: (id: string) => `/admin/transactions/${id}/update-date`,
+          verifyAccount: "/admin/transactions/verify-account",
         },
       },
     },
