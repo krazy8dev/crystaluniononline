@@ -79,7 +79,7 @@ const Planning = () => {
                     </Link>
                   </motion.div>
 
-                  <motion.div
+                  {/* <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -90,7 +90,7 @@ const Planning = () => {
                       <span>Get in touch</span>
                       <ArrowRight className="h-4 w-4" />
                     </Link>
-                  </motion.div>
+                  </motion.div> */}
                 </motion.div>
               </motion.div>
             </motion.div>

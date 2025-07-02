@@ -3,22 +3,22 @@
 import React from "react";
 import Link from "next/link";
 // import { motion } from "framer-motion";
-import {
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
+// import {
+//   Facebook,
+//   Twitter,
+//   Linkedin,
+//   Instagram,
+//   Mail,
+//   Phone,
+//   MapPin,
+// } from "lucide-react";
 import Logo from "../../ui/logo";
 
 const Footer = () => {
   return (
     <footer className="border-t border-gray-200 bg-white">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Bank Info Section */}
           <div className="space-y-4">
             <Logo width={180} height={50} />
@@ -26,7 +26,7 @@ const Footer = () => {
               A legacy of trust, innovation, and excellence spanning over 150
               years in the UAE&apos;s financial landscape.
             </p>
-            <div className="flex space-x-4">
+            {/* <div className="flex space-x-4">
               <Link
                 href="#"
                 className="text-gray-400 transition-colors hover:text-blue-600"
@@ -51,7 +51,7 @@ const Footer = () => {
               >
                 <Instagram className="h-5 w-5" />
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}
@@ -77,20 +77,20 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/loans"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                <button
+                  type="button"
+                  className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   Loans & Credit
-                </Link>
+                </button>
               </li>
               <li>
-                <Link
-                  href="/investments"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                <button
+                  type="button"
+                  className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   Investment Services
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -118,12 +118,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/help"
-                  className="text-sm text-gray-600 transition-colors hover:text-blue-600"
+                <button
+                  type="button"
+                  className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   Help Center
-                </Link>
+                </button>
               </li>
               <li>
                 <Link
@@ -137,7 +137,7 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div>
+          {/* <div>
             <h3 className="mb-4 text-lg font-semibold text-gray-900">
               Contact
             </h3>
@@ -157,7 +157,7 @@ const Footer = () => {
                 <span className="text-sm text-gray-600">Dubai, UAE</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Section */}
@@ -166,19 +166,19 @@ const Footer = () => {
             <p className="mb-4 text-sm text-gray-500 md:mb-0">
               © 2024 Heritage Trust Bank. All rights reserved.
             </p>
-            <div className="flex space-x-6">
-              <Link
-                href="/terms"
-                className="text-sm text-gray-500 transition-colors hover:text-blue-600"
+            <div className="flex space-x-6 text-sm gap-5">
+              <button
+                type="button"
+                className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"
               >
                 Terms & Conditions
-              </Link>
-              <Link
-                href="/security"
-                className="text-sm text-gray-500 transition-colors hover:text-blue-600"
+              </button>
+              <button
+                type="button"
+                className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"
               >
                 Security
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@ const Ebanking = () => {
           <div
             className="flex flex-col items-start justify-end bg-black/30 p-4"
             style={{
-              backgroundImage: `url(${icons.ebanking.src})`,
+              backgroundImage: `url(${icons.recepient.src})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",

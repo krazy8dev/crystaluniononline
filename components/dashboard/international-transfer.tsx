@@ -7,11 +7,12 @@ import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
+import { toast } from "sonner";
 
 const InternationalTransfer = () => {
   const router = useRouter();
   const { profile } = useUserStore();
-  const { internationalTransfer, isLoading, error } = useTransactionStore();
+  const { sameBankTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -40,10 +41,14 @@ const InternationalTransfer = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await internationalTransfer({
-        ...formData,
+      // Only send the fields needed for domestic transfer
+      await sameBankTransfer({
+        accountNumber: formData.accountNumber,
         amount: parseFloat(formData.amount),
+        purpose: formData.purpose,
+        securityPin: formData.securityPin,
       });
+      toast.success("Transfer successful");
       router.push("/dashboard/transactions");
     } catch (error) {
       console.error("Transfer failed:", error);
@@ -56,15 +61,16 @@ const InternationalTransfer = () => {
     <div className="min-h-screen p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
-        onClick={() => router.push("/dashboard/account-details")}
+        <div
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+          onClick={() => router.push("/dashboard/account-details")}
         >
           {initials}
         </div>
       </div>
       <hr className="my-4" />
 
-      <div className="md:max-w-5xl w-full">
+      <div className="w-full md:max-w-5xl">
         <h1 className="text-2xl font-semibold text-gray-900">
           International Transfer
         </h1>
@@ -76,7 +82,7 @@ const InternationalTransfer = () => {
         )}
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-1">
               <label
                 htmlFor="firstName"
@@ -135,7 +141,7 @@ const InternationalTransfer = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-1">
               <label
                 htmlFor="city"
@@ -213,7 +219,7 @@ const InternationalTransfer = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-1">
               <label
                 htmlFor="swiftBic"
@@ -324,7 +330,7 @@ const InternationalTransfer = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? "Processing..." : "Next"}
             </button>

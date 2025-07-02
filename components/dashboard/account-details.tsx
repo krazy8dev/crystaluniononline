@@ -69,8 +69,6 @@ const AccountDetails = () => {
                 <span>Email: {profile?.email}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Phone className="h-4 w-4" />
-                <span>Mobile No:</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Wallet className="h-4 w-4" />

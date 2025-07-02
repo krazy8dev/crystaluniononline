@@ -96,6 +96,7 @@ const DomesticTransfer = () => {
         purpose: formData.purpose,
         securityPin: formData.securityPin,
       });
+      toast.success("Transfer successful");
       // Redirect to success page or show success message
       router.push("/dashboard/transactions");
     } catch {

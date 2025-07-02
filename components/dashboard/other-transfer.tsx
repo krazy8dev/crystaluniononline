@@ -7,11 +7,12 @@ import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Breadcrumb from "../ui/breadcrumb";
+import { toast } from "sonner";
 
 const OtherTransfer = () => {
   const router = useRouter();
   const { profile } = useUserStore();
-  const { otherBankTransfer, isLoading, error } = useTransactionStore();
+  const { sameBankTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -38,10 +39,13 @@ const OtherTransfer = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await otherBankTransfer({
-        ...formData,
+      await sameBankTransfer({
+        accountNumber: formData.accountNumber,
         amount: parseFloat(formData.amount),
+        purpose: formData.purpose,
+        securityPin: formData.securityPin,
       });
+      toast.success("Transfer successful");
       router.push("/dashboard/transactions");
     } catch (error) {
       console.error("Transfer failed:", error);

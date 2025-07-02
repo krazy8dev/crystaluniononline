@@ -38,6 +38,7 @@ import login from "@/app/assets/images/login.jpg";
 import loginImage from "@/app/assets/images/bglogin.jpg";
 import ebanking from "@/app/assets/images/e-banking.jpg";
 import about from "@/app/assets/images/about.jpg";
+import recepient from "@/app/assets/images/recepient.jpg";
 
 import {
   CreditCard,
@@ -71,6 +72,7 @@ export const icons = {
   loginImage,
   ebanking,
   about,
+  recepient,
 };
 
 export const cards = [

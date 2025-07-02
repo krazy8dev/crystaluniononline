@@ -3,15 +3,10 @@
 import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronDown,
-  
-  LogOut,
-  LayoutDashboard,
-
-} from "lucide-react";
+import { ChevronDown, LogOut, LayoutDashboard } from "lucide-react";
 import useAuthStore from "@/store/authstore";
 import { useRouter } from "next/navigation";
+import type { User } from "@/types/user";
 
 const UserButton = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -19,8 +14,10 @@ const UserButton = () => {
   const router = useRouter();
 
   // Get auth state from store
-  const { token, user, logout } = useAuthStore();
+  const { token, user: rawUser, logout } = useAuthStore();
+  const user = rawUser as User | null;
   const isAuthenticated = !!token;
+  const isAdmin = (user?.role || "user") === "admin";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -125,7 +122,11 @@ const UserButton = () => {
             {/* Menu Items */}
             <div className="py-2">
               <Link
-                href="/dashboard/account-summary"
+                href={
+                  isAdmin
+                    ? "/admin/dashboard-admin"
+                    : "/dashboard/account-summary"
+                }
                 onClick={() => setIsDropdownOpen(false)}
                 className="group flex items-center space-x-3 px-4 py-3 text-sm text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
               >
