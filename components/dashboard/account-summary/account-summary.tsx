@@ -1,30 +1,32 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Breadcrumb from "../../ui/breadcrumb";
-import useUserStore from "@/store/userStore";
 import { getInitials } from "@/lib/utils";
+import useTransactionStore from "@/store/transactionStore";
+import useUserStore from "@/store/userStore";
 import {
-  CreditCard,
   ChevronDown,
+  Copy,
+  CreditCard,
+  Ellipsis,
   RefreshCcw,
   User2,
-  Ellipsis,
-  Copy,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { toast } from "sonner";
+import Breadcrumb from "../../ui/breadcrumb";
 import Ebanking from "./e-banking";
 import Personal from "./personal";
-import { useRouter } from "next/navigation";
 
 const AccountSummary = () => {
   const router = useRouter();
   const { profile, isLoading, error, fetchProfile } = useUserStore();
-  // const [timeLeft, setTimeLeft] = useState("00:00:00");
+  const { transactionsCount, getAllTransactions } = useTransactionStore();
 
   useEffect(() => {
     fetchProfile();
-  }, [fetchProfile]);
+    getAllTransactions();
+  }, [fetchProfile, getAllTransactions]);
 
   // Timer effect
   // useEffect(() => {
@@ -117,8 +119,6 @@ const AccountSummary = () => {
             </div>
           </div>
 
-         
-
           <div className="transition-all duration-300 hover:scale-[1.02]">
             <div className="relative h-full bg-black p-6 shadow-lg">
               <div className="flex items-start justify-between">
@@ -145,7 +145,7 @@ const AccountSummary = () => {
               </div>
             </div>
           </div>
-           <div className="transition-all duration-300 hover:scale-[1.02] sm:col-span-2 xl:col-span-1">
+          <div className="transition-all duration-300 hover:scale-[1.02] sm:col-span-2 xl:col-span-1">
             <div className="relative h-full bg-white p-6 shadow-lg">
               <div className="flex items-start justify-between">
                 <User2 className="h-8 w-8 text-yellow-600" />
@@ -156,7 +156,7 @@ const AccountSummary = () => {
               <div className="mt-12">
                 <div className="flex items-baseline">
                   <span className="text-4xl font-semibold text-gray-900">
-                    0
+                    {transactionsCount}
                   </span>
                 </div>
                 <p className="mt-1 text-base text-gray-500">Transactions</p>

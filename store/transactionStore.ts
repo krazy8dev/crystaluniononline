@@ -43,6 +43,7 @@ interface TransactionState {
   isLoading: boolean;
   error: string | null;
   transactions: Transaction[];
+  transactionsCount: number;
   selectedTransaction: Transaction | null;
 
   // Same Bank Transfer
@@ -95,6 +96,7 @@ const useTransactionStore = create<TransactionState>((set) => ({
   isLoading: false,
   error: null,
   transactions: [],
+  transactionsCount: 0,
   selectedTransaction: null,
 
   sameBankTransfer: async (data) => {
@@ -167,7 +169,11 @@ const useTransactionStore = create<TransactionState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const response = await axiosInstance.get("/transactions");
-      set({ transactions: response.data.data.transactions, isLoading: false });
+      set({
+        transactions: response.data.data.transactions,
+        transactionsCount: response.data.data.count,
+        isLoading: false,
+      });
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || "Failed to fetch transactions";
