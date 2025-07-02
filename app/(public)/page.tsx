@@ -7,7 +7,6 @@ import Partners from "@/components/ui/partners";
 import Planning from "@/components/ui/planning";
 import Solution from "@/components/ui/solution";
 import Testimonials from "@/components/ui/testimonials";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -16,13 +15,11 @@ export default function Home() {
       <Partners />
       <Details />
       <Account />
-      <div className="bg-gray-100 pt-[300px] pb-10 md:pt-[250px] md:pb-20 lg:pt-[200px]">
         <Banking />
-      </div>
       <Planning />
-      <div className="mt-[95rem] sm:mt-[60rem] md:mt-[70rem] lg:mt-[55rem]">
+      {/* <div className="mt-[95rem] sm:mt-[60rem] md:mt-[70rem] lg:mt-[55rem]"> */}
         <Solution />
-      </div>
+      {/* </div> */}
       <Testimonials />
       <Faq />
     </main>

@@ -1,0 +1,348 @@
+"use client";
+
+import { getInitials } from "@/lib/utils";
+import useTransactionStore from "@/store/transactionStore";
+import useUserStore from "@/store/userStore";
+import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import Breadcrumb from "../ui/breadcrumb";
+
+const InternationalTransfer = () => {
+  const router = useRouter();
+  const { profile } = useUserStore();
+  const { internationalTransfer, isLoading, error } = useTransactionStore();
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    city: "",
+    country: "",
+    bankName: "",
+    accountNumber: "",
+    swiftBic: "",
+    iban: "",
+    amount: "",
+    purpose: "",
+    securityPin: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await internationalTransfer({
+        ...formData,
+        amount: parseFloat(formData.amount),
+      });
+      router.push("/dashboard/transactions");
+    } catch (error) {
+      console.error("Transfer failed:", error);
+    }
+  };
+
+  const initials = getInitials(profile?.fullName ?? "");
+
+  return (
+    <div className="min-h-screen p-4">
+      <div className="flex items-center justify-between">
+        <Breadcrumb />
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
+        onClick={() => router.push("/dashboard/account-details")}
+        >
+          {initials}
+        </div>
+      </div>
+      <hr className="my-4" />
+
+      <div className="md:max-w-5xl w-full">
+        <h1 className="text-2xl font-semibold text-gray-900">
+          International Transfer
+        </h1>
+
+        {error && (
+          <div className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <p>{error}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                First Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="First Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Last Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Last Name"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email Address"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="city"
+                className="block text-sm font-medium text-gray-700"
+              >
+                City<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="City"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="country"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Country<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                placeholder="Country"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="bankName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Bank Name<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="bankName"
+              name="bankName"
+              value={formData.bankName}
+              onChange={handleChange}
+              placeholder="Bank Name"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="accountNumber"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Account Number<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="accountNumber"
+              name="accountNumber"
+              value={formData.accountNumber}
+              onChange={handleChange}
+              placeholder="Account Number"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <label
+                htmlFor="swiftBic"
+                className="block text-sm font-medium text-gray-700"
+              >
+                SWIFT/BIC<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="swiftBic"
+                name="swiftBic"
+                value={formData.swiftBic}
+                onChange={handleChange}
+                placeholder="SWIFT/BIC Code"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label
+                htmlFor="iban"
+                className="block text-sm font-medium text-gray-700"
+              >
+                IBAN<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="iban"
+                name="iban"
+                value={formData.iban}
+                onChange={handleChange}
+                placeholder="IBAN"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Amount<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              placeholder="Amount"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="purpose"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Purpose<span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="purpose"
+              name="purpose"
+              value={formData.purpose}
+              onChange={handleChange}
+              placeholder="Purpose"
+              rows={3}
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="securityPin"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Security PIN<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              id="securityPin"
+              name="securityPin"
+              value={formData.securityPin}
+              onChange={handleChange}
+              placeholder="Enter your security PIN"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              required
+              maxLength={4}
+              minLength={4}
+            />
+          </div>
+
+          <div className="flex items-start gap-2 rounded-lg bg-red-50 p-4 text-sm text-red-600">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+            <p>
+              Warning: if you have insufficient funds in your account to cover
+              the transactions, your account is at risk of going into overdraft.
+            </p>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Processing..." : "Next"}
+            </button>
+          </div>
+        </form>
+
+        <div className="mt-8 text-sm text-gray-600">
+          <p>
+            This site provides information about and access to services offered
+            by the Institution and all its respective affiliates or partners.
+          </p>
+          <p className="mt-2 text-xs text-gray-500">
+            ©2022 All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default InternationalTransfer;

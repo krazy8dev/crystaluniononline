@@ -33,6 +33,25 @@ import house from "@/app/assets/icons/house.png";
 import education from "@/app/assets/icons/education.png";
 import businessloan from "@/app/assets/icons/business.png";
 import person from "@/app/assets/images/guy.png";
+import register from "@/app/assets/images/register.jpg";
+import login from "@/app/assets/images/login.jpg";
+import loginImage from "@/app/assets/images/bglogin.jpg";
+import ebanking from "@/app/assets/images/e-banking.jpg";
+import about from "@/app/assets/images/about.jpg";
+
+import {
+  CreditCard,
+  LayoutDashboard,
+  SendHorizontal,
+  History,
+  Building2,
+  Globe2,
+  BanknoteIcon,
+  LucideIcon,
+  Users,
+  FileText,
+  List,
+} from "lucide-react";
 
 export const icons = {
   amex,
@@ -47,6 +66,11 @@ export const icons = {
   education,
   businessloan,
   person,
+  register,
+  login,
+  loginImage,
+  ebanking,
+  about,
 };
 
 export const cards = [
@@ -95,7 +119,6 @@ export const loans = [
     icon: businessloan,
   },
 ];
-
 
 export const testimonials = [
   {
@@ -160,5 +183,121 @@ export const faqData = [
     question: "What security measures do you have in place?",
     answer:
       "We employ multiple layers of security including 256-bit encryption, two-factor authentication, biometric login, and 24/7 fraud monitoring. We also provide instant alerts for suspicious activities and zero liability protection for unauthorized transactions.",
+  },
+];
+
+export interface SidebarLink {
+  icon: LucideIcon;
+  label: string;
+  href: string;
+  subLinks?: {
+    label: string;
+    href: string;
+    icon: LucideIcon;
+  }[];
+}
+
+export const sidebarLinks: SidebarLink[] = [
+  {
+    icon: LayoutDashboard,
+    label: "My Account",
+    href: "/dashboard",
+    subLinks: [
+      {
+        icon: CreditCard,
+        label: "Account Summary",
+        href: "/dashboard/account-summary",
+      },
+      {
+        icon: History,
+        label: "Account Details",
+        href: "/dashboard/account-details",
+      },
+      {
+        icon: BanknoteIcon,
+        label: "Transactions",
+        href: "/dashboard/transactions",
+      },
+    ],
+  },
+
+  {
+    icon: SendHorizontal,
+    label: "Transfer",
+    href: "/dashboard/transfer",
+    subLinks: [
+      {
+        label: "Transfer to same bank",
+        href: "/dashboard/domestic-transfer",
+        icon: Building2,
+      },
+      {
+        label: "Transfer to other bank",
+        href: "/dashboard/other-transfer",
+        icon: Building2,
+      },
+      {
+        label: "International Transfer",
+        href: "/dashboard/international-transfer",
+        icon: Globe2,
+      },
+      //   {
+      //     label: "Loans",
+      //     href: "/dashboard/loans",
+      //     icon: Wallet,
+      //   },
+      //   {
+      //     label: "Deposits",
+      //     href: "/dashboard/deposits",
+      //     icon: BanknoteIcon,
+      //   },
+    ],
+  },
+];
+
+export const dashboardLinks = [
+  {
+    title: "Transfer",
+    links: [
+      {
+        label: "International Transfer",
+        href: "/dashboard/international-transfer",
+      },
+      {
+        label: "Domestic Transfer",
+        href: "/dashboard/domestic-transfer",
+      },
+      {
+        label: "Loans",
+        href: "/dashboard/loans",
+      },
+      {
+        label: "Deposits",
+        href: "/dashboard/deposits",
+      },
+    ],
+  },
+];
+
+export const adminLinks: SidebarLink[] = [
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    href: "/admin/dashboard-admin",
+  },
+  {
+    icon: Users,
+    label: "Users",
+    href: "/admin/dashboard-admin/users",
+  },
+  {
+    icon: FileText,
+    label: "Create Transactions",
+    href: "/admin/dashboard-admin/create-transactions",
+  },
+  {
+    icon: List,
+    label: "Transactions List",
+    href: "/admin/dashboard-admin/transactions-list",
   },
 ];

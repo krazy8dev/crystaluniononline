@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Container from "../shared/container";
 import {
@@ -5,79 +7,225 @@ import {
   ShieldCheckIcon,
   SmartphoneIcon,
   TabletIcon,
+  Download,
+  Zap,
 } from "lucide-react";
 import Image from "next/image";
 import { icons } from "@/lib";
-import Link from "next/link";
+import { motion } from "framer-motion";
 
 const Banking = () => {
   return (
-    <section className="bg-gray-100 py-10 md:py-20">
+    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24 overflow-hidden">
       <Container>
-        <div className="flex flex-col-reverse items-center gap-10 lg:flex-row lg:justify-between">
-          <div className="w-full text-center lg:w-1/2 lg:text-left">
-            <ShieldCheckIcon className="mx-auto h-12 w-12 rounded-full bg-blue-600/70 p-3 text-white md:h-14 md:w-14 lg:mx-0" />
-            <h1 className="mt-4 mb-3 text-lg font-bold capitalize md:mt-5 md:mb-5 md:text-xl">
-              Banking at your fingertips
-            </h1>
-            <h2 className="text-3xl leading-tight font-extrabold md:text-4xl lg:text-5xl">
-              Your banking <br className="hidden md:block" /> experience
-              anytime, <br className="hidden md:block" /> anywhere.
-            </h2>
-            <p className="mt-4 text-sm md:mt-5 md:text-base">
-              Get your money moving with our simple to use, accessible mobile
-              app. As good as <br className="hidden lg:block" /> a bank branch
-              within your phone!
-            </p>
-            <div className="mt-5">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-center gap-2 lg:justify-start">
-                  <CheckIcon className="h-5 w-5 flex-shrink-0 rounded-full border border-green-700 bg-green-700 p-1 text-white md:h-6 md:w-6" />
-                  <span className="text-sm font-bold md:text-base">
-                    Bill Payments, Funds Transfer, QR payments
-                  </span>
-                </div>
-                <div className="flex items-center justify-center gap-2 lg:justify-start">
-                  <CheckIcon className="h-5 w-5 flex-shrink-0 rounded-full border border-green-700 bg-green-700 p-1 text-white md:h-6 md:w-6" />
-                  <span className="text-sm font-bold md:text-base">
-                    Credit card payments and Order food
-                  </span>
-                </div>
-              </div>
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* Content */}
+          <motion.div
+            className="space-y-8"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            {/* Icon */}
+            <motion.div
+              className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 p-4 shadow-lg"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <ShieldCheckIcon className="h-8 w-8 text-white" />
+            </motion.div>
+
+            {/* Header */}
+            <div className="space-y-4">
+              <motion.h3
+                className="text-lg font-semibold text-blue-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
+                Banking at your fingertips
+              </motion.h3>
+              <motion.h2
+                className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                Your banking experience
+                <span className="block bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                  anytime, anywhere
+                </span>
+              </motion.h2>
             </div>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:mt-10 lg:justify-start">
-              <button className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-black px-3 py-2 transition-all hover:bg-gray-900 md:px-4">
-                <TabletIcon className="h-5 w-5 text-white md:h-6 md:w-6" />
+
+            {/* Description */}
+            <motion.p
+              className="text-lg leading-relaxed text-gray-600"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1 }}
+            >
+              Get your money moving with our intuitive mobile banking app.
+              Experience the convenience of a full-service bank branch right in
+              your pocket, with advanced security and seamless functionality.
+            </motion.p>
+
+            {/* Features */}
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1.2 }}
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                  <CheckIcon className="h-4 w-4 text-green-600" />
+                </div>
+                <span className="text-base font-medium text-gray-700">
+                  Bill payments, funds transfer, and QR payments
+                </span>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                  <CheckIcon className="h-4 w-4 text-green-600" />
+                </div>
+                <span className="text-base font-medium text-gray-700">
+                  Credit card payments and food ordering
+                </span>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                  <Zap className="h-4 w-4 text-green-600" />
+                </div>
+                <span className="text-base font-medium text-gray-700">
+                  Real-time notifications and instant transfers
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Download Buttons */}
+            <motion.div
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1.4 }}
+            >
+              <motion.button
+                className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-lg"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-black">
+                  <TabletIcon className="h-5 w-5 text-white" />
+                </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-300 md:text-xs">
-                    Download on the
-                  </span>
-                  <span className="text-xs font-semibold text-white md:text-sm">
+                  <span className="text-xs text-gray-500">Download on the</span>
+                  <span className="text-sm font-semibold text-gray-900">
                     App Store
                   </span>
                 </div>
-              </button>
-              <button className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-black px-3 py-2 transition-all hover:bg-gray-900 md:px-4">
-                <SmartphoneIcon className="h-5 w-5 text-white md:h-6 md:w-6" />
+                <Download className="h-4 w-4 text-gray-400 transition-colors group-hover:text-blue-600" />
+              </motion.button>
+
+              <motion.button
+                className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-lg"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-black">
+                  <SmartphoneIcon className="h-5 w-5 text-white" />
+                </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-300 md:text-xs">
-                    Get it on
-                  </span>
-                  <span className="text-xs font-semibold text-white md:text-sm">
+                  <span className="text-xs text-gray-500">Get it on</span>
+                  <span className="text-sm font-semibold text-gray-900">
                     Google Play
                   </span>
                 </div>
-              </button>
-            </div>
-          </div>
-          <div className="w-full lg:w-1/2">
-            <Image
-              src={icons.mobile}
-              alt="banking"
-              className="mx-auto w-full max-w-[500px] rounded-xl"
-              priority
-            />
-          </div>
+                <Download className="h-4 w-4 text-gray-400 transition-colors group-hover:text-blue-600" />
+              </motion.button>
+            </motion.div>
+
+            {/* Trust Indicators */}
+            <motion.div
+              className="flex items-center gap-6 pt-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1.6 }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                <span className="text-sm text-gray-600">
+                  Bank-level security
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                <span className="text-sm text-gray-600">24/7 support</span>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Image */}
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <motion.div
+              className="overflow-hidden rounded-2xl shadow-2xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Image
+                src={icons.mobile}
+                alt="Mobile banking app interface"
+                className="h-full w-full object-cover"
+                priority
+              />
+            </motion.div>
+
+            {/* Decorative elements */}
+            <div className="absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-xl"></div>
+            <div className="absolute -top-4 -left-4 h-16 w-16 rounded-full bg-gradient-to-br from-cyan-400/20 to-blue-400/20 blur-xl"></div>
+
+            {/* Floating stats */}
+            <motion.div
+              className="absolute top-8 -left-4 rounded-xl bg-white/95 p-4 shadow-lg backdrop-blur-sm"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1 }}
+            >
+              <div className="text-center">
+                <div className="text-lg font-bold text-blue-600">2M+</div>
+                <div className="text-xs text-gray-600">Active Users</div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="absolute -right-4 bottom-8 rounded-xl bg-white/95 p-4 shadow-lg backdrop-blur-sm"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1.2 }}
+            >
+              <div className="text-center">
+                <div className="text-lg font-bold text-green-600">99.9%</div>
+                <div className="text-xs text-gray-600">Uptime</div>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </Container>
     </section>

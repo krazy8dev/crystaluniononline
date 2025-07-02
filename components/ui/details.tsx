@@ -1,101 +1,271 @@
+"use client";
+
 import React from "react";
 import Container from "../shared/container";
 import Image from "next/image";
 import notif from "@/app/assets/images/notification.jpg";
-import { Bell, CheckIcon, ShieldCheckIcon } from "lucide-react";
+import {
+  Bell,
+  CheckIcon,
+  ShieldCheckIcon,
+  TrendingUp,
+  Globe,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 const Details = () => {
   return (
-    <main className="bg-gray-100 py-10 md:py-20">
+    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24 overflow-hidden">
       <Container>
-        <div className="flex flex-col gap-10 md:gap-20">
-          {/* First Section */}
-          <div className="flex flex-col items-center justify-between gap-10 lg:flex-row">
-            <div className="flex w-full flex-col gap-4 text-center md:gap-5 lg:w-1/2 lg:text-left">
-              <Bell className="mx-auto h-12 w-12 rounded-full bg-blue-800 p-4 text-white md:h-14 md:w-14 lg:mx-0" />
-              <h3 className="text-xl font-bold md:text-2xl">Smart Banking</h3>
-              <h1 className="text-3xl font-bold capitalize md:text-4xl lg:text-5xl">
-                Real time notifications
-              </h1>
-              <p className="text-base font-medium md:text-lg">
-                Your customer stay informed in real time with everything that's
-                happening on his account: payments, transfer, advice. Get
-                visibility on your customers' flows to anticipate their needs.
-              </p>
+        <div className="space-y-24">
+          {/* First Section - Smart Banking */}
+          <motion.div
+            className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Content */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              {/* Icon */}
+              <motion.div
+                className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 p-4 shadow-lg"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <Bell className="h-8 w-8 text-white" />
+              </motion.div>
 
-              <div>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-center gap-2 lg:justify-start">
-                    <CheckIcon className="h-5 w-5 flex-shrink-0 rounded-full border border-green-700 bg-green-700 p-1 text-white md:h-6 md:w-6" />
-                    <span className="text-base font-bold md:text-lg">
-                      Cards that work all across the world.
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 lg:justify-start">
-                    <CheckIcon className="h-5 w-5 flex-shrink-0 rounded-full border border-green-700 bg-green-700 p-1 text-white md:h-6 md:w-6" />
-                    <span className="text-base font-bold md:text-lg">
-                      No ATM fees. No minimum balance. No overdrafts.
-                    </span>
-                  </div>
-                </div>
+              {/* Header */}
+              <div className="space-y-4">
+                <motion.h3
+                  className="text-lg font-semibold text-blue-600"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                >
+                  Smart Banking
+                </motion.h3>
+                <motion.h2
+                  className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  Real-time notifications
+                </motion.h2>
               </div>
-            </div>
-            <div className="w-full lg:w-1/2">
-              <Image
-                src={notif}
-                alt="notification"
-                className="mx-auto w-full max-w-[500px] rounded-xl"
-                priority
-              />
-            </div>
-          </div>
 
-          {/* Second Section */}
-          <div className="flex flex-col-reverse items-center justify-between gap-10 lg:flex-row">
-            <div className="w-full lg:w-1/2">
-              <Image
-                src={notif}
-                alt="notification"
-                className="mx-auto w-full max-w-[500px] rounded-xl"
-                priority
-              />
-            </div>
-            <div className="flex w-full flex-col gap-4 text-center md:gap-5 lg:w-1/2 lg:text-left">
-              <ShieldCheckIcon className="mx-auto h-12 w-12 rounded-full bg-blue-800 p-4 text-white md:h-14 md:w-14 lg:mx-0" />
-              <h3 className="text-xl font-bold md:text-2xl">
-                Safe Investments
-              </h3>
-              <h1 className="text-3xl font-bold capitalize md:text-4xl lg:text-5xl">
-                The better way to save & invest
-              </h1>
-              <p className="text-base font-medium md:text-lg">
+              {/* Description */}
+              <motion.p
+                className="text-lg leading-relaxed text-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 1 }}
+              >
+                Keep your customers informed in real-time with everything
+                happening on their account: payments, transfers, and important
+                updates. Gain visibility into customer flows to anticipate their
+                needs and provide proactive service.
+              </motion.p>
+
+              {/* Features */}
+              <motion.div
+                className="space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                    <CheckIcon className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-base font-medium text-gray-700">
+                    Cards that work worldwide with competitive exchange rates
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                    <CheckIcon className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-base font-medium text-gray-700">
+                    No ATM fees, no minimum balance, no hidden charges
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                    <CheckIcon className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-base font-medium text-gray-700">
+                    Instant fraud alerts and transaction monitoring
+                  </span>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Image */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <motion.div
+                className="overflow-hidden rounded-2xl shadow-2xl"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src={notif}
+                  alt="Real-time banking notifications"
+                  className="h-full w-full object-cover"
+                  priority
+                />
+              </motion.div>
+              {/* Decorative element */}
+              <div className="absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-xl"></div>
+            </motion.div>
+          </motion.div>
+
+          {/* Second Section - Safe Investments */}
+          <motion.div
+            className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Image */}
+            <motion.div
+              className="relative order-2 lg:order-1"
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <motion.div
+                className="overflow-hidden rounded-2xl shadow-2xl"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src={notif}
+                  alt="Safe investment platform"
+                  className="h-full w-full object-cover"
+                  priority
+                />
+              </motion.div>
+              {/* Decorative element */}
+              <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-gradient-to-br from-emerald-400/20 to-teal-400/20 blur-xl"></div>
+            </motion.div>
+
+            {/* Content */}
+            <motion.div
+              className="order-1 space-y-8 lg:order-2"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              {/* Icon */}
+              <motion.div
+                className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 p-4 shadow-lg"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <ShieldCheckIcon className="h-8 w-8 text-white" />
+              </motion.div>
+
+              {/* Header */}
+              <div className="space-y-4">
+                <motion.h3
+                  className="text-lg font-semibold text-emerald-600"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 1 }}
+                >
+                  Safe Investments
+                </motion.h3>
+                <motion.h2
+                  className="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 1.2 }}
+                >
+                  The smarter way to save & invest
+                </motion.h2>
+              </div>
+
+              {/* Description */}
+              <motion.p
+                className="text-lg leading-relaxed text-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 1.4 }}
+              >
                 Heritage Trust Bank helps over 2 million customers achieve their
-                financial goals by helping them save and invest with ease. Put
-                that extra cash to use without putting it at risk with Heritage
-                Trust Bank.
-              </p>
+                financial goals through intelligent saving and investment
+                solutions. Put your money to work without unnecessary risk,
+                backed by our proven track record.
+              </motion.p>
 
-              <div>
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-center gap-2 lg:justify-start">
-                    <CheckIcon className="h-5 w-5 flex-shrink-0 rounded-full border border-green-700 bg-green-700 p-1 text-white md:h-6 md:w-6" />
-                    <span className="text-base font-bold md:text-lg">
-                      Profitable to invest and Handy to manage
-                    </span>
+              {/* Features */}
+              <motion.div
+                className="space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 1.6 }}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                    <TrendingUp className="h-4 w-4 text-emerald-600" />
                   </div>
-                  <div className="flex items-center justify-center gap-2 lg:justify-start">
-                    <CheckIcon className="h-5 w-5 flex-shrink-0 rounded-full border border-green-700 bg-green-700 p-1 text-white md:h-6 md:w-6" />
-                    <span className="text-base font-bold md:text-lg">
-                      Highest Returns on your investments
-                    </span>
-                  </div>
+                  <span className="text-base font-medium text-gray-700">
+                    Industry-leading returns with managed risk profiles
+                  </span>
                 </div>
-              </div>
-            </div>
-          </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                    <Globe className="h-4 w-4 text-emerald-600" />
+                  </div>
+                  <span className="text-base font-medium text-gray-700">
+                    Diversified portfolio across global markets
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                    <CheckIcon className="h-4 w-4 text-emerald-600" />
+                  </div>
+                  <span className="text-base font-medium text-gray-700">
+                    Automated rebalancing and tax-loss harvesting
+                  </span>
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </Container>
-    </main>
+    </section>
   );
 };
 
