@@ -4,7 +4,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import React, { useEffect } from "react";
 import { getInitials } from "@/lib/utils";
 import useUserStore from "@/store/userStore";
-import { Mail, Phone, Wallet, PenSquare } from "lucide-react";
+import { Mail, Wallet, PenSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const AccountDetails = () => {

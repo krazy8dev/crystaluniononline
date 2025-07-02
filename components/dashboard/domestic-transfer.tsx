@@ -96,12 +96,9 @@ const DomesticTransfer = () => {
         purpose: formData.purpose,
         securityPin: formData.securityPin,
       });
-      toast.success("Transfer successful");
-      // Redirect to success page or show success message
+      toast.success("Transfer successful"); 
       router.push("/dashboard/transactions");
     } catch {
-      // Error is handled by the store
-      // console.error("Transfer failed:", error);
       toast.error("Transfer failed, Please try again");
     }
   };
