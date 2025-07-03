@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "Heritage Trust Bank",
   description:
     "A modern, technology-first bank built for you and your growing business.",
+  icons: [
+    {
+      url: "/logo.svg",
+    },
+  ],
 };
 
 export default function RootLayout({
