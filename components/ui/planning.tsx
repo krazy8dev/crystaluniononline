@@ -162,7 +162,7 @@ const Planning = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 1.4 }}
                 >
-                  <motion.div
+                  {/* <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -173,7 +173,7 @@ const Planning = () => {
                       <span>Apply for a loan</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
-                  </motion.div>
+                  </motion.div> */}
                 </motion.div>
               </motion.div>
 

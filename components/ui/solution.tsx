@@ -3,10 +3,9 @@
 import React from "react";
 import Container from "../shared/container";
 import Image from "next/image";
-import Link from "next/link";
 import { icons } from "@/lib";
 import { motion } from "framer-motion";
-import { ArrowRight, Users, Sparkles } from "lucide-react";
+import { Users, Sparkles } from "lucide-react";
 
 const Solution = () => {
   return (
@@ -143,7 +142,7 @@ const Solution = () => {
             </motion.div>
 
             {/* CTA Button */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -161,7 +160,7 @@ const Solution = () => {
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </motion.div>
-            </motion.div>
+            </motion.div> */}
 
             {/* Trust Indicators */}
             <motion.div

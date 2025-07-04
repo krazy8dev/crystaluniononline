@@ -11,10 +11,10 @@ const navbarLinks = [
     label: "Accounts",
     href: "/accounts",
   },
-  {
-    label: "Contact Us",
-    href: "/contact",
-  },
+  // {
+  //   label: "Contact Us",
+  //   href: "/contact",
+  // },
 ];
 
 export { navbarLinks };

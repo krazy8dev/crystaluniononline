@@ -5,13 +5,22 @@ import useUserStore from "@/store/userStore";
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import useTransactionStore from "@/store/transactionStore";
 
 const Ebanking = () => {
   const { profile } = useUserStore();
+  const { transactions, getAllTransactions } = useTransactionStore();
 
-  //   useEffect(() => {
-  //     fetchProfile();
-  //   }, [fetchProfile]);
+  React.useEffect(() => {
+    getAllTransactions();
+  }, [getAllTransactions]);
+
+  const lastTransaction =
+    transactions.length > 0
+      ? transactions.reduce((latest, tx) =>
+          new Date(tx.createdAt) > new Date(latest.createdAt) ? tx : latest,
+        )
+      : null;
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
@@ -68,7 +77,9 @@ const Ebanking = () => {
                 </h2>
                 <span className="mt-1 flex items-center gap-1 text-lg font-semibold text-green-600">
                   <ArrowUpRight className="h-5 w-5" />
-                  $0.00
+                  {lastTransaction
+                    ? `$${lastTransaction.amount.toLocaleString()}`
+                    : "$0.00"}
                 </span>
               </div>
 

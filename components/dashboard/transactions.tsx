@@ -91,22 +91,22 @@ const Transactions = () => {
     return format(new Date(date), "MMM dd, yyyy HH:mm");
   };
 
-  const getTransactionType = (type: string) => {
-    switch (type) {
-      case "SAME_BANK":
-        return "Same Bank";
-      case "OTHER_BANK":
-        return "Other Bank";
-      case "INTERNATIONAL":
-        return "International";
-      case "TOPUP":
-        return "Top Up";
-      case "ADMIN_TOPUP":
-        return "Admin Top Up";
-      default:
-        return type.replace("_", " ");
-    }
-  };
+  // const getTransactionType = (type: string) => {
+  //   switch (type) {
+  //     case "SAME_BANK":
+  //       return "Same Bank";
+  //     case "OTHER_BANK":
+  //       return "Other Bank";
+  //     case "INTERNATIONAL":
+  //       return "International";
+  //     case "TOPUP":
+  //       return "Top Up";
+  //     case "ADMIN_TOPUP":
+  //       return "Admin Top Up";
+  //     default:
+  //       return type.replace("_", " ");
+  //   }
+  // };
 
   const initials = getInitials(profile?.fullName ?? "");
 
@@ -186,7 +186,7 @@ const Transactions = () => {
                     <TableCell>
                       <div className="space-y-1">
                         <div className="font-medium whitespace-nowrap">
-                          {getTransactionType(transaction.type)}
+                          {/* {(transaction.type)} */}
                         </div>
                         {transaction.typeDescription && (
                           <Badge
@@ -265,9 +265,18 @@ const Transactions = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500">Type</p>
-                  <p className="mt-1">
-                    {getTransactionType(selectedTransaction.type)}
-                  </p>
+                  {/* <p className="mt-1">
+                    {(selectedTransaction.type)}
+                  </p> */}
+                    {selectedTransaction.typeDescription && (
+                          <Badge
+                            className={getTypeColor(
+                              selectedTransaction.typeDescription,
+                            )}
+                          >
+                    {selectedTransaction.typeDescription}
+                  </Badge>
+                )}
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500">Amount</p>

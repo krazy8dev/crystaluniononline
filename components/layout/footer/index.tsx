@@ -76,7 +76,7 @@ const Footer = () => {
                   Accounts
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <button
                   type="button"
                   className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"
@@ -91,7 +91,7 @@ const Footer = () => {
                 >
                   Investment Services
                 </button>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -101,14 +101,14 @@ const Footer = () => {
               Support
             </h3>
             <ul className="space-y-3">
-              <li>
+              {/* <li>
                 <Link
                   href="/contact"
                   className="text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   Contact Us
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/faq"

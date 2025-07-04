@@ -9,8 +9,7 @@ import {
   Home,
   CreditCard,
   Building2,
-  Phone,
-  Mail,
+  // Phone,
 
 } from "lucide-react";
 // import Logo from "../../ui/logo";
@@ -30,7 +29,7 @@ const Mobile = () => {
     { name: "Home", href: "/", icon: Home },
     { name: "About Us", href: "/about", icon: Building2 },
     { name: "Accounts", href: "/accounts", icon: CreditCard },
-    { name: "Contact", href: "/contact", icon: Phone },
+    // { name: "Contact", href: "/contact", icon: Phone },
   ];
 
 
@@ -149,14 +148,14 @@ const Mobile = () => {
                       transition={{ delay: 0.8 }}
                       className="flex items-start space-x-3"
                     >
-                      <Phone className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
+                      {/* <Phone className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" /> */}
                       <div>
-                        <p className="text-sm text-gray-700">+971 4 123 4567</p>
+                        {/* <p className="text-sm text-gray-700">+971 4 123 4567</p> */}
                         <p className="text-sm text-gray-500">24/7 Support</p>
                       </div>
                     </motion.div>
 
-                    <motion.div
+                    {/* <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.9 }}
@@ -169,7 +168,7 @@ const Mobile = () => {
                         </p>
                         <p className="text-sm text-gray-500">Email Support</p>
                       </div>
-                    </motion.div>
+                    </motion.div> */}
                   </div>
                 </div>
               </div>
