@@ -50,7 +50,7 @@ const About = () => {
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
               >
                 A legacy of trust, innovation, and excellence spanning over 150
-                years in the UAE&apos;s financial landscape.
+                years in the  financial landscape.
               </motion.p>
             </motion.div>
           </div>
@@ -97,7 +97,7 @@ const About = () => {
             >
               <p className="text-lg leading-relaxed font-medium text-gray-700 md:text-xl">
                 At Heritage Trust Bank, we have over 150 years of experience
-                working with professional financial advisers in the UAE. We have
+                working with professional financial advisers. We have
                 earned our reputation by putting the traditional values of{" "}
                 <span className="font-semibold text-blue-600">courtesy</span>,{" "}
                 <span className="font-semibold text-blue-600">convenience</span>{" "}

@@ -24,7 +24,7 @@ const Footer = () => {
             <Logo width={180} height={50} />
             <p className="text-sm leading-relaxed text-gray-600">
               A legacy of trust, innovation, and excellence spanning over 150
-              years in the UAE&apos;s financial landscape.
+              years in the  financial landscape.
             </p>
             {/* <div className="flex space-x-4">
               <Link

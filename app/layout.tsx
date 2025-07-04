@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import Script from "next/script";
 import { AnimationProvider } from "@/components/providers/animation-provider";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "Heritage Trust Bank",
@@ -94,6 +95,7 @@ export default function RootLayout({
             });
           `}
           </Script> */}
+          <Analytics />
         </AnimationProvider>
       </body>
     </html>
