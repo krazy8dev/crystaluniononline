@@ -20,7 +20,7 @@ const decodeToken = (token: string) => {
     const payload = Buffer.from(base64Payload, "base64").toString("utf-8");
     return JSON.parse(payload);
   } catch (error) {
-    console.error("Invalid token");
+    // console.error("Invalid token");
     return null;
   }
 };

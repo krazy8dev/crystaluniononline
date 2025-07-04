@@ -46,7 +46,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         // If user is already logged in and tries to access login/register
         if (isAuthRoute) {
           // console.log("Authenticated user detected, redirecting to dashboard");
-          toast.error("Authenticated user detected, redirecting to dashboard")
+          // toast.error("Authenticated user detected, redirecting to dashboard")
           router.replace("/dashboard/account-summary");
           return;
         }
@@ -54,7 +54,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
         // If user is not logged in and tries to access protected routes
         if (!isAuthRoute && !isHomeRoute) {
           // console.log("Not authenticated, redirecting to login");
-          toast.error("Not authenticated, redirecting to login")
+          // toast.error("Not authenticated, redirecting to login")
           router.replace("/login");
           return;
         }

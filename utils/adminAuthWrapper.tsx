@@ -53,16 +53,16 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
       // If already authenticated and trying to access login page
       if (pathname === "/admin/login") {
         if (checkAdminAccess()) {
-          toast.error(
-            "Admin already logged in, redirecting to admin dashboard",
-          );
+          // toast.error(
+          //   "Admin already logged in, redirecting to admin dashboard",
+          // );
           // console.log(
           //   "Admin already logged in, redirecting to admin dashboard",
           // );
           router.replace("/admin/dashboard-admin");
         } else {
           // console.log();
-          toast.error("Non-admin user detected, redirecting to user dashboard");
+          // toast.error("Non-admin user detected, redirecting to user dashboard");
           router.replace("/dashboard/account-summary");
         }
         return;
@@ -71,7 +71,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
       // For admin routes, check if user is admin
       if (pathname.startsWith("/admin/") && pathname !== "/admin/login") {
         if (!checkAdminAccess()) {
-          console.log("Non-admin user detected, redirecting to user dashboard");
+          // console.log("Non-admin user detected, redirecting to user dashboard");
           router.replace("/dashboard/account-summary");
           return;
         }

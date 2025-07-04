@@ -48,7 +48,7 @@ const OtherTransfer = () => {
       toast.success("Transfer successful");
       router.push("/dashboard/transactions");
     } catch{
-      console.error("Transfer failed:", error);
+      // console.error("Transfer failed:", error);
     }
   };
 
