@@ -13,7 +13,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import useAdminStore, { CreateTransferData } from "@/store/adminStore";
 import useAuthStore from "@/store/authstore";
-import useUserStore from "@/store/userStore";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -538,9 +537,8 @@ const InternationalForm = ({
 
 const CreateTransactionPage = () => {
   const [activeTab, setActiveTab] = useState<TransferType>("SAME_BANK");
-  const { processTransfer, loading, error } = useAdminStore();
+  const { createTransfer, loading, error } = useAdminStore();
   const { user } = useAuthStore();
-  const { fetchProfile } = useUserStore();
 
   const adminAccountNumber = user?.accountNumber || "";
 
@@ -549,11 +547,9 @@ const CreateTransactionPage = () => {
   };
 
   const handleSubmit = async (data: CreateTransferData) => {
-    const success = await processTransfer(data);
+    const success = await createTransfer(data);
     if (success) {
-      toast.success("Transfer processed successfully!");
-      // Refresh the user profile to update balance
-      await fetchProfile();
+      toast.success("Transfer created successfully!");
     } else {
       toast.error(error || "An unknown error occurred.");
     }
