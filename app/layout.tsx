@@ -24,10 +24,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {/* Smartsupp Live Chat script */}
-        {/* <Script id="smartsupp-livechat" strategy="afterInteractive">
+        <Script id="smartsupp-livechat" strategy="afterInteractive">
           {`
             var _smartsupp = _smartsupp || {};
-            _smartsupp.key = '14dd920f18a9907f8a5cbe3cd2590d57bebc2173';
+            _smartsupp.key = '${process.env.NEXT_PUBLIC_SMARTSUPP_KEY}';
             window.smartsupp||(function(d) {
               var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
               s=d.getElementsByTagName('script')[0];c=d.createElement('script');
@@ -41,7 +41,7 @@ export default function RootLayout({
           <a href="https://www.smartsupp.com" target="_blank">
             Smartsupp
           </a>
-        </noscript> */}
+        </noscript>
         <AnimationProvider>
           {children}
           <Toaster
@@ -54,7 +54,7 @@ export default function RootLayout({
               className: "text-sm font-medium",
             }}
           />
-          <Script id="tawkto" strategy="afterInteractive">
+          {/* <Script id="tawkto" strategy="afterInteractive">
             {`
             // Check if ad blocker is active
             function isAdBlockerActive() {
@@ -93,7 +93,7 @@ export default function RootLayout({
               }
             });
           `}
-          </Script>
+          </Script> */}
         </AnimationProvider>
       </body>
     </html>
