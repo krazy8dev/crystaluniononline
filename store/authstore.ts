@@ -113,7 +113,7 @@ const useAuthStore = create<AuthState>()(
 
       login: async (data: LoginRequest, isAdminRoute = false) => {
         try {
-          console.log("Making login request with data:", data);
+          // console.log("Making login request with data:", data);
 
           const response = await axiosInstance.post(
             isAdminRoute
@@ -122,7 +122,7 @@ const useAuthStore = create<AuthState>()(
             data,
           );
 
-          console.log("Login response:", response.data);
+          // console.log("Login response:", response.data);
 
           if (response.data.status === "success") {
             const { token } = response.data;

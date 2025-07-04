@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { config } from "@/config";
+import { toast } from "sonner";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -44,14 +45,16 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       if (token) {
         // If user is already logged in and tries to access login/register
         if (isAuthRoute) {
-          console.log("Authenticated user detected, redirecting to dashboard");
+          // console.log("Authenticated user detected, redirecting to dashboard");
+          toast.error("Authenticated user detected, redirecting to dashboard")
           router.replace("/dashboard/account-summary");
           return;
         }
       } else {
         // If user is not logged in and tries to access protected routes
         if (!isAuthRoute && !isHomeRoute) {
-          console.log("Not authenticated, redirecting to login");
+          // console.log("Not authenticated, redirecting to login");
+          toast.error("Not authenticated, redirecting to login")
           router.replace("/login");
           return;
         }

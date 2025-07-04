@@ -52,8 +52,9 @@ const TransactionsList = () => {
         // For now, we'll use the pending transactions API
         // In a real implementation, you might want a separate API endpoint for all transactions
         await fetchPendingTransactions();
-      } catch (error) {
-        console.error("Failed to fetch transactions:", error);
+      } catch {
+        // console.error();
+        toast.error("Failed to fetch transactions:");
       }
     };
 

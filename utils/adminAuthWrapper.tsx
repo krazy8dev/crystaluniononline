@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { config } from "@/config";
+import { toast } from "sonner";
 
 interface AdminAuthWrapperProps {
   children: React.ReactNode;
@@ -44,7 +45,7 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
 
     if (isInitialized) {
       if (!token) {
-        console.log("Not authenticated, redirecting to admin login");
+        // console.log("Not authenticated, redirecting to admin login");
         router.replace("/admin/login");
         return;
       }
@@ -52,12 +53,16 @@ export default function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
       // If already authenticated and trying to access login page
       if (pathname === "/admin/login") {
         if (checkAdminAccess()) {
-          console.log(
+          toast.error(
             "Admin already logged in, redirecting to admin dashboard",
           );
+          // console.log(
+          //   "Admin already logged in, redirecting to admin dashboard",
+          // );
           router.replace("/admin/dashboard-admin");
         } else {
-          console.log("Non-admin user detected, redirecting to user dashboard");
+          // console.log();
+          toast.error("Non-admin user detected, redirecting to user dashboard");
           router.replace("/dashboard/account-summary");
         }
         return;

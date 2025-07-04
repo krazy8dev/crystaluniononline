@@ -32,10 +32,10 @@ const useUserStore = create<UserState>((set) => ({
         config.api.endpoints.user.verifyAccount,
         { accountNumber },
       );
-      console.log(response);
+      // console.log(response);
       return response.data;
     } catch (error) {
-      console.error("Error verifying account:", error);
+      // console.error("Error verifying account:", error);
       throw error;
     }
   },

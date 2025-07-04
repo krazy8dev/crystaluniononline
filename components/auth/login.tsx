@@ -52,8 +52,8 @@ const Login = () => {
       await login(values as LoginRequest);
       toast.success("Login successful!");
       router.replace("/dashboard/account-summary");
-    } catch (error) {
-      console.error("Login error:", error);
+    } catch  {
+      // console.error("Login error:", error);
       toast.error("Failed to login. Please try again.");
     } finally {
       setIsLoading(false);
