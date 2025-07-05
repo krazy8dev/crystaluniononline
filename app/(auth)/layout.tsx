@@ -8,7 +8,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     <AuthWrapper>
       <div>
         <NavbarAuth />
-        <div className="h-screen bg-gray-100 pt-24">
+        <div className="h-screen md:bg-gray-100 bg-white pt-24">
           <Breadcrumb />
           {children}
         </div>
