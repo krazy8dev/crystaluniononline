@@ -5,7 +5,7 @@
   <rect x="26" y="12" width="3" height="8" fill="#FFFFFF" opacity="0.9"/>
   <path d="M17 12L20 10L23 12L26 10L29 12L32 10L32 12L17 12Z" fill="#FFFFFF" opacity="0.9"/>
   <path d="M20 18L22 20L28 14" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="45" y="20" fill="#1E40AF" font-size="12" font-weight="bold" font-family="Arial, sans-serif">Heritage Trust</text>
+  <text x="45" y="20" fill="#1E40AF" font-size="12" font-weight="bold" font-family="Arial, sans-serif">Crystal Union </text>
   <text x="45" y="35" fill="#1E40AF" font-size="12" font-weight="bold" font-family="Arial, sans-serif">Bank</text>
   <text x="45" y="50" fill="#6B7280" font-size="8" font-family="Arial, sans-serif">Trust • Excellence • Innovation</text>
   <defs>

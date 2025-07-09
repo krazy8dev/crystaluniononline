@@ -10,7 +10,6 @@ import {
   CreditCard,
   Building2,
   // Phone,
-
 } from "lucide-react";
 // import Logo from "../../ui/logo";
 
@@ -31,7 +30,6 @@ const Mobile = () => {
     { name: "Accounts", href: "/accounts", icon: CreditCard },
     // { name: "Contact", href: "/contact", icon: Phone },
   ];
-
 
   return (
     <>
@@ -164,7 +162,7 @@ const Mobile = () => {
                       <Mail className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
                       <div>
                         <p className="text-sm text-gray-700">
-                          support@heritagetrustbank.ae
+                          support@Crystal Union trustbank.ae
                         </p>
                         <p className="text-sm text-gray-500">Email Support</p>
                       </div>
@@ -202,7 +200,7 @@ const Mobile = () => {
                     transition={{ delay: 1.4 }}
                     className="text-center text-xs text-gray-500"
                   >
-                    © 2024 Heritage Trust Bank
+                    © 2024 Crystal Union
                   </motion.p>
                 </div>
               </div>

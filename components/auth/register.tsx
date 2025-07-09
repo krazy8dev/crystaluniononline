@@ -55,11 +55,9 @@ const Register = () => {
       };
 
       await register(registerData);
-      toast.success(
-        "Registration successful!",
-      );
+      toast.success("Registration successful!");
       router.replace("/login");
-    } catch  {
+    } catch {
       const errorMessage =
         // error.response?.data?.message ||
         // error.message ||
@@ -243,7 +241,7 @@ const Register = () => {
               <div className="text-sm text-gray-600">
                 By clicking submit, you agree to{" "}
                 <Link href="/terms" className="text-blue-600 hover:underline">
-                  heritagetrustbank.com Terms of Use
+                  Crystal Union trustbank.com Terms of Use
                 </Link>
               </div>
 

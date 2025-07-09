@@ -85,7 +85,7 @@ const Accounts = () => {
     },
     {
       icon: CheckCircle,
-      title: "Trusted Heritage",
+      title: "Trusted Crystal Union ",
       description:
         "150+ years of banking excellence with a proven track record of financial stability.",
     },
@@ -130,7 +130,7 @@ const Accounts = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
               >
-                Heritage Trust Accounts
+                Crystal Union Accounts
               </motion.h1>
               <motion.p
                 className="text-xl leading-relaxed text-blue-100 md:text-2xl"
@@ -247,7 +247,7 @@ const Accounts = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                Why Choose Heritage Trust?
+                Why Choose Crystal Union ?
               </motion.h2>
               <motion.div
                 className="mx-auto h-1 w-24 bg-blue-600"
@@ -325,7 +325,7 @@ const Accounts = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
               >
-                Open your account today and experience the Heritage Trust
+                Open your account today and experience the Crystal Union
                 difference. Our team is ready to help you choose the perfect
                 account for your needs.
               </motion.p>

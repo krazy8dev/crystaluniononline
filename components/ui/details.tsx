@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 
 const Details = () => {
   return (
-    <section className="bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24 overflow-hidden">
+    <section className="overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-16 md:py-24">
       <Container>
         <div className="space-y-24">
           {/* First Section - Smart Banking */}
@@ -137,7 +137,7 @@ const Details = () => {
                 />
               </motion.div>
               {/* Decorative element */}
-              <div className="absolute -right-4 -bottom-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-xl"></div>
+              <div className="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-xl"></div>
             </motion.div>
           </motion.div>
 
@@ -222,7 +222,7 @@ const Details = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 1.4 }}
               >
-                Heritage Trust Bank helps over 2 million customers achieve their
+                Crystal Union helps over 2 million customers achieve their
                 financial goals through intelligent saving and investment
                 solutions. Put your money to work without unnecessary risk,
                 backed by our proven track record.

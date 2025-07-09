@@ -8,7 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 // import LanguageSelector from "@/components/ui/language-selector";
 
 export const metadata: Metadata = {
-  title: "Heritage Trust Bank",
+  title: "Crystal Union ",
   description:
     "A modern, technology-first bank built for you and your growing business.",
   icons: [
@@ -46,23 +46,23 @@ export default function RootLayout({
           </a>
         </noscript>
         {/* <TranslationProvider> */}
-          <AnimationProvider>
-            {/* Language Selector - Fixed position at bottom */}
-            <div className="fixed left-4 bottom-4 z-50">
-              {/* <LanguageSelector /> */}
-            </div>
-            {children}
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                style: {
-                  background: "#0B4B3C",
-                  color: "white",
-                },
-                className: "text-sm font-medium",
-              }}
-            />
-            {/* <Script id="tawkto" strategy="afterInteractive">
+        <AnimationProvider>
+          {/* Language Selector - Fixed position at bottom */}
+          <div className="fixed bottom-4 left-4 z-50">
+            {/* <LanguageSelector /> */}
+          </div>
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                background: "#0B4B3C",
+                color: "white",
+              },
+              className: "text-sm font-medium",
+            }}
+          />
+          {/* <Script id="tawkto" strategy="afterInteractive">
               {`
               // Check if ad blocker is active
               function isAdBlockerActive() {
@@ -102,8 +102,8 @@ export default function RootLayout({
               });
             `}
             </Script> */}
-            <Analytics />
-          </AnimationProvider>
+          <Analytics />
+        </AnimationProvider>
         {/* </TranslationProvider> */}
       </body>
     </html>

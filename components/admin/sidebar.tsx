@@ -44,7 +44,7 @@ const Sidebar = () => {
             href="/admin/dashboard-admin"
             className="text-xl font-bold text-blue-800"
           >
-            Heritage Trust Bank
+            Crystal Union
           </Link>
         )}
         <button
@@ -115,7 +115,7 @@ const Sidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="fixed top-4 left-4 z-50 rounded-lg bg-white p-2 shadow-md lg:hidden"
+        className="fixed left-4 top-4 z-50 rounded-lg bg-white p-2 shadow-md lg:hidden"
       >
         <Menu className="h-6 w-6" />
       </button>
@@ -123,7 +123,7 @@ const Sidebar = () => {
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="bg-opacity-10 fixed inset-0 z-40 bg-black/10 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/10 bg-opacity-10 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

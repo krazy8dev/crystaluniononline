@@ -38,7 +38,7 @@
 //       cancel: "Cancel",
 //       confirm_logout: "Confirm Logout",
 //       logout_confirmation_message: "Are you sure you want to logout?",
-//       heritage_trust_bank: "Heritage Trust Bank",
+//       Crystal Union _trust_bank: "Crystal Union ",
 //       more_than_banking: "More than banking",
 
 //       // Navigation
@@ -112,7 +112,7 @@
 //       confirm_logout: "Confirmar cierre de sesión",
 //       logout_confirmation_message:
 //         "¿Estás seguro de que quieres cerrar sesión?",
-//       heritage_trust_bank: "Heritage Trust Bank",
+//       Crystal Union _trust_bank: "Crystal Union ",
 //       more_than_banking: "Más que banca",
 
 //       // Navigation
@@ -186,7 +186,7 @@
 //       confirm_logout: "Confirmer la déconnexion",
 //       logout_confirmation_message:
 //         "Êtes-vous sûr de vouloir vous déconnecter ?",
-//       heritage_trust_bank: "Heritage Trust Bank",
+//       Crystal Union _trust_bank: "Crystal Union ",
 //       more_than_banking: "Plus que la banque",
 
 //       // Navigation
@@ -260,7 +260,7 @@
 //       confirm_logout: "Abmeldung bestätigen",
 //       logout_confirmation_message:
 //         "Sind Sie sicher, dass Sie sich abmelden möchten?",
-//       heritage_trust_bank: "Heritage Trust Bank",
+//       Crystal Union _trust_bank: "Crystal Union ",
 //       more_than_banking: "Mehr als Banking",
 
 //       // Navigation

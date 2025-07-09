@@ -72,7 +72,7 @@ const NotFound = () => {
 
         {/* Gradient orbs */}
         <motion.div
-          className="absolute top-20 left-20 h-64 w-64 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl"
+          className="absolute left-20 top-20 h-64 w-64 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.2, 0.4, 0.2],
@@ -86,7 +86,7 @@ const NotFound = () => {
           }}
         />
         <motion.div
-          className="absolute right-20 bottom-20 h-80 w-80 rounded-full bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-3xl"
+          className="absolute bottom-20 right-20 h-80 w-80 rounded-full bg-gradient-to-r from-cyan-400/20 to-blue-400/20 blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.4, 0.2, 0.4],
@@ -167,8 +167,8 @@ const NotFound = () => {
             </h2>
             <p className="mx-auto max-w-md text-lg text-gray-600 md:text-xl">
               Looks like this page has been transferred to a different account.
-              Don&apos;t worry, our secure banking services are still available to
-              help you navigate back to safety.
+              Don&apos;t worry, our secure banking services are still available
+              to help you navigate back to safety.
             </p>
           </motion.div>
 
@@ -266,7 +266,7 @@ const NotFound = () => {
             transition={{ duration: 0.8, delay: 1.5 }}
           >
             <p className="text-sm text-gray-500">
-              Made with ❤️ by Heritage Trust Bank
+              Made with ❤️ by Crystal Union
             </p>
           </motion.div>
         </div>
@@ -274,7 +274,7 @@ const NotFound = () => {
 
       {/* Bottom Decorative Elements */}
       <motion.div
-        className="absolute right-0 bottom-0 left-0 h-32 bg-gradient-to-t from-blue-50/50 to-transparent"
+        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-50/50 to-transparent"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 2 }}

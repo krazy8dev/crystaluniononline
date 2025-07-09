@@ -49,7 +49,7 @@ const Logo: React.FC<LogoProps> = ({
         strokeLinejoin="round"
       />
 
-      {/* Text: Heritage Trust Bank */}
+      {/* Text: Crystal Union  */}
       <text
         x="45"
         y="20"
@@ -58,7 +58,7 @@ const Logo: React.FC<LogoProps> = ({
         fontWeight="bold"
         fontFamily="Arial, sans-serif"
       >
-        Heritage Trust
+        Crystal Union
       </text>
       <text
         x="45"

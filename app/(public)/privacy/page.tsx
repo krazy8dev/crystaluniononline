@@ -5,14 +5,14 @@ import Container from "@/components/shared/container";
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="pt-40 pb-10">
+      <div className="pb-10 pt-40">
         <Breadcrumb />
         {/* Hero Section */}
         <div className="relative bg-gradient-to-r from-blue-900 to-blue-700">
           <div className="absolute inset-0 bg-black/20"></div>
           <Container>
             <div className="relative flex flex-col items-center gap-6 py-24">
-              <h1 className="mb-4 text-center text-4xl leading-tight font-bold text-white md:text-6xl">
+              <h1 className="mb-4 text-center text-4xl font-bold leading-tight text-white md:text-6xl">
                 Privacy Policy
               </h1>
               <p className="max-w-2xl text-center text-lg text-blue-100 md:text-2xl">
@@ -24,16 +24,15 @@ const PrivacyPolicy = () => {
         </div>
         {/* Policy Content */}
         <Container>
-          <div className=" mt-12 rounded-lg bg-white p-8 shadow-md">
+          <div className="mt-12 rounded-lg bg-white p-8 shadow-md">
             <section className="mb-8">
               <h2 className="mb-2 text-2xl font-semibold text-blue-900">
                 Introduction
               </h2>
               <p className="text-gray-700">
-                Heritage Trust Bank we are committed to
-                protecting your privacy. This Privacy Policy describes how we
-                collect, use, disclose, and safeguard your information when you
-                use our services.
+                Crystal Union we are committed to protecting your privacy. This
+                Privacy Policy describes how we collect, use, disclose, and
+                safeguard your information when you use our services.
               </p>
             </section>
             <section className="mb-8">

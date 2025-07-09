@@ -41,7 +41,7 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
               >
-                About Heritage Trust Bank
+                About Crystal Union
               </motion.h1>
               <motion.p
                 className="text-xl leading-relaxed text-blue-100 md:text-2xl"
@@ -50,7 +50,7 @@ const About = () => {
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
               >
                 A legacy of trust, innovation, and excellence spanning over 150
-                years in the  financial landscape.
+                years in the financial landscape.
               </motion.p>
             </motion.div>
           </div>
@@ -96,9 +96,9 @@ const About = () => {
               whileHover={{ y: -10, scale: 1.02 }}
             >
               <p className="text-lg leading-relaxed font-medium text-gray-700 md:text-xl">
-                At Heritage Trust Bank, we have over 150 years of experience
-                working with professional financial advisers. We have
-                earned our reputation by putting the traditional values of{" "}
+                At Crystal Union , we have over 150 years of experience working
+                with professional financial advisers. We have earned our
+                reputation by putting the traditional values of{" "}
                 <span className="font-semibold text-blue-600">courtesy</span>,{" "}
                 <span className="font-semibold text-blue-600">convenience</span>{" "}
                 and{" "}
@@ -258,7 +258,7 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                Heritage Trust Group
+                Crystal Union Group
               </motion.h2>
               <motion.p
                 className="mb-6 text-lg leading-relaxed text-gray-700"
@@ -267,10 +267,10 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                Today, Heritage Trust Bank is a wholly owned subsidiary of the
-                Heritage Trust Group. Our growing range of bank accounts and
-                structured solutions is designed to be consistent with the needs
-                of clients&apos; cash portfolios.
+                Today, Crystal Union is a wholly owned subsidiary of the Crystal
+                Union Group. Our growing range of bank accounts and structured
+                solutions is designed to be consistent with the needs of
+                clients&apos; cash portfolios.
               </motion.p>
               <motion.div
                 className="mt-8 grid gap-6 md:grid-cols-2"
@@ -323,9 +323,9 @@ const About = () => {
                     Our Commitment
                   </h4>
                   <p className="leading-relaxed text-gray-700">
-                    At Heritage Trust Bank, we want you and your clients to feel
-                    good about banking with us. We prioritize your financial
-                    success and peace of mind.
+                    At Crystal Union , we want you and your clients to feel good
+                    about banking with us. We prioritize your financial success
+                    and peace of mind.
                   </p>
                 </motion.div>
               </motion.div>
@@ -355,7 +355,7 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                Learn More About Heritage Trust Bank
+                Learn More About Crystal Union
               </motion.h3>
               <motion.p
                 className="mx-auto mb-8 max-w-2xl text-lg text-blue-100"

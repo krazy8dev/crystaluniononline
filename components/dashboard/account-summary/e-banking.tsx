@@ -40,9 +40,9 @@ const Ebanking = () => {
             }}
           >
             <h1 className="rounded-full border border-[#ffffff39] bg-[#ffffff8c] px-4 py-1 font-bold text-white">
-              Heritage Trust Bank
+              Crystal Union
             </h1>
-            <p className="mt-2 px-3 text-lg font-bold text-white capitalize">
+            <p className="mt-2 px-3 text-lg font-bold capitalize text-white">
               More than banking
             </p>
           </div>

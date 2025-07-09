@@ -70,8 +70,8 @@ const Contact = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
               >
-                We&apos;re here to help. Reach out to us for any questions about our
-                services.
+                We&apos;re here to help. Reach out to us for any questions about
+                our services.
               </motion.p>
             </motion.div>
           </div>
@@ -267,8 +267,8 @@ const Contact = () => {
                     Contact Information
                   </h3>
                   <p className="mb-8 text-lg leading-relaxed text-gray-600">
-                    We&apos;re here to help you with all your banking needs. Reach
-                    out to us through any of the channels below.
+                    We&apos;re here to help you with all your banking needs.
+                    Reach out to us through any of the channels below.
                   </p>
                 </div>
 
@@ -331,9 +331,11 @@ const Contact = () => {
                       <h4 className="text-lg font-semibold text-gray-900">
                         Email
                       </h4>
-                      <p className="text-gray-600">info@heritagetrustbank.ae</p>
                       <p className="text-gray-600">
-                        support@heritagetrustbank.ae
+                        info@Crystal Union trustbank.ae
+                      </p>
+                      <p className="text-gray-600">
+                        support@Crystal Union trustbank.ae
                       </p>
                     </div>
                   </motion.div>
@@ -489,7 +491,7 @@ const Contact = () => {
           </motion.div> */}
         </div>
       </Container>
-          <Faq />
+      <Faq />
     </motion.div>
   );
 };

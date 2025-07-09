@@ -31,8 +31,9 @@ const AccountDetails = () => {
     <div className="p-4">
       <div className="flex items-center justify-between">
         <Breadcrumb />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800 cursor-pointer"
-        onClick={() => router.push("/dashboard/account-details")}
+        <div
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-800"
+          onClick={() => router.push("/dashboard/account-details")}
         >
           {initials}
         </div>
@@ -68,8 +69,7 @@ const AccountDetails = () => {
                 <Mail className="h-4 w-4" />
                 <span>Email: {profile?.email}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600"></div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Wallet className="h-4 w-4" />
                 <span>
@@ -100,7 +100,7 @@ const AccountDetails = () => {
             <p className="mt-4 text-sm text-blue-100">
               Sign up offer requires you to deposit and maintain a minimum
               balance in order to earn the $600 bonus. For enquiries send us an
-              email support@heritagetrustbank.com
+              email support@Crystal Union trustbank.com
             </p>
           </div>
         </div>

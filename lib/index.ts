@@ -128,9 +128,9 @@ export const testimonials = [
     name: "Sophie Moore",
     role: "Business Owner",
     location: "United Kingdom",
-    quote: "I love Heritage Trust Bank, they're the best",
+    quote: "I love Crystal Union , they're the best",
     description:
-      "It's been 2 years since I found Heritage Trust Bank, and it's such a relief as a small business owner to not worry about unnecessary fees. I lost my credit card once, and the service was so prompt that I was back to work the next day!",
+      "It's been 2 years since I found Crystal Union , and it's such a relief as a small business owner to not worry about unnecessary fees. I lost my credit card once, and the service was so prompt that I was back to work the next day!",
     image: "/testimonial1.jpg",
   },
   {

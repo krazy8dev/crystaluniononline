@@ -24,7 +24,7 @@ const Footer = () => {
             <Logo width={180} height={50} />
             <p className="text-sm leading-relaxed text-gray-600">
               A legacy of trust, innovation, and excellence spanning over 150
-              years in the  financial landscape.
+              years in the financial landscape.
             </p>
             {/* <div className="flex space-x-4">
               <Link
@@ -149,7 +149,7 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-blue-600" />
                 <span className="text-sm text-gray-600">
-                  info@heritagetrustbank.ae
+                  info@Crystal Union trustbank.ae
                 </span>
               </div>
               <div className="flex items-center space-x-3">
@@ -164,9 +164,9 @@ const Footer = () => {
         <div className="mt-8 border-t border-gray-200 pt-8">
           <div className="flex flex-col items-center justify-between md:flex-row">
             <p className="mb-4 text-sm text-gray-500 md:mb-0">
-              © 2024 Heritage Trust Bank. All rights reserved.
+              © 2024 Crystal Union . All rights reserved.
             </p>
-            <div className="flex space-x-6 text-sm gap-5">
+            <div className="flex gap-5 space-x-6 text-sm">
               <button
                 type="button"
                 className="m-0 cursor-pointer border-none bg-transparent p-0 text-sm text-gray-600 transition-colors hover:text-blue-600"

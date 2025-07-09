@@ -1,6 +1,6 @@
 # Animation System Documentation
 
-This document explains how to use the animation system built with Framer Motion in the Heritage Trust Bank application.
+This document explains how to use the animation system built with Framer Motion in the Crystal Union application.
 
 ## 🎯 Overview
 
@@ -150,7 +150,7 @@ const Hero = () => {
   return (
     <motion.div variants={heroVariants} initial="initial" animate="animate">
       <motion.h1 variants={heroTextVariants}>
-        Welcome to Heritage Trust Bank
+        Welcome to Crystal Union
       </motion.h1>
       <motion.button variants={buttonVariants}>Get Started</motion.button>
     </motion.div>
