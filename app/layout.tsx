@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { Toaster } from "sonner";
-import "./globals.css";
-import Script from "next/script";
 import { AnimationProvider } from "@/components/providers/animation-provider";
 import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
+import Script from "next/script";
+import { Toaster } from "sonner";
+import "./globals.css";
 // import { TranslationProvider } from "@/contexts/TranslationContext";
 // import LanguageSelector from "@/components/ui/language-selector";
 
@@ -46,6 +46,26 @@ export default function RootLayout({
           </a>
         </noscript>
         {/* <TranslationProvider> */}
+        <div
+          id="google_translate_element"
+          className="fixed top-1/2 right-4 z-50 -translate-y-1/2 rounded bg-white px-3 py-2 shadow-md"
+        ></div>
+
+        <Script id="google-translate" strategy="afterInteractive">
+          {`
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  `}
+        </Script>
+        <Script
+          strategy="afterInteractive"
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+        />
+
         <AnimationProvider>
           {/* Language Selector - Fixed position at bottom */}
           <div className="fixed bottom-4 left-4 z-50">
