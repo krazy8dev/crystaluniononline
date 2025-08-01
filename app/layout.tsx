@@ -46,12 +46,12 @@ export default function RootLayout({
           </a>
         </noscript>
         {/* <TranslationProvider> */}
-        <div
+        {/* <div
           id="google_translate_element"
           className="fixed top-1/2 right-4 z-50 -translate-y-1/2 rounded bg-white px-3 py-2 shadow-md"
-        ></div>
+        ></div> */}
 
-        <Script id="google-translate" strategy="afterInteractive">
+        {/* <Script id="google-translate" strategy="afterInteractive">
           {`
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -60,7 +60,7 @@ export default function RootLayout({
       }, 'google_translate_element');
     }
   `}
-        </Script>
+        </Script> */}
         <Script
           strategy="afterInteractive"
           src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
