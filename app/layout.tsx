@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // <html lang="en">
+    <html lang="en">
       <body>
         {/* Smartsupp Live Chat script */}
         <Script id="smartsupp-livechat" strategy="afterInteractive">
