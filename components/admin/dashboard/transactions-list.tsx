@@ -284,13 +284,13 @@ const TransactionsList = () => {
                   <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900">
                     <div>
                       <div className="font-medium">
-                        {transaction.sender.fullName}
+                        {transaction.sender?.fullName || "N/A"}
                       </div>
                       <div className="text-gray-500">
-                        {transaction.sender.email}
+                        {transaction.sender?.email || "N/A"}
                       </div>
                       <div className="text-gray-500">
-                        {transaction.sender.accountNumber}
+                        {transaction.sender?.accountNumber || "N/A"}
                       </div>
                     </div>
                   </td>
@@ -439,31 +439,35 @@ const TransactionsList = () => {
                 </div>
               </div>
 
-              <div className="border-t pt-4">
-                <h4 className="mb-2 font-medium text-gray-900">
-                  Sender Details
-                </h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Name</p>
-                    <p className="mt-1">
-                      {selectedTransaction.sender.fullName}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">Email</p>
-                    <p className="mt-1">{selectedTransaction.sender.email}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Account Number
-                    </p>
-                    <p className="mt-1 font-mono">
-                      {selectedTransaction.sender.accountNumber}
-                    </p>
+              {selectedTransaction.sender && (
+                <div className="border-t pt-4">
+                  <h4 className="mb-2 font-medium text-gray-900">
+                    Sender Details
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Name</p>
+                      <p className="mt-1">
+                        {selectedTransaction.sender.fullName || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Email</p>
+                      <p className="mt-1">
+                        {selectedTransaction.sender.email || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Account Number
+                      </p>
+                      <p className="mt-1 font-mono">
+                        {selectedTransaction.sender.accountNumber || "N/A"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {selectedTransaction.recipient && (
                 <div className="border-t pt-4">
