@@ -57,10 +57,12 @@ const Register = () => {
       await register(registerData);
       toast.success("Registration successful!");
       router.replace("/login");
-    } catch (error: any) {
-      console.error(error);
+    } catch (error: unknown) {
       const errorMessage =
-        typeof error === "string" ? error : error.response?.data?.message;
+        typeof error === "string"
+          ? error
+          : (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            "Registration failed. Please try again.";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
