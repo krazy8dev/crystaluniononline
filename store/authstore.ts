@@ -99,13 +99,11 @@ const useAuthStore = create<AuthState>()(
               isAdmin: response.data.data.user?.role === "admin",
             });
           } else {
-            throw new Error(response.data.message || "Registration failed");
+            throw new Error(response.data.message);
           }
         } catch (error: any) {
           if (error.response?.status === 400) {
-            throw new Error(
-              error.response.data.message || "Invalid registration data",
-            );
+            throw error.response.data.message;
           }
           throw error;
         }

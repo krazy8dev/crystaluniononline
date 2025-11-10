@@ -57,17 +57,11 @@ const Register = () => {
       await register(registerData);
       toast.success("Registration successful!");
       router.replace("/login");
-    } catch {
+    } catch (error: any) {
+      console.error(error);
       const errorMessage =
-        // error.response?.data?.message ||
-        // error.message ||
-        "Failed to register. Please try again.";
+        typeof error === "string" ? error : error.response?.data?.message;
       toast.error(errorMessage);
-
-      // If email already exists, clear the email field
-      if (errorMessage.toLowerCase().includes("email already exists")) {
-        form.setValue("email", "");
-      }
     } finally {
       setIsLoading(false);
     }

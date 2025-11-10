@@ -1,8 +1,7 @@
 export const config = {
   api: {
     baseUrl:
-      // process.env.NEXT_PUBLIC_API_URL ||
-      // "http://localhost:5000/api",
+      process.env.NEXT_PUBLIC_API_URL ||
       "https://developersgridapi.onrender.com/api",
 
     endpoints: {
