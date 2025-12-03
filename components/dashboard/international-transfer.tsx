@@ -12,7 +12,7 @@ import { toast } from "sonner";
 const InternationalTransfer = () => {
   const router = useRouter();
   const { profile } = useUserStore();
-  const { sameBankTransfer, isLoading, error } = useTransactionStore();
+  const { internationalTransfer, isLoading, error } = useTransactionStore();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -42,8 +42,16 @@ const InternationalTransfer = () => {
     e.preventDefault();
     try {
       // Only send the fields needed for domestic transfer
-      await sameBankTransfer({
+      await internationalTransfer({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        city: formData.city,
+        country: formData.country,
+        bankName: formData.bankName,
         accountNumber: formData.accountNumber,
+        swiftBic: formData.swiftBic,
+        iban: formData.iban,
         amount: parseFloat(formData.amount),
         purpose: formData.purpose,
         securityPin: formData.securityPin,
