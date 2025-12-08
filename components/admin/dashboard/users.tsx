@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import useAdminStore from "@/store/adminStore";
 // import useUserStore from "@/store/userStore";
 import { ArrowLeft, Eye, Pencil, Search, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 // import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -41,7 +42,7 @@ const UsersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [userStates, setUserStates] = useState<Record<string, UserState>>({});
   // const { profile } = useUserStore();
-  // const router = useRouter();
+  const router = useRouter();
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
@@ -225,13 +226,21 @@ const UsersPage = () => {
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.accountNumber} className="hover:bg-gray-50">
+                  <tr
+                    key={user._id}
+                    className="cursor-pointer hover:bg-gray-50"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 cursor-pointer"
+                      onClick={() => router.push(`/admin/dashboard-admin/users/${user._id}`)}
+                      >
                         {user.fullName}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td
+                      className="px-6 py-4 whitespace-nowrap cursor-pointer"
+                   
+                    >
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -509,7 +518,9 @@ const UsersPage = () => {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">User Password</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      User Password
+                    </p>
                     <p className="mt-1 font-mono text-sm text-gray-900">
                       {selectedUser.password}
                     </p>

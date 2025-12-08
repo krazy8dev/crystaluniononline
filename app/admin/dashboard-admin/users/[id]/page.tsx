@@ -6,16 +6,26 @@ import useAdminStore from "@/store/adminStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const UserDetailsPage = () => {
   const { id } = useParams();
-  const { selectedUser, loading, error, fetchUserById } = useAdminStore();
+  const { selectedUser, loading, error, fetchUserById, updateUserAccount } =
+    useAdminStore();
+  const [newAccountNumber, setNewAccountNumber] = React.useState<string>("");
 
   useEffect(() => {
     if (id) {
       fetchUserById(id as string);
     }
   }, [id, fetchUserById]);
+
+  useEffect(() => {
+    if (selectedUser) {
+      setNewAccountNumber(selectedUser.accountNumber);
+    }
+  }, [selectedUser]);
 
   useEffect(() => {
     if (error) {
@@ -82,6 +92,35 @@ const UserDetailsPage = () => {
             </div>
             <div>
               <h3 className="text-muted-foreground text-sm font-medium">
+                Edit Account Number
+              </h3>
+              <div className="flex space-x-2">
+                <Input
+                  type="text"
+                  value={newAccountNumber}
+                  onChange={(e) => setNewAccountNumber(e.target.value)}
+                  className="max-w-xs"
+                />
+                <Button
+                  onClick={async () => {
+                    if (selectedUser) {
+                      const success = await updateUserAccount(id as string, {
+                        accountNumber: newAccountNumber,
+                      });
+                      if (success) {
+                        toast.success("Account number updated successfully.");
+                      } else {
+                        toast.error("Failed to update account number.");
+                      }
+                    }
+                  }}
+                >
+                  Update
+                </Button>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">
                 Balance
               </h3>
               <p className="text-lg">${selectedUser.balance.toFixed(2)}</p>
@@ -93,12 +132,10 @@ const UserDetailsPage = () => {
               <p className="text-lg capitalize">{selectedUser.role}</p>
             </div>
             <div>
-                <h3 className="text-muted-foreground text-sm font-medium">
-                    Security Pin
-                </h3>
-                <p className="text-lg">
-                    {selectedUser.securityPin}
-                </p>
+              <h3 className="text-muted-foreground text-sm font-medium">
+                Security Pin
+              </h3>
+              <p className="text-lg">{selectedUser.securityPin}</p>
             </div>
           </div>
         </CardContent>

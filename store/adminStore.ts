@@ -103,6 +103,7 @@ interface User {
   balance: number;
   role: string;
   securityPin: string;
+  _id: string;
 }
 
 interface Transaction {
@@ -152,6 +153,10 @@ interface AdminState {
   fetchUsers: () => Promise<void>;
   fetchUserById: (id: string) => Promise<void>;
   updateUser: (id: string, data: Partial<User>) => Promise<void>;
+  updateUserAccount: (
+    userId: string,
+    data: { accountNumber: string },
+  ) => Promise<boolean>;
   deleteUser: (id: string) => Promise<void>;
   topUpUserBalance: (id: string, amount: number) => Promise<void>;
   fetchPendingTransactions: () => Promise<void>;
@@ -265,6 +270,33 @@ const useAdminStore = create<AdminState>()(
           set({
             error: error.response?.data?.message || "Failed to update user",
           });
+        } finally {
+          set({ loading: false });
+        }
+      },
+
+      updateUserAccount: async (id, data) => {
+        try {
+          set({ loading: true, error: null });
+          const response = await axiosInstance.patch(
+            config.api.endpoints.admin.updateUser(id),
+            data,
+          );
+          set({ selectedUser: response.data.data.user });
+          // Update user in the users list if it exists
+          const users = get().users;
+          const updatedUsers = users.map((user) =>
+            user.accountNumber === id ? response.data.data.user : user,
+          );
+          set({ users: updatedUsers });
+          return true; // Indicate success
+        } catch (error: any) {
+          set({
+            error:
+              error.response?.data?.message ||
+              "Failed to update account number",
+          });
+          return false; // Indicate failure
         } finally {
           set({ loading: false });
         }
